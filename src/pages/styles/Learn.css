@@ -1,0 +1,15 @@
+/* Стили для страницы Learn */
+.page {
+  padding: 48px 0;
+  text-align: center;
+}
+.heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.desc {
+  color: #888;
+  font-size: 18px;
+  max-width: 600px;
+  margin: 24px auto 0;
+}

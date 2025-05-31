@@ -1,0 +1,16 @@
+/* Стили для AdminPanel */
+.container {
+  max-width: 700px;
+  margin: 48px auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px #0001;
+}
+.title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.tabContent {
+  padding: 12px;
+}

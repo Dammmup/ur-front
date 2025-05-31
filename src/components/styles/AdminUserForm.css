@@ -1,0 +1,50 @@
+/* Стили для AdminUserForm */
+.formContainer {
+  max-width: 540px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 2px 20px #0001;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.headerTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #e0e0e0;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+.label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.success {
+  color: green;
+  margin-top: 18px;
+  text-align: center;
+  font-size: 15px;
+}
+.error {
+  color: red;
+  margin-top: 18px;
+  text-align: center;
+  font-size: 15px;
+}

@@ -1,0 +1,15 @@
+/* Стили для UserEditor */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 2px 20px #0001;
+}
+.mb24 {
+  margin-bottom: 24px;
+}
+.select {
+  width: 100%;
+}
