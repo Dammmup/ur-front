@@ -1,39 +1,34 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Form, Input, Button, message, Typography } from 'antd';
+import { login } from '../api';
+
+const { Title } = Typography;
 
 const Login: React.FC = () => {
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    if (!login || !password) {
-      setError('Пожалуйста, заполните все поля!');
-      return;
-    }
+  const onFinish = async (values: { login: string; password: string }) => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:4000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ login, password }),
-      });
+      const res = await login(values.login, values.password);
+      console.log(values);
+      
+      console.log(res.body);
+      
       const data = await res.json();
+      console.log(data);
+      
       if (res.ok && data.token) {
         localStorage.setItem('token', data.token);
-        setSuccess('Успешный вход!');
+        message.success('Успешный вход!');
         setTimeout(() => navigate('/admin'), 700);
       } else {
-        setError(data.error || 'Ошибка входа');
+        message.error(data.error || 'Ошибка входа');
       }
     } catch (e) {
-      setError('Ошибка сети');
+      message.error('Ошибка сети');
     } finally {
       setLoading(false);
     }
@@ -41,33 +36,41 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 350, margin: '80px auto', background: '#fff', padding: 32, borderRadius: 12, boxShadow: '0 2px 16px #0001' }}>
-      <div style={{ textAlign: 'center', fontSize: 24, fontWeight: 600, marginBottom: 24 }}>Вход для администратора</div>
-      <form onSubmit={handleSubmit} autoComplete="off">
-        <label style={{ display: 'block', marginBottom: 8 }}>Логин</label>
-        <input
-          type="text"
-          value={login}
-          onChange={e => setLogin(e.target.value)}
-          style={{ width: '100%', padding: 8, marginBottom: 16, borderRadius: 6, border: '1px solid #ccc', fontSize: 16 }}
-          disabled={loading}
-        />
-        <label style={{ display: 'block', marginBottom: 8 }}>Пароль</label>
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          style={{ width: '100%', padding: 8, marginBottom: 24, borderRadius: 6, border: '1px solid #ccc', fontSize: 16 }}
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          style={{ width: '100%', background: '#1677ff', color: '#fff', padding: 10, border: 'none', borderRadius: 6, fontSize: 18, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer' }}
-          disabled={loading}
-        >{loading ? 'Вход...' : 'Войти'}</button>
-        <div>Нет аккаунта? <Link to="/register">Зарегистрироваться</Link></div>
-        {error && <div style={{ color: 'red', marginTop: 18, textAlign: 'center', fontSize: 15 }}>{error}</div>}
-        {success && <div style={{ color: 'green', marginTop: 18, textAlign: 'center', fontSize: 15 }}>{success}</div>}
-      </form>
+      <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>Вход для администратора</Title>
+      <Form
+        layout="vertical"
+        onFinish={onFinish}
+        autoComplete="off"
+        style={{ width: '100%' }}
+      >
+        <Form.Item
+          label="Логин"
+          name="login"
+          rules={[{ required: true, message: 'Пожалуйста, введите логин!' }]}
+        >
+          <Input placeholder="Логин" size="large" disabled={loading} />
+        </Form.Item>
+        <Form.Item
+          label="Пароль"
+          name="password"
+          rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
+        >
+          <Input.Password placeholder="Пароль" size="large" disabled={loading} />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            size="large"
+            loading={loading}
+            style={{ fontWeight: 600 }}
+          >Войти</Button>
+        </Form.Item>
+        <div style={{ textAlign: 'center', marginTop: 8 }}>
+          Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+        </div>
+      </Form>
     </div>
   );
 };

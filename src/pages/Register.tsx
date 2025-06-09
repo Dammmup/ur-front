@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminUserForm from '../components/AdminUserForm';
+import UserForm from '../components/UserForm';
 const Register : React.FC = () => {
-return <AdminUserForm />
+return <UserForm />
 }
 export default Register

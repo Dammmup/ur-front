@@ -1,19 +1,13 @@
 import React from 'react';
+import { useUser } from '../UserContext';
 import { Menu, Select, Button, Drawer } from 'antd';
-import { MenuOutlined, GlobalOutlined, BookOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuOutlined, GlobalOutlined, BookOutlined, TeamOutlined, UserOutlined, CalendarOutlined } from '@ant-design/icons';
 import { useTranslation } from '../../node_modules/react-i18next';
+import { LANGUAGES } from '../constants';
 
-const languages = [
-  { code: 'ug', label: 'ئۇيغۇرچە' },
-  { code: 'ru', label: 'Русский' },
-  { code: 'en', label: 'English' },
-  { code: 'fr', label: 'Français' },
-  { code: 'sv', label: 'Svenska' },
-  { code: 'kk', label: 'Қазақша' },
-  { code: 'tr', label: 'Türkçe' },
-];
 
 export const Navbar: React.FC = () => {
+  const { user } = useUser();
   const { i18n } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
@@ -44,7 +38,7 @@ export const Navbar: React.FC = () => {
               },
               {
                 key: 'events',
-                icon: <BookOutlined />, // Можно заменить на CalendarOutlined
+                icon: <CalendarOutlined />,
                 label: <a href="/events">Events</a>,
               },
             ]}
@@ -52,7 +46,7 @@ export const Navbar: React.FC = () => {
           <Select
             value={i18n.language}
             onChange={lng => i18n.changeLanguage(lng)}
-            options={languages.map(l => ({ value: l.code, label: l.label }))}
+            options={LANGUAGES.map(l => ({ value: l.value, label: l.label }))}
             style={{ width: 120 }}
             prefix={<GlobalOutlined />}
           />
@@ -90,7 +84,7 @@ export const Navbar: React.FC = () => {
           <Select
             value={i18n.language}
             onChange={lng => i18n.changeLanguage(lng)}
-            options={languages.map(l => ({ value: l.code, label: l.label }))}
+            options={LANGUAGES.map(l => ({ value: l.value, label: l.label }))}
             style={{ width: 120, marginTop: 16 }}
             prefix={<GlobalOutlined />}
           />
@@ -119,8 +113,15 @@ export const Navbar: React.FC = () => {
 
           <div style={{ marginTop: 24, textAlign: 'center' }}>
             {localStorage.getItem('token') ? (
+             user && (
+               <span style={{ marginRight: 16, fontWeight: 500, color: '#1677ff', background: '#f4f8ff', borderRadius: 6, padding: '4px 12px' }}>
+                 {user.firstName} {user.lastName} — {user.role === 'admin' ? 'Администратор' : user.role === 'teacher' ? 'Преподаватель' : 'Студент'}
+               </span>
+             )
+           ) : null}
+           {localStorage.getItem('token') ? (
               <>
-                <a href="/admin">
+                <a href={user?.role === 'admin' ? '/admin' : '/profile'}>
                   <UserOutlined
                     style={{ fontSize: 28, color: '#1677ff', cursor: 'pointer', background: '#f0f5ff', borderRadius: '50%', padding: 10 }}
                   />

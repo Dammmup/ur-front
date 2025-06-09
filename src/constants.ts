@@ -5,7 +5,10 @@ export const COUNTRIES = [
 ];
 
 export const LANGUAGES = [
-  'Uyghur', 'Russian', 'English', 'French', 'Swedish', 'Kazakh', 'Turkish', 'Chinese', 'German', 'Other'
+  { value: 'ru', label: 'Russian' },
+  { value: 'en', label: 'English' },
+  { value: 'fr', label: 'French' },
+  { value: 'sv', label: 'Swedish' }
 ];
 
 export const ROLES = [
@@ -16,7 +19,6 @@ export const ROLES = [
 export const GENDERS = [
   { value: 'male', label: 'Мужской' },
   { value: 'female', label: 'Женский' },
-  { value: 'other', label: 'Другое' },
 ];
 
 export const COURSE_LEVELS = [

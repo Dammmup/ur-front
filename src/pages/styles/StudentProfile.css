@@ -1,0 +1,91 @@
+.root {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #1976d2 0%, #42a5f5 100%);
+  padding-top: 32px;
+  padding-bottom: 32px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.profileContainer {
+  max-width: 700px;
+  margin: 0 auto 32px auto;
+  background: rgba(255,255,255,0.95);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.16);
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.animatedBg {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 160px;
+  height: 160px;
+  background: #1976d2;
+  border-radius: 50%;
+  opacity: 0.13;
+  filter: blur(24px);
+  z-index: 0;
+}
+
+.avatarLarge {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 16px auto;
+  font-size: 44px;
+  background: #1976d2;
+  color: white;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.16);
+  z-index: 1;
+}
+
+.greeting {
+  font-weight: 700;
+  margin-bottom: 8px;
+  z-index: 1;
+  position: relative;
+}
+
+.email {
+  opacity: 0.7;
+  z-index: 1;
+  position: relative;
+}
+
+.roleChip {
+  margin-top: 16px;
+  font-weight: 700;
+  font-size: 16px;
+  z-index: 1;
+  position: relative;
+}
+
+.regDate {
+  margin-top: 16px;
+  z-index: 1;
+  position: relative;
+}
+
+.sections {
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 16px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10);
+  padding: 16px 24px;
+}
+
+.sectionCard {
+  margin-bottom: 24px;
+}
+
+.sectionDivider {
+  margin: 24px 0;
+}
+
+

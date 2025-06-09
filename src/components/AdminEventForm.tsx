@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './styles/AdminEventForm.css';
 import { createEvent } from '../api';
+import { Upload } from 'antd';
 
 const eventIcon = (
   <span className="event-icon">🎉</span>
@@ -14,12 +15,25 @@ interface EventRequest {
   image?: string;
 }
 
-const AdminEventForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+interface AdminEventFormProps {
+  onSuccess?: () => void;
+  initialValues?: {
+    title: string;
+    description: string;
+    date: string;
+    location?: string;
+    image?: string;
+    [key: string]: any;
+  };
+  onCancel?: () => void;
+}
+
+const AdminEventForm: React.FC<AdminEventFormProps> = ({ onSuccess, initialValues, onCancel }) => {
+  const [title, setTitle] = useState(initialValues?.title || '');
+  const [description, setDescription] = useState(initialValues?.description || '');
+  const [date, setDate] = useState(initialValues?.date || '');
+  const [location, setLocation] = useState(initialValues?.location || '');
+  const [imageUrl, setImageUrl] = useState<string | null>(initialValues?.image || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -32,6 +46,7 @@ const AdminEventForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => 
       setError('Пожалуйста, заполните обязательные поля!');
       return;
     }
+
     setLoading(true);
     const payload: EventRequest = {
       title,
@@ -42,14 +57,32 @@ const AdminEventForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => 
     };
     try {
       const token = localStorage.getItem('token');
-      const res = await createEvent(payload, token || undefined);
-      const data = await res.json();
+      let res, data;
+      if (initialValues && initialValues._id) {
+        try {
+          data = await updateEvent(initialValues._id, payload, token || undefined);
+          res = { ok: true };
+        } catch (err: any) {
+          setLoading(false);
+          setError(err.message || 'Ошибка при сохранении события');
+          return;
+        }
+      } else {
+        try {
+          data = await createEvent(payload, token || undefined);
+          res = { ok: true };
+        } catch (err: any) {
+          setLoading(false);
+          setError(err.message || 'Ошибка при создании события');
+          return;
+        }
+      }
       if (!res.ok) {
         setLoading(false);
-        setError(data.error || 'Ошибка при создании события');
+        setError(data.error || 'Ошибка при сохранении события');
         return;
       }
-      setSuccess('Событие добавлено!');
+      setSuccess(initialValues ? 'Событие обновлено!' : 'Событие добавлено!');
       setTitle('');
       setDescription('');
       setDate('');
@@ -63,13 +96,19 @@ const AdminEventForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => 
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
+  // Антд Upload: загрузка файла в base64
+  const handleImageUpload = (info: any) => {
+    const file = info.file?.originFileObj;
     if (file) {
       const reader = new FileReader();
-      reader.onload = evt => setImageUrl(evt.target?.result as string);
+      reader.onload = e => setImageUrl(e.target?.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  // Ввод ссылки на изображение
+  const setImageLink = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageUrl(e.target.value);
   };
 
   return (
@@ -133,36 +172,36 @@ const AdminEventForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => 
         </div>
         <div style={{ marginBottom: 18 }}>
           <label style={{ fontWeight: 500, marginBottom: 4, display: 'block' }}>Изображение (необязательно)</label>
+          <Upload beforeUpload={() => false} maxCount={1} onChange={handleImageUpload} listType="picture-card" showUploadList={false} disabled={loading}>
+            {imageUrl ? <img src={imageUrl} alt="event" style={{ width: '100%' }} /> : <button type="button" style={{ border: 'none', background: '#f5f5f5', borderRadius: 8, padding: 12, cursor: 'pointer' }}>Загрузить</button>}
+          </Upload>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            style={{ marginBottom: 8 }}
+            type="text"
+            placeholder="или вставьте ссылку на изображение"
+            value={imageUrl || ''}
+            onChange={setImageLink}
+            style={{ width: '100%', marginTop: 8, padding: '8px 10px', borderRadius: 7, border: '1.5px solid #e0e0e0', fontSize: 15, outline: 'none', transition: 'border 0.2s', boxSizing: 'border-box' }}
             disabled={loading}
           />
-          {imageUrl && (
-            <div style={{ marginTop: 8, marginBottom: 0 }}>
-              <img src={imageUrl} alt="event" style={{ width: 110, height: 110, objectFit: 'cover', borderRadius: 10, border: '1px solid #eee', boxShadow: '0 2px 8px #0001' }} />
-            </div>
-          )}
         </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
           <button
             type="submit"
             style={{ flex: 1, background: '#1677ff', color: '#fff', padding: '12px 0', border: 'none', borderRadius: 7, fontSize: 18, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
             disabled={loading}
-          >{loading ? 'Добавление...' : 'Добавить событие'}</button>
-          <button
-            type="button"
-            onClick={() => { setTitle(''); setDescription(''); setDate(''); setLocation(''); setImageUrl(null); setError(null); setSuccess(null); }}
-            style={{ flex: '0 0 50px', background: '#fff', color: '#1677ff', border: '1.5px solid #1677ff', borderRadius: 7, fontWeight: 500, fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
-            disabled={loading}
-            title="Очистить форму"
-          >✕</button>
+          >{loading ? (initialValues ? 'Сохранение...' : 'Добавление...') : (initialValues ? 'Сохранить изменения' : 'Добавить событие')}</button>
+          {onCancel && (
+            <button
+              type="button"
+              style={{ flex: 1, background: '#fff', color: '#1677ff', padding: '12px 0', border: '1.5px solid #1677ff', borderRadius: 7, fontSize: 18, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
+              disabled={loading}
+              onClick={onCancel}
+            >Отмена</button>
+          )}
         </div>
-        {error && <div style={{ color: '#f5222d', marginTop: 18, textAlign: 'center', fontSize: 15, fontWeight: 500, background: '#fff1f0', borderRadius: 6, padding: '8px 0' }}>{error}</div>}
-        {success && <div style={{ color: '#389e0d', marginTop: 18, textAlign: 'center', fontSize: 15, fontWeight: 500, background: '#f6ffed', borderRadius: 6, padding: '8px 0' }}>{success}</div>}
       </form>
+      {success && <div className="success-message">{success}</div>}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

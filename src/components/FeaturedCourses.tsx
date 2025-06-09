@@ -1,57 +1,73 @@
-import React from 'react';
-import { Card, Tag, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Tag, Spin, Alert } from 'antd';
+import { getCourses } from '../api';
+import { useNavigate } from 'react-router-dom';
+interface Course {
+  _id: string;
+  name: string;
+  language: string;
+  image?: string;
+  level?: string;
+  duration?: number;
+  content: string;
+  price?: number;
+  // дополнительные поля, если появятся
+  [key: string]: any;
+}
 
-const courses = [
-  {
-    title: 'Uyghur for Children',
-    tag: 'children',
-    description: 'Fun and interactive Uyghur lessons designed specifically for young learners.',
-    img: 'https://uyghurlear-6bqwrp1t.on.adaptive.ai/cdn/qg7LWpHMEqCWyhMKc28DCG6FytQ7W9Ci.png',
-    link: '/learn/cmb28uqt8000af53tyy9whlas',
-    materials: 1,
-  },
-  {
-    title: 'Uyghur for Beginners',
-    tag: 'beginner',
-    description: 'Start your journey learning the beautiful Uyghur language with basic vocabulary and phrases.',
-    img: 'https://uyghurlear-6bqwrp1t.on.adaptive.ai/cdn/qg7LWpHMEqCWyhMKc28DCG6FytQ7W9Ci.png',
-    link: '/learn/cmb28uqsv0008f53tomollu7e',
-    materials: 1,
-  },
-  {
-    title: 'Uyghur for Children',
-    tag: 'children',
-    description: 'Fun and interactive Uyghur lessons designed specifically for young learners.',
-    img: 'https://uyghurlear-6bqwrp1t.on.adaptive.ai/cdn/7V3GJTYMmURApFwgAL3Y8VW6xJhq7KFd.png',
-    link: '/learn/cmb28ssl2000azghak5aqsamc',
-    materials: 1,
-  },
-];
 
-export const FeaturedCourses: React.FC = () => (
-  <section style={{ padding: '48px 0' }}>
-    <h2 style={{ fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: 48 }}>Featured Courses</h2>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, maxWidth: 1200, margin: '0 auto' }}>
-      {courses.map(course => (
-        <Card
-          key={course.link}
-          hoverable
-          cover={<img alt={course.title} src={course.img} style={{ height: 192, objectFit: 'cover' }} />}
-          style={{ borderRadius: 12 }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600 }}>{course.title}</h3>
-              <Tag color={course.tag === 'children' ? 'blue' : 'green'} style={{ marginLeft: 8 }}>{course.tag}</Tag>
-            </div>
-            <p style={{ color: '#888' }}>{course.description}</p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
-              <span style={{ fontSize: 14, color: '#888' }}>{course.materials} materials</span>
-              <Button href={course.link} type="default" size="small">View Course</Button>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
-  </section>
-);
+export const FeaturedCourses: React.FC = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // Логируем user при каждом рендере
+
+
+  useEffect(() => {
+    getCourses()
+      .then(data => {
+        // Фильтруем курсы с access !== 'none'
+        setCourses(data.filter((c: Course) => c.access !== 'none'));
+        setLoading(false);
+      })
+      .catch(e => {
+        setError(e.message || 'Ошибка загрузки курсов');
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />;
+  if (error) return <Alert type="error" message={error} style={{ margin: 40 }} />;
+  if (courses.length === 0) return <Alert type="info" message="Нет доступных курсов" style={{ margin: 40 }} />;
+
+  return (
+    <section style={{ padding: '48px 0' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, maxWidth: 1200, margin: '0 auto' }}>
+        {courses.slice(0, 3).map(course => {
+          return (
+            <Card
+              key={course._id}
+              hoverable
+              cover={course.image && <img alt={course.name} src={course.image} style={{ height: 192, objectFit: 'cover' }} />}
+              style={{ borderRadius: 12 }}
+              onClick={() => navigate(`/course/${course._id}`)}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 600 }}>{course.name}</h3>
+                  {course.level && <Tag color="green" style={{ marginLeft: 8 }}>{course.level}</Tag>}
+                </div>
+                <div style={{ color: '#888', fontSize: 14, marginBottom: 4 }}>
+                  Язык: <b>{course.language}</b>{course.duration ? ` • ${course.duration} ч.` : ''}{course.price ? ` • ${course.price}₸` : ''}
+                </div>
+                <p style={{ color: '#555', marginBottom: 8 }}>{course.content}</p>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
