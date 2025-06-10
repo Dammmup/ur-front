@@ -1,0 +1,53 @@
+.navbar {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1677ff;
+}
+
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-mobile-btn {
+  display: none;
+}
+
+.navbar .ant-menu-horizontal {
+    line-height: 62px;
+}
+
+.navbar .ant-menu-item a {
+    font-weight: 500;
+}
+
+/* New breakpoint to prevent layout breaking with long labels */
+@media (max-width: 992px) {
+  .nav-desktop {
+    display: none;
+  }
+
+  .nav-mobile-btn {
+    display: block;
+  }
+}

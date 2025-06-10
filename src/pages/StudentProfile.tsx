@@ -2,24 +2,22 @@ import React from 'react';
 import { 
   Avatar, 
   Box, 
-  CardContent, 
   Stack, 
   Typography, 
   LinearProgress, 
   Chip, 
   CircularProgress, 
   Alert as MuiAlert,
-  TextField,
-  FormControl,
 } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { useUser } from '../UserContext';
 import { fetchUserById } from '../api';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import './styles/StudentProfile.css';
 import { Collapse } from 'antd';
-import SectionCard from './SectionCard';
-import ProfileField from './ProfileField';
+import { SectionCard } from './SectionCard';
+import { ProfileField } from './ProfileField';
 
 interface UserProfile {
   id: string;
@@ -41,57 +39,14 @@ interface UserProfile {
   birthDate?: string;
 }
 
-interface ProfileForm {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  country: string;
-  language: string;
-  gender: string;
-  telegram: string;
-  whatsapp: string;
-}
 
-interface ProfileFormErrors {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  country: string;
-  language: string;
-  gender: string;
-  telegram: string;
-  whatsapp: string;
-}
 
-const StudentProfile: React.FC = () => {
+export const StudentProfile: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const [profile, setProfile] = React.useState<UserProfile | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [formValues, setFormValues] = React.useState<ProfileForm>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    country: '',
-    language: '',
-    gender: '',
-    telegram: '',
-    whatsapp: '',
-  });
-  const [formErrors, setFormErrors] = React.useState<ProfileFormErrors>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    country: '',
-    language: '',
-    gender: '',
-    telegram: '',
-    whatsapp: '',
-  });
 
 
 
@@ -105,7 +60,7 @@ const StudentProfile: React.FC = () => {
         setLoading(false);
       })
       .catch(e => {
-        setError(e.message || 'Ошибка профиля');
+        setError(e.message || t('studentProfile.profileError'));
         setLoading(false);
       });
   }, [user]);
@@ -115,26 +70,21 @@ const StudentProfile: React.FC = () => {
   if (!profile) return null;
 
   const achievements = [];
-  if (profile.coursesCompleted >= 1) achievements.push({ name: 'Первые шаги' });
-  if (profile.coursesCompleted >= 5) achievements.push({ name: '5 курсов' });
-  if (profile.firstName && profile.lastName && profile.email && profile.phone && profile.country && profile.language && profile.gender && profile.telegram && profile.whatsapp) achievements.push({ name: 'Профиль заполнен' });
+  if (profile.coursesCompleted >= 1) achievements.push({ name: t('studentProfile.achievementFirstSteps') });
+  if (profile.coursesCompleted >= 5) achievements.push({ name: t('studentProfile.achievement5Courses') });
+  if (profile.firstName && profile.lastName && profile.email && profile.phone && profile.country && profile.language && profile.gender && profile.telegram && profile.whatsapp) achievements.push({ name: t('studentProfile.achievementProfileComplete') });
 
   const recommendations = [];
-  if (profile.coursesCompleted === 0) recommendations.push('Пройдите первый курс');
-  if (!profile.phone || !profile.telegram || !profile.whatsapp) recommendations.push('Заполните профиль');
-  else recommendations.push('Откройте новые возможности');
+  if (profile.coursesCompleted === 0) recommendations.push(t('studentProfile.recommendationFirstCourse'));
+  if (!profile.phone || !profile.telegram || !profile.whatsapp) recommendations.push(t('studentProfile.recommendationCompleteProfile'));
+  else recommendations.push(t('studentProfile.recommendationNewOpportunities'));
 
   const events = [
-    { name: `Дата регистрации: ${dayjs(profile.createdAt).format('DD.MM.YYYY')}` },
-    { name: `Последний вход: ${dayjs(profile.lastLogin).format('DD.MM.YYYY')}` },
+    { name: t('studentProfile.eventRegistrationDate', { date: dayjs(profile.createdAt).format('DD.MM.YYYY') }) },
+    { name: t('studentProfile.eventLastLogin', { date: dayjs(profile.lastLogin).format('DD.MM.YYYY') }) },
   ];
 
 
-  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
-    setFormErrors({ ...formErrors, [name]: '' });
-  };
 
   return (
     <Box sx={{
@@ -174,11 +124,11 @@ const StudentProfile: React.FC = () => {
           {profile.firstName?.[0] || '?'}
         </Avatar>
         <Typography variant="h3" fontWeight={700} sx={{ mb: 1, zIndex: 1, position: 'relative' }}>
-          Привет, {profile.firstName}!
+          {t('studentProfile.greeting', { name: profile.firstName })}
         </Typography>
         <Typography variant="h6" sx={{ opacity: 0.7, zIndex: 1, position: 'relative' }}>{profile.email}</Typography>
         <Chip
-          label={profile.role === 'student' ? 'Студент' : profile.role}
+          label={profile.role === 'student' ? t('studentProfile.roleStudent') : profile.role}
           color="primary"
           sx={{ mt: 2, fontWeight: 700, fontSize: 16, zIndex: 1, position: 'relative' }}
         />
@@ -188,17 +138,17 @@ const StudentProfile: React.FC = () => {
         <Collapse style={{ backgroundColor:'white' }}
           items={[
             {
-              label: <Typography variant="h6" fontWeight={700}>Профиль</Typography>,
+              label: <Typography variant="h6" fontWeight={700}>{t('studentProfile.profileCollapseLabel')}</Typography>,
               className: "panelProfile",
               children: (
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                   <Stack spacing={2} sx={{ mt: 2, alignItems: 'center', textAlign: 'center' }}>
-                    <ProfileField label="Имя" value={profile.firstName} />
-                    <ProfileField label="Фамилия" value={profile.lastName} />
-                    <ProfileField label="Email" value={profile.email} />
-                    <ProfileField label="Телефон" value={profile.phone} />
-                    <ProfileField label="Страна" value={profile.country} />
-                    <ProfileField label="Язык" value={profile.language} />
+                    <ProfileField label={t('studentProfile.fieldFirstName')} value={profile.firstName} />
+                    <ProfileField label={t('studentProfile.fieldLastName')} value={profile.lastName} />
+                    <ProfileField label={t('studentProfile.fieldEmail')} value={profile.email} />
+                    <ProfileField label={t('studentProfile.fieldPhone')} value={profile.phone} />
+                    <ProfileField label={t('studentProfile.fieldCountry')} value={profile.country} />
+                    <ProfileField label={t('studentProfile.fieldLanguage')} value={profile.language} />
                   </Stack>
                 </Box>
               ),
@@ -207,7 +157,7 @@ const StudentProfile: React.FC = () => {
         />
       </Box>
 
-      <SectionCard title="Достижения">
+      <SectionCard title={t('studentProfile.sectionAchievements')}>
         {achievements.map((achievement, index) => (
           <Chip 
             key={index} 
@@ -218,13 +168,13 @@ const StudentProfile: React.FC = () => {
           />
         ))}
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-          <Typography variant="body2" sx={{ mr: 1 }}>Количество пройденных курсов:</Typography>
+          <Typography variant="body2" sx={{ mr: 1 }}>{t('studentProfile.coursesCompletedLabel')}</Typography>
           <LinearProgress variant="determinate" value={profile.coursesCompleted} sx={{ width: 100, mr: 1 }} />
           <Typography variant="body2">{profile.coursesCompleted}</Typography>
         </Box>
       </SectionCard>
 
-      <SectionCard title="Рекомендации">
+      <SectionCard title={t('studentProfile.sectionRecommendations')}>
         <Stack spacing={2}>
           {recommendations.map((recommendation, index) => (
             <Typography variant="body2" key={index}>{recommendation}</Typography>
@@ -232,7 +182,7 @@ const StudentProfile: React.FC = () => {
         </Stack>
       </SectionCard>
 
-      <SectionCard title="История">
+      <SectionCard title={t('studentProfile.sectionHistory')}>
         {events.map((event, index) => (
           <Chip 
             key={index} 
@@ -248,4 +198,3 @@ const StudentProfile: React.FC = () => {
   );
 };
 
-export default StudentProfile;

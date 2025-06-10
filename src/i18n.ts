@@ -1,24 +1,28 @@
 import i18n from 'i18next';
-import { initReactI18next } from '../node_modules/react-i18next';
-
-const resources = {
-  en: { translation: { 'Welcome': 'Welcome to Uyghur Connect!' } },
-  ru: { translation: { 'Welcome': 'Добро пожаловать на Uyghur Connect!' } },
-  fr: { translation: { 'Welcome': 'Bienvenue sur Uyghur Connect!' } },
-  sv: { translation: { 'Welcome': 'Välkommen till Uyghur Connect!' } },
-  kk: { translation: { 'Welcome': 'Uyghur Connect-ке қош келдіңіз!' } },
-  tr: { translation: { 'Welcome': 'Uyghur Connect’e hoş geldiniz!' } },
-  ug: { translation: { 'Welcome': 'ئۇيغۇر كۇننېكت تور بېكىتىگە خۇش كەپسىز!' } },
-};
+import { initReactI18next } from 'react-i18next';
+import HttpApi from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
-  .use(initReactI18next)
+  .use(HttpApi) // Загружает переводы с вашего сервера/папки public
+  .use(LanguageDetector) // Определяет язык пользователя
+  .use(initReactI18next) // Передает экземпляр i18n в react-i18next
   .init({
-    resources,
-    fallbackLng: 'en',
-    lng: navigator.language.split('-')[0],
-    interpolation: { escapeValue: false },
-    supportedLngs: ['en', 'ru', 'fr', 'sv', 'kk', 'tr', 'ug'],
+    fallbackLng: 'en', // Язык по умолчанию, если язык пользователя не доступен
+    debug: true, // Включает логирование в консоль для разработки
+    supportedLngs: ['en', 'ru', 'fr', 'sv'], // Список поддерживаемых языков
+    ns: 'translations', // Пространство имен по умолчанию
+    defaultNS: 'translations',
+    backend: {
+      loadPath: '/locales/{{lng}}/translations.json', // Путь к файлам переводов
+    },
+    interpolation: {
+      escapeValue: false, // React уже защищает от XSS
+    },
+    detection: {
+      order: ['queryString', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag'],
+      caches: ['cookie', 'localStorage'],
+    },
   });
 
 export default i18n;

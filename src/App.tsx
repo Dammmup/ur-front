@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import Home from './pages/Home';
-import Learn from './pages/Learn';
-import Community from './pages/Community';
-import AdminPanel from './pages/AdminPanel';
-import Events from './pages/Events';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import CoursePage from './pages/Course';
+import {Home} from './pages/Home';
+import {Learn} from './pages/Learn';
+import {Community} from './pages/Community';
+import {AdminPanel} from './pages/AdminPanel';
+import {Events} from './pages/Events';
+import {Login} from './pages/Login';
+import {Register} from './pages/Register';
+import {CoursePage} from './pages/Course';
 import { UserProvider } from './UserContext';
-import StudentProfile from './pages/StudentProfile';
+import {StudentProfile} from './pages/StudentProfile';
+import { useTranslation } from 'react-i18next';
 const App: React.FC = () => {
-
+const {t, i18n} = useTranslation();
+const changeLanguage = (lng: string) => {
+  i18n.changeLanguage(lng);
+}
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <UserProvider>
       <BrowserRouter>
         <Navbar />
@@ -36,6 +41,7 @@ const App: React.FC = () => {
         </footer>
       </BrowserRouter>
     </UserProvider>
+    </Suspense>
   );
 };
 

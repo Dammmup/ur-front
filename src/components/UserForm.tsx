@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LANGUAGES, GENDERS, ROLES, COUNTRIES } from '../constants';
 import { checkUserDuplicate, createUser } from '../api';
 import styles from './styles/UserForm.module.css';
@@ -19,11 +20,10 @@ import dayjs from 'dayjs';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
-const userIcon = (
-  <span style={{ fontSize: 32, marginRight: 10, verticalAlign: 'middle' }}>👤</span>
-);
+
 
 interface UserFormProps {
+  isReadOnly?: boolean;
   isRegistration?: boolean;
   _id?: string;
   login?: string;
@@ -77,8 +77,14 @@ function filterUserFormValues(user: any) {
   };
 }
 
-const UserForm: React.FC<UserFormProps> = (props) => {
-  const { isRegistration = false, currentUserRole } = props;
+export const UserForm: React.FC<UserFormProps> = (props) => {
+  const { t } = useTranslation();
+  const { isRegistration = false, currentUserRole, isReadOnly = false } = props;
+  const isEditMode = !isRegistration;
+
+  const userIcon = (
+    <span style={{ fontSize: 32, marginRight: 10, verticalAlign: 'middle' }}>{t('userForm.userIcon')}</span>
+  );
   const [loading, setLoading] = React.useState(false);
   const [formState, setFormState] = React.useState(filterUserFormValues(props));
   const [errors] = React.useState<any>({});
@@ -103,7 +109,7 @@ const UserForm: React.FC<UserFormProps> = (props) => {
       const checkRes = await checkUserDuplicate(isRegistration ? values.phone : values.login, values.email);
       const checkData = await checkRes.json();
       if (checkData.duplicate) {
-        setSnackbar({ open: true, message: 'Пользователь с таким логином или email уже существует!', severity: 'error' });
+        setSnackbar({ open: true, message: t('userForm.duplicateUserError'), severity: 'error' });
         setLoading(false);
         return;
       }
@@ -130,6 +136,7 @@ const UserForm: React.FC<UserFormProps> = (props) => {
         blocked: 'false',
         active: 'true',
       };
+      console.log("создаем запись");
       if (!isRegistration) {
         userData = {
           ...userData,
@@ -139,19 +146,18 @@ const UserForm: React.FC<UserFormProps> = (props) => {
       const createRes = await createUser(userData);
       if (!createRes.ok) {
         setLoading(false);
-        setSnackbar({ open: true, message: 'Ошибка при создании пользователя!', severity: 'error' });
+        setSnackbar({ open: true, message: t('userForm.errorCreatingUser'), severity: 'error' });
         return;
       }
       setLoading(false);
-      setSnackbar({ open: true, message: isRegistration ? 'Регистрация успешна!' : 'Пользователь успешно добавлен!', severity: 'success' });
+      setSnackbar({ open: true, message: isRegistration ? t('userForm.registrationSuccess') : t('userForm.addUserSuccess'), severity: 'success' });
     } catch (error) {
       setLoading(false);
-      setSnackbar({ open: true, message: 'Ошибка при создании пользователя!', severity: 'error' });
+      setSnackbar({ open: true, message: t('userForm.errorCreatingUser'), severity: 'error' });
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    console.log('кнопка нажата');
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     handleFinish(formState);
   };
@@ -172,72 +178,76 @@ const UserForm: React.FC<UserFormProps> = (props) => {
       <div className={styles.header}>
         {userIcon}
         <Typography variant="h5" fontWeight={700} sx={{ ml: 1 }}>
-          {isRegistration ? 'Регистрация пользователя' : 'Редактирование пользователя'}
+          {isEditMode ? t('userForm.titleEdit') : t('userForm.titleRegistration')}
         </Typography>
       </div>
       <Box component="form" onSubmit={handleFormSubmit} sx={{ maxWidth: 480, margin: '0 auto' }}>
         <Stack spacing={2} sx={{ mt: 2 }}>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Имя"
+              label={t('userForm.firstNameLabel')}
               name="firstName"
               fullWidth
               value={formState.firstName}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, firstName: e.target.value }))}
               error={errors.firstName}
-              helperText={errors.firstName && 'Введите имя!'}
+              helperText={errors.firstName && t('userForm.firstNameError')}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Фамилия"
+              label={t('userForm.lastNameLabel')}
               name="lastName"
               fullWidth
               value={formState.lastName}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, lastName: e.target.value }))}
               error={errors.lastName}
-              helperText={errors.lastName && 'Введите фамилию!'}
+              helperText={errors.lastName && t('userForm.lastNameError')}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Номер телефона"
+              label={t('userForm.phoneLabel')}
               name="phone"
               fullWidth
               value={formState.phone}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, phone: e.target.value }))}
               error={errors.phone}
-              helperText={errors.phone && 'Введите номер телефона!'}
+              helperText={errors.phone && t('userForm.phoneError')}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <FormControl fullWidth>
-              <InputLabel id="country-label">Страна</InputLabel>
+              <InputLabel id="country-label">{t('userForm.countryLabel')}</InputLabel>
               <Select
                 labelId="country-label"
-                label="Страна"
+                label={t('userForm.countryLabel')}
                 name="country"
                 value={formState.country}
                 onChange={(e) => setFormState((prev: any) => ({ ...prev, country: e.target.value }))}
-              error={errors.country}
-            >
-              {COUNTRIES.map((c: string) => (
-                <MenuItem key={`country-${c}`} value={c}>
-                  {c}
-                </MenuItem>
-              ))}
+                disabled={isReadOnly}
+              >
+                {COUNTRIES.map((c: string) => (
+                  <MenuItem key={`country-${c}`} value={c}>
+                    {c}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
           <Box sx={{ width: '100%' }}>
             <FormControl fullWidth>
-              <InputLabel id="language-label">Язык</InputLabel>
+              <InputLabel id="language-label">{t('userForm.languageLabel')}</InputLabel>
               <Select
                 labelId="language-label"
-                label="Язык"
+                label={t('userForm.languageLabel')}
                 name="language"
                 value={formState.language}
                 onChange={(e) => setFormState((prev: any) => ({ ...prev, language: e.target.value }))}
+                disabled={isReadOnly}
               >
                 {Array.isArray(LANGUAGES) && LANGUAGES.length > 0 && typeof LANGUAGES[0] === 'object' ? (
                   (LANGUAGES as { value: string; label: string }[]).map((l) => (
@@ -257,47 +267,51 @@ const UserForm: React.FC<UserFormProps> = (props) => {
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Фотография"
+              label={t('userForm.photoLabel')}
               name="photo"
               fullWidth
               value={formState.photo}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, photo: e.target.value }))}
+              disabled={isReadOnly}
             />
-            <input type="file" onChange={handlePhotoChange} />
+            <input type="file" onChange={handlePhotoChange} disabled={isReadOnly} />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Логин"
+              label={t('userForm.loginLabel')}
               name="login"
               fullWidth
               value={formState.login}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, login: e.target.value }))}
               error={errors.login}
-              helperText={errors.login && 'Введите логин!'}
+              helperText={errors.login && t('userForm.loginError')}
+              disabled={!isRegistration || isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Пароль"
+              label={t('userForm.passwordLabel')}
               name="password"
               type="password"
               fullWidth
               value={formState.password}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, password: e.target.value }))}
               error={errors.password}
-              helperText={errors.password && 'Введите пароль!'}
+              helperText={errors.password && t('userForm.passwordError')}
+              disabled={isReadOnly}
             />
           </Box>
           {(!isRegistration && (currentUserRole === 'admin' || currentUserRole === 'teacher')) && (
             <Box sx={{ width: '100%' }}>
               <FormControl fullWidth>
-                <InputLabel id="role-label">Роль</InputLabel>
+                <InputLabel id="role-label">{t('userForm.roleLabel')}</InputLabel>
                 <Select
                   labelId="role-label"
-                  label="Роль"
+                  label={t('userForm.roleLabel')}
                   name="role"
                   value={formState.role}
                   onChange={(e) => setFormState((prev: any) => ({ ...prev, role: e.target.value }))}
+                  disabled={isReadOnly}
                 >
                   {ROLES.map((opt: { value: string, label: string }) => (
                     <MenuItem key={`role-${opt.value}`} value={opt.value}>
@@ -310,13 +324,14 @@ const UserForm: React.FC<UserFormProps> = (props) => {
           )}
           <Box sx={{ width: '100%' }}>
             <FormControl fullWidth>
-              <InputLabel id="gender-label">Пол</InputLabel>
+              <InputLabel id="gender-label">{t('userForm.genderLabel')}</InputLabel>
               <Select
                 labelId="gender-label"
-                label="Пол"
+                label={t('userForm.genderLabel')}
                 name="gender"
                 value={formState.gender}
                 onChange={(e) => setFormState((prev: any) => ({ ...prev, gender: e.target.value }))}
+                disabled={isReadOnly}
               >
                 {GENDERS.map((opt: { value: string, label: string }) => (
                   <MenuItem key={`gender-${opt.value}`} value={opt.value}>
@@ -329,48 +344,51 @@ const UserForm: React.FC<UserFormProps> = (props) => {
           {(currentUserRole === 'admin' || currentUserRole === 'teacher') && (
             <Box sx={{ width: '100%' }}>
               <TextField
-                label="Примечания"
+                label={t('userForm.notesLabel')}
                 name="notes"
                 fullWidth
                 value={formState.notes}
                 onChange={(e) => setFormState((prev: any) => ({ ...prev, notes: e.target.value }))}
-                disabled={currentUserRole !== 'admin'}
+                disabled={currentUserRole !== 'admin' || isReadOnly}
               />
             </Box>
           )}
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Telegram"
+              label={t('userForm.telegramLabel')}
               name="telegram"
               fullWidth
               value={formState.telegram}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, telegram: e.target.value }))}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="WhatsApp"
+              label={t('userForm.whatsappLabel')}
               name="whatsapp"
               fullWidth
               value={formState.whatsapp}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, whatsapp: e.target.value }))}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <TextField
-              label="Email"
+              label={t('userForm.emailLabel')}
               name="email"
               fullWidth
               value={formState.email}
               onChange={(e) => setFormState((prev: any) => ({ ...prev, email: e.target.value }))}
               error={errors.email}
-              helperText={errors.email && 'Введите email!'}
+              helperText={errors.email && t('userForm.emailError')}
+              disabled={isReadOnly}
             />
           </Box>
           <Box sx={{ width: '100%' }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label="День рождения"
+                label={t('userForm.birthdayLabel')}
                 value={formState.birthday ? dayjs(formState.birthday) : null}
                 onChange={(date) => {
                   setFormState((prev: any) => ({
@@ -378,12 +396,13 @@ const UserForm: React.FC<UserFormProps> = (props) => {
                     birthday: date && dayjs(date).isValid() ? dayjs(date).toISOString() : ''
                   }));
                 }}
+                disabled={isReadOnly}
                 slotProps={{
                   textField: {
                     fullWidth: true,
                     error: !!errors.birthday,
                     helperText: errors.birthday,
-                    disabled: loading
+                    disabled: loading || isReadOnly
                   }
                 }}
               />
@@ -394,52 +413,55 @@ const UserForm: React.FC<UserFormProps> = (props) => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2, py: 1.5, fontWeight: 700, fontSize: 16 }}
-            disabled={loading}
+            disabled={loading || isReadOnly}
           >
-            {isRegistration ? 'Добавить пользователя' : 'Обновить данные'}
+            {isEditMode ? t('userForm.submitButtonUpdate') : t('userForm.submitButtonAdd')}
           </Button>
           {(currentUserRole === 'admin') && (
             <Stack direction="column" spacing={2} sx={{ mt: 2, border: '1px solid #e0e0e0', borderRadius: 2, p: 2 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Switch
                   checked={formState.active === 'true'}
-                  onChange={(e) => setFormState((prev: any) => ({ ...prev, active: e.target.checked ? 'true' : 'false' }))}
+                  onChange={(e) => setFormState((prev: any) => ({ ...prev, active: String(e.target.checked) }))}
+                  disabled={isReadOnly}
                   color="primary"
-                  inputProps={{ 'aria-label': 'Активен' }}
+                  inputProps={{ 'aria-label': t('userForm.activeSwitch') }}
                 />
-                <span>Активен</span>
+                <span>{t('userForm.activeSwitch')}</span>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Switch
                   checked={formState.access === 'true'}
-                  onChange={(e) => setFormState((prev: any) => ({ ...prev, access: e.target.checked ? 'true' : 'false' }))}
+                  onChange={(e) => setFormState((prev: any) => ({ ...prev, access: String(e.target.checked) }))}
+                  disabled={isReadOnly}
                   color="primary"
-                  inputProps={{ 'aria-label': 'Доступ разрешён' }}
+                  inputProps={{ 'aria-label': t('userForm.accessSwitch') }}
                 />
-                <span>Доступ разрешён</span>
+                <span>{t('userForm.accessSwitch')}</span>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Switch
                   checked={formState.blocked === 'true'}
-                  onChange={(e) => setFormState((prev: any) => ({ ...prev, blocked: e.target.checked ? 'true' : 'false' }))}
+                  onChange={(e) => setFormState((prev: any) => ({ ...prev, blocked: String(e.target.checked) }))}
+                  disabled={isReadOnly}
                   color="primary"
-                  inputProps={{ 'aria-label': 'Заблокирован' }}
+                  inputProps={{ 'aria-label': t('userForm.blockedSwitch') }}
                 />
-                <span>Заблокирован</span>
+                <span>{t('userForm.blockedSwitch')}</span>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Switch
                   checked={formState.emailVerified === 'true'}
-                  onChange={(e) => setFormState((prev: any) => ({ ...prev, emailVerified: e.target.checked ? 'true' : 'false' }))}
+                  onChange={(e) => setFormState((prev: any) => ({ ...prev, emailVerified: String(e.target.checked) }))}
+                  disabled={isReadOnly}
                   color="primary"
-                  inputProps={{ 'aria-label': 'Email подтверждён' }}
+                  inputProps={{ 'aria-label': t('userForm.emailVerifiedSwitch') }}
                 />
-                <span>Email подтверждён</span>
+                <span>{t('userForm.emailVerifiedSwitch')}</span>
               </Stack>
               <Box sx={{ width: '100%' }}>
                 <TextField
-                  label="Курсов завершено"
+                  label={t('userForm.coursesCompletedLabel')}
                   name="coursesCompleted"
                   type="number"
                   fullWidth
@@ -464,4 +486,3 @@ const UserForm: React.FC<UserFormProps> = (props) => {
   );
 };
 
-export default UserForm;

@@ -6,7 +6,7 @@ interface ProfileFieldProps {
   value?: string | number;
 }
 
-const ProfileField: React.FC<ProfileFieldProps> = ({ label, value }) => {
+export const ProfileField: React.FC<ProfileFieldProps> = ({ label, value }) => {
   if (!value) return null;
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 2, alignItems: 'center', mb: 2 }}>
@@ -16,4 +16,3 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ label, value }) => {
   );
 };
 
-export default ProfileField;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import '../pages/styles/UserEditor.css';
 import { getUsers } from '../api.ts';
 import { Select, Spin, message } from 'antd';
-import UserForm from './UserForm.tsx';
-import StudentNotes from './StudentNotes';
+import {UserForm} from './UserForm.tsx';
+import {StudentNotes} from './StudentNotes';
 import { useUser } from '../UserContext';
 
 interface User {
@@ -30,7 +31,8 @@ interface User {
   photo?: string;
 }
 
-const UserEditor: React.FC = () => {
+export const UserEditor: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,9 +63,9 @@ const UserEditor: React.FC = () => {
     }
   }, [selectedUserId, users]);
 
-  return (
+    return (
     <div>
-      {/* Только админ видит селектор и может редактировать любого */}
+      {/* Админ видит селектор и может редактировать любого */}
       {user?.role === 'admin' && (
         <>
           <div style={{ marginBottom: 24 }}>
@@ -73,7 +75,7 @@ const UserEditor: React.FC = () => {
               <Select
                 showSearch
                 style={{ width: '100%' }}
-                placeholder="Выберите пользователя для редактирования"
+                placeholder={t('userEditor.selectUserPlaceholderAdmin')}
                 optionFilterProp="children"
                 value={selectedUserId || undefined}
                 onChange={setSelectedUserId}
@@ -81,9 +83,9 @@ const UserEditor: React.FC = () => {
                   (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                 }
               >
-                {users.map(user => (
-                  <Select.Option key={user._id} value={user._id}>
-                    {user.lastName} {user.firstName} ({user.phone})
+                {users.map(u => (
+                  <Select.Option key={u._id} value={u._id}>
+                    {u.lastName} {u.firstName} ({u.role})
                   </Select.Option>
                 ))}
               </Select>
@@ -95,21 +97,50 @@ const UserEditor: React.FC = () => {
         </>
       )}
 
-      {/* Преподаватель и студент видят только свой профиль */}
-      {(user?.role === 'teacher' || user?.role === 'student') && (
-        <UserForm {...user} currentUserRole={user.role} />
+      {/* Преподаватель видит селектор студентов и либо свой профиль, либо заметки студента */}
+      {user?.role === 'teacher' && (
+        <>
+          <div style={{ marginBottom: 24 }}>
+            {loading ? (
+              <Spin />
+            ) : (
+              <Select
+                showSearch
+                style={{ width: '100%' }}
+                placeholder={t('userEditor.selectUserPlaceholderTeacher')}
+                optionFilterProp="children"
+                value={selectedUserId || undefined}
+                onChange={setSelectedUserId}
+                allowClear
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {users.filter(u => u.role === 'student').map(student => (
+                  <Select.Option key={student._id} value={student._id}>
+                    {student.lastName} {student.firstName} ({student.phone})
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </div>
+          
+          {selectedUser && selectedUser.role === 'student' ? (
+            <StudentNotes
+              userId={selectedUser._id}
+              notes={selectedUser.notes || ''}
+            />
+          ) : (
+            <UserForm {...user} currentUserRole={user.role} isReadOnly={true} />
+          )}
+        </>
       )}
 
-      {/* teacher может видеть заметки выбранного ученика */}
-      {user?.role === 'teacher' && selectedUser && selectedUser.role === 'student' && (
-        <StudentNotes
-          userId={selectedUser._id}
-          notes={selectedUser.notes || ''}
-        />
+      {/* Студент видит только свой профиль */}
+      {user?.role === 'student' && (
+        <UserForm {...user} currentUserRole={user.role} />
       )}
-      
     </div>
   );
 };
 
-export default UserEditor;

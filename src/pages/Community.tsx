@@ -1,17 +1,20 @@
 import React from 'react';
-import CommunityUsers from '../components/CommunityUsers';
+// ИСПРАВЛЕНО: импортируем CommunityUsers как именованный компонент
+import { CommunityUsers } from '../components/CommunityUsers'; 
+import { useTranslation } from 'react-i18next';
+import './styles/Community.css';
 
-const Community: React.FC = () => (
-  <div style={{ padding: '48px 0', textAlign: 'center' }}>
-    <h1 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Community</h1>
-    <p style={{ color: '#888', fontSize: 18, maxWidth: 600, margin: '24px auto 0' }}>
-      Join discussions, ask questions, and connect with other learners and native speakers.
-    </p>
-    <div style={{ marginTop: 48 }}>
+export const Community: React.FC = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="community-page-container">
+      <h1 className="community-title">{t('communityPage.title')}</h1>
+      <p className="community-subtitle">
+        {t('communityPage.subtitle')}
+      </p>
+      {/* В этом контейнере стили не нужны, так как они уже есть в самом компоненте */}
       <CommunityUsers />
     </div>
-    {/* TODO: Add community features here */}
-  </div>
-);
-
-export default Community;
+  );
+};

@@ -4,8 +4,9 @@ import { Calendar, Badge, Spin, Typography, message, Empty } from 'antd';
 import { Popover, Modal, Button } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import AdminEventForm from '../components/AdminEventForm';
+import {AdminEventForm} from '../components/AdminEventForm';
 import { getEvents, deleteEvent } from '../api';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -18,7 +19,8 @@ interface Event {
   image?: string;
 }
 
-const Events: React.FC = () => {
+export const Events: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,8 +70,8 @@ const Events: React.FC = () => {
               }}
               content={
                 <div style={{ maxWidth: 260 }}>
-                  <div style={{ marginBottom: 6 }}><b>Дата:</b> {dayjs(event.date).format('LLL')}</div>
-                  {event.location && <div style={{ marginBottom: 6 }}><b>Место:</b> {event.location}</div>}
+                  <div style={{ marginBottom: 6 }}><b>{t('eventsPage.dateLabel')}</b> {dayjs(event.date).format('LLL')}</div>
+                  {event.location && <div style={{ marginBottom: 6 }}><b>{t('eventsPage.locationLabel')}</b> {event.location}</div>}
                   <div style={{ margin: '8px 0', color: '#444' }}>{event.description}</div>
                   {event.image && <img src={event.image} alt="event" style={{ width: '100%', borderRadius: 8, marginTop: 8 }} />}
                   {user && (user.role === 'admin' || user.role === 'teacher') && (
@@ -80,23 +82,23 @@ const Events: React.FC = () => {
                           setEditEvent(event);
                           setActivePopoverEventId(null);
                         }}
-                      >Редактировать</Button>
+                      >{t('eventsPage.editButton')}</Button>
                       <Button
                         danger
                         size="small"
                         onClick={() => {
-                          if (window.confirm('Вы действительно хотите удалить это событие?')) {
+                          if (window.confirm(t('eventsPage.deleteConfirmation'))) {
                             const token = localStorage.getItem('token');
                             deleteEvent(event._id, token || undefined)
                               .then(() => {
-                                message.success('Событие удалено!');
+                                message.success(t('eventsPage.deleteSuccess'));
                                 fetchEvents();
                               })
-                              .catch((err: any) => message.error(err.message || 'Ошибка удаления'));
+                              .catch((err: any) => message.error(err.message || t('eventsPage.deleteError')));
                           }
                           setActivePopoverEventId(null);
                         }}
-                      >Удалить</Button>
+                      >{t('eventsPage.deleteButton')}</Button>
                     </div>
                   )}
                 </div>
@@ -115,11 +117,11 @@ const Events: React.FC = () => {
 
   return (
   <div style={{ maxWidth: 900, margin: '40px auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px #0001', padding: 32 }}>
-    <Title level={2} style={{ textAlign: 'center', marginBottom: 32 }}>Календарь мероприятий</Title>
+    <Title level={2} style={{ textAlign: 'center', marginBottom: 32 }}>{t('eventsPage.title')}</Title>
     {loading ? (
       <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />
     ) : events.length === 0 ? (
-      <Empty description="Нет запланированных событий" />
+      <Empty description={t('eventsPage.noEvents')} />
     ) : (
       <Calendar cellRender={dateCellRender} />
     )}
@@ -128,9 +130,9 @@ const Events: React.FC = () => {
     <Modal
       open={!!editEvent}
       onCancel={() => setEditEvent(null)}
-      title="Редактировать событие"
+      title={t('eventsPage.editModalTitle')}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
     >
       {editEvent && (
         <AdminEventForm
@@ -138,7 +140,7 @@ const Events: React.FC = () => {
           onSuccess={() => {
             setEditEvent(null);
             fetchEvents();
-            message.success('Событие обновлено!');
+            message.success(t('eventsPage.updateSuccess'));
           }}
           onCancel={() => setEditEvent(null)}
         />
@@ -148,4 +150,3 @@ const Events: React.FC = () => {
 );
 };
 
-export default Events;

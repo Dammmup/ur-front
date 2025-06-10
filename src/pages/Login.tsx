@@ -1,34 +1,50 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, message, Typography } from 'antd';
+import { jwtDecode } from 'jwt-decode';
 import { login } from '../api';
+import { useUser } from '../UserContext';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
-const Login: React.FC = () => {
+type User = {
+  id: string;
+  role: string;
+  [key: string]: any;
+};
+
+export const Login: React.FC = () => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser(); 
 
   const onFinish = async (values: { login: string; password: string }) => {
     setLoading(true);
     try {
       const res = await login(values.login, values.password);
-      console.log(values);
-      
-      console.log(res.body);
-      
       const data = await res.json();
-      console.log(data);
-      
       if (res.ok && data.token) {
-        localStorage.setItem('token', data.token);
-        message.success('Успешный вход!');
-        setTimeout(() => navigate('/admin'), 700);
+        const decoded = jwtDecode<User>(data.token); 
+        if (decoded.id && decoded.role) {
+          localStorage.setItem('token', data.token); // сохранить токен
+          setUser(decoded); // вызвать setUser из useUser
+          message.success(t('login.success'));
+          if (decoded.role === 'admin' || decoded.role === 'teacher') {
+            navigate('/admin');
+          } 
+          else {
+            navigate('/profile');
+          }
+        } else {
+          message.error(t('login.invalidTokenError'));
+        }
       } else {
-        message.error(data.error || 'Ошибка входа');
+        message.error(data.error || t('login.genericError'));
       }
     } catch (e) {
-      message.error('Ошибка сети');
+      message.error(t('login.networkError'));
     } finally {
       setLoading(false);
     }
@@ -36,7 +52,7 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 350, margin: '80px auto', background: '#fff', padding: 32, borderRadius: 12, boxShadow: '0 2px 16px #0001' }}>
-      <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>Вход для администратора</Title>
+      <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>{t('login.title')}</Title> 
       <Form
         layout="vertical"
         onFinish={onFinish}
@@ -44,18 +60,18 @@ const Login: React.FC = () => {
         style={{ width: '100%' }}
       >
         <Form.Item
-          label="Логин"
+          label={t('login.loginLabel')}
           name="login"
-          rules={[{ required: true, message: 'Пожалуйста, введите логин!' }]}
+          rules={[{ required: true, message: t('login.loginRequiredError') }]}
         >
-          <Input placeholder="Логин" size="large" disabled={loading} />
+          <Input placeholder={t('login.loginPlaceholder')} size="large" disabled={loading} />
         </Form.Item>
         <Form.Item
-          label="Пароль"
+          label={t('login.passwordLabel')}
           name="password"
-          rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
+          rules={[{ required: true, message: t('login.passwordRequiredError') }]}
         >
-          <Input.Password placeholder="Пароль" size="large" disabled={loading} />
+          <Input.Password placeholder={t('login.passwordPlaceholder')} size="large" disabled={loading} />
         </Form.Item>
         <Form.Item>
           <Button
@@ -65,14 +81,13 @@ const Login: React.FC = () => {
             size="large"
             loading={loading}
             style={{ fontWeight: 600 }}
-          >Войти</Button>
+          >{t('login.submitButton')}</Button>
         </Form.Item>
         <div style={{ textAlign: 'center', marginTop: 8 }}>
-          Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+          {t('login.noAccount')} <Link to="/register">{t('login.registerLink')}</Link>
         </div>
       </Form>
     </div>
   );
 };
 
-export default Login;

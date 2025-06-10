@@ -73,8 +73,8 @@ export const createUser = async (userData: {
 
 export const updateUserNotes = async (userId: string, notes: string, token?: string) => {
   console.log(`updating user notes: ${userId}`);
-  const res = await fetch(`http://localhost:4000/api/users/${userId}/notes`, {
-    method: 'PATCH',
+  const res = await fetch(`http://localhost:4000/api/users/${userId}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

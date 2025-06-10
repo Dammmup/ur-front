@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Input, Select, InputNumber, Button, Upload } from 'antd';
+import { Input, Select, InputNumber, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { COURSE_LEVELS, LANGUAGES } from '../constants';
 import { createCourse } from '../api';
+import { useTranslation } from 'react-i18next';
 
 export interface CourseFormValues {
   name: string;
@@ -36,7 +37,8 @@ const INITIAL_STATE: CourseFormValues = {
   imageLink: '',
 };
 
-const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create', onSuccess, submitText }) => {
+export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create', onSuccess, submitText }) => {
+  const { t } = useTranslation();
   const [form, setForm] = useState<CourseFormValues>(initialValues ? {
     ...INITIAL_STATE,
     ...initialValues,
@@ -57,8 +59,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create',
     e.preventDefault();
     // Простая валидация
     if (!form.name || !form.language || !form.level || !form.content || form.duration === 0 || form.price === 0) {
-      // @ts-ignore
-      if (typeof message !== 'undefined') message.error('Пожалуйста, заполните все поля!');
+      message.error(t('courseForm.validationError'));
       return;
     }
     setLoading(true);
@@ -89,19 +90,16 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create',
         }, token || undefined);
       }
       if (res.ok || (res._id && mode === 'edit')) {
-        // @ts-ignore
-        if (typeof message !== 'undefined') message.success(mode === 'edit' ? 'Курс обновлён!' : 'Курс добавлен!');
+        message.success(mode === 'edit' ? t('courseForm.updateSuccess') : t('courseForm.addSuccess'));
         if (mode === 'edit' && onSuccess) onSuccess(updatedCourse);
         if (mode === 'create') setForm(INITIAL_STATE);
         if (mode === 'create' && onSuccess) onSuccess(updatedCourse);
       } else {
         const data = await res.json?.() || res;
-        // @ts-ignore
-        if (typeof message !== 'undefined') message.error(data.error || 'Ошибка при сохранении курса');
+        message.error(data.error || t('courseForm.saveError'));
       }
     } catch (e) {
-      // @ts-ignore
-      if (typeof message !== 'undefined') message.error('Ошибка сети');
+      message.error(t('courseForm.networkError'));
     } finally {
       setLoading(false);
     }
@@ -111,24 +109,24 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create',
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <Input
-        placeholder="Название курса"
+        placeholder={t('courseForm.namePlaceholder')}
         value={form.name}
         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
       />
       <Select
-        placeholder="Язык"
+        placeholder={t('courseForm.languagePlaceholder')}
         value={form.language}
         onChange={val => setForm(f => ({ ...f, language: val }))}
         options={LANGUAGES.map(lang => ({ value: lang, label: lang }))}
       />
       <Select
-        placeholder="Уровень"
+        placeholder={t('courseForm.levelPlaceholder')}
         value={form.level}
         onChange={val => setForm(f => ({ ...f, level: val }))}
         options={COURSE_LEVELS.map(level => ({ value: level, label: level }))}
       />
       <InputNumber
-        placeholder="Длительность (часы)"
+        placeholder={t('courseForm.durationPlaceholder')}
         value={form.duration}
         onChange={val => setForm(f => ({ ...f, duration: typeof val === 'number' ? val : 0 }))}
         min={0.1}
@@ -137,13 +135,13 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create',
         style={{ width: '100%' }}
       />
       <Input.TextArea
-        placeholder="Описание"
+        placeholder={t('courseForm.descriptionPlaceholder')}
         value={form.content}
         onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
         rows={4}
       />
       <InputNumber
-        placeholder="Цена ($)"
+        placeholder={t('courseForm.pricePlaceholder')}
         value={form.price}
         onChange={val => setForm(f => ({ ...f, price: typeof val === 'number' ? val : 0 }))}
         min={0}
@@ -151,22 +149,20 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'create',
         style={{ width: '100%' }}
       />
       <Upload beforeUpload={() => false} maxCount={1} onChange={handleImageUpload} listType="picture-card">
-        {form.imageUrl ? <img src={form.imageUrl} alt="course" style={{ width: '100%' }} /> : <Button icon={<UploadOutlined />}>Загрузить</Button>}
+        {form.imageUrl ? <img src={form.imageUrl} alt="course" style={{ width: '100%' }} /> : <Button icon={<UploadOutlined />}>{t('courseForm.uploadButton')}</Button>}
       </Upload>
       <Input
-        placeholder="или вставьте ссылку на изображение"
+        placeholder={t('courseForm.imageLinkPlaceholder')}
         value={form.imageLink}
         onChange={e => setForm(f => ({ ...f, imageLink: e.target.value }))}
       />
       {(form.imageLink || form.imageUrl) && (
         <div style={{ marginBottom: 16 }}>
-          <span style={{ fontSize: 13, color: '#888' }}>Превью:</span><br />
+          <span style={{ fontSize: 13, color: '#888' }}>{t('courseForm.previewLabel')}</span><br />
           <img src={form.imageLink || form.imageUrl || ''} alt="preview" style={{ width: 120, borderRadius: 8, marginTop: 4 }} />
         </div>
       )}
-      <Button type="primary" block htmlType="submit" loading={loading}>{submitText}</Button>
+      <Button type="primary" block htmlType="submit" loading={loading}>{submitText || (mode === 'create' ? t('courseForm.submitButtonCreate') : t('courseForm.submitButtonUpdate'))}</Button>
     </form>
   );
 };
-
-export default CourseForm;

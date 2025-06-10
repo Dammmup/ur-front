@@ -7,7 +7,7 @@ interface SectionCardProps {
   sx?: SxProps;
 }
 
-const SectionCard: React.FC<SectionCardProps> = ({ title, children, sx }) => (
+export const SectionCard: React.FC<SectionCardProps> = ({ title, children, sx }) => (
   <Card sx={{ maxWidth: 700, mx: 'auto', mt: 2, mb: 2, background: 'rgba(255,255,255,0.97)', borderRadius: 6, boxShadow: 3, p: { xs: 1, md: 3 }, ...sx }}>
     <CardContent>
       <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>{title}</Typography>
@@ -16,4 +16,3 @@ const SectionCard: React.FC<SectionCardProps> = ({ title, children, sx }) => (
   </Card>
 );
 
-export default SectionCard;
