@@ -1,53 +1,93 @@
+/* Главный контейнер для сетки карточек пользователей */
 .community-users-container {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1200px; /* Сделаем контейнер шире, чтобы поместилось несколько карточек */
+  margin: 40px auto;
   padding: 24px;
+  display: grid; /* Используем Grid для удобной сетки */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Адаптивные колонки */
+  gap: 24px; /* Расстояние между карточками */
 }
 
-.spinner-container {
-  display: block;
-  margin: 60px auto;
-}
-
-.alert-container {
+/* Стили для спиннера и уведомлений */
+.spinner-container, .alert-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  grid-column: 1 / -1; /* Растягиваем на всю ширину сетки */
   margin: 40px;
 }
 
+/* Стили для отдельной карточки пользователя */
 .user-card {
-  margin-bottom: 16px;
-  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Обрезаем все, что выходит за рамки */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Центрируем контент по вертикали */
+  align-items: center; /* Центрируем контент по горизонтали */
+  padding: 24px;
+  aspect-ratio: 1 / 1; /* Делает карточку ИДЕАЛЬНО КВАДРАТНОЙ */
+  text-align: center;
 }
 
+.user-card:hover {
+  transform: translateY(-5px); /* Приподнимаем карточку при наведении */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Контент внутри карточки */
 .user-card-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 16px;
+  width: 100%;
 }
 
-.user-info {
-  flex-grow: 1;
-}
-
+/* Имя пользователя */
 .user-name {
+  font-size: 1.25rem;
   font-weight: 600;
-  font-size: 16px;
+  color: #333;
+  margin: 0;
 }
 
+/* Полное имя */
+.user-full-name {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: -4px;
+}
+
+/* Контейнер для иконок контактов */
 .user-contacts {
-  margin-top: 8px;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
+  margin-top: 16px;
 }
 
+/* Ссылка на контакт */
 .contact-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #1890ff;
-  text-decoration: none;
+  font-size: 1rem; /* Иконки побольше */
+  color: #555;
+  transition: color 0.3s ease;
 }
 
 .contact-link:hover {
-  text-decoration: underline;
+  color: #007bff; /* Цвет при наведении */
+}
+
+/* Адаптивность для маленьких экранов */
+@media (max-width: 600px) {
+  .community-users-container {
+    /* На маленьких экранах всегда одна колонка */
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
 }

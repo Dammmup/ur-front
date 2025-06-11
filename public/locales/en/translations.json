@@ -32,6 +32,7 @@
     "notesLabel": "Notes",
     "telegramLabel": "Telegram",
     "whatsappLabel": "WhatsApp",
+    "levelLabel": "Tariff level",
     "emailLabel": "Email",
     "emailError": "Please enter an email!",
     "birthdayLabel": "Date of Birth",
@@ -70,6 +71,8 @@
     "learn": "Learn",
     "community": "Community",
     "events": "Events",
+    "about": "About Us",
+    "pricing": "Pricing",
     "logout": "Logout",
     "menuTitle": "Menu",
     "roleAdmin": "Administrator",
@@ -223,6 +226,7 @@
     "noCourses": "No courses available",
     "languageLabel": "Language",
     "durationLabel": "h.",
+    "levelFilterPlaceholder": "Filter by level",
     "editButton": "Edit",
     "deleteButton": "Delete",
     "editModalTitle": "Edit course: {{courseName}}",
@@ -240,5 +244,23 @@
   "communityPage": {
     "title": "Community",
     "subtitle": "Connect with fellow learners, share experiences, and grow together."
+  },
+  "aboutUs": {
+    "title": "About Us",
+    "description": "Learn more about our mission, vision, and the team behind this platform.",
+    "missionTitle": "Our Mission",
+    "missionText": "To provide accessible and high-quality education for everyone, everywhere.",
+    "visionTitle": "Our Vision",
+    "visionText": "To create a global community of learners who are empowered to achieve their full potential."
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "subtitle": "Unlock full access to all courses and features with the plan that suits you best.",
+    "plans": {
+      "beginner": { "title": "Beginner", "description": "Start learning basics.", "button": "Choose" },
+      "intermediate": { "title": "Intermediate", "description": "Improve your skills.", "button": "Choose" },
+      "advanced": { "title": "Advanced", "description": "Master the language.", "button": "Choose" },
+      "speaking": { "title": "Speaking", "description": "Focus on conversation.", "button": "Choose" }
+    }
   }
 }

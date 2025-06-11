@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Tag, Button, Spin, Alert, Modal, message } from 'antd';
+import { Card, Tag, Button, Spin, Alert, Modal, message, Select } from 'antd';
 import { useUser } from '../UserContext';
 import { getCourses, deleteCourse } from '../api';
 import {CourseForm} from '../components/CourseForm';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LEVELS } from '../constants';
+
 interface Course {
   _id: string;
   name: string;
@@ -26,6 +28,7 @@ export const Learn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const navigate = useNavigate();
+  const [levelFilter, setLevelFilter] = useState<string>('');
 
   useEffect(() => {
     getCourses()
@@ -67,15 +70,26 @@ export const Learn: React.FC = () => {
     });
   };
 
+  const filteredCourses = levelFilter ? courses.filter(c => c.level === levelFilter) : courses;
 
   if (loading) return <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />;
   if (error) return <Alert type="error" message={error} style={{ margin: 40 }} />;
-  if (courses.length === 0) return <Alert type="info" message={t('learnPage.noCourses')} style={{ margin: 40 }} />;
 
   return (
     <div style={{ padding: '48px 0', textAlign: 'center' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', marginBottom: 24 }}>
+        <Select
+          allowClear
+          placeholder={t('learnPage.levelFilterPlaceholder')}
+          style={{ width: 200, marginBottom: 24 }}
+          value={levelFilter || undefined}
+          onChange={val => setLevelFilter(val)}
+          options={LEVELS.map(l => ({ value: l.value ?? l, label: l.label ?? l }))}
+        />
+      </div>
+{filteredCourses.length === 0 ? <Alert type="info" message={t('learnPage.noCourses')} style={{ margin: 40 }} /> : ( 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, maxWidth: 1200, margin: '0 auto' }}>
-        {courses.map(course => (
+        {filteredCourses.map(course => (
           <Card
             key={course._id}
             hoverable
@@ -102,7 +116,7 @@ export const Learn: React.FC = () => {
             </div>
           </Card>
         ))}
-      </div>
+      </div>)}
       <Modal open={!!deleteModal} title={t('learnPage.deleteConfirmTitle')} onCancel={() => setDeleteModal(null)} footer={null}>
         
       </Modal>
@@ -128,6 +142,5 @@ export const Learn: React.FC = () => {
         )}
       </Modal>
     </div>
-  );
-};
+    )}
 

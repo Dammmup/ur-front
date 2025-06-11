@@ -55,6 +55,7 @@
     "learn": "Lär dig",
     "community": "Gemenskap",
     "events": "Evenemang",
+    "about": "Om oss",
     "logout": "Logga ut",
     "menuTitle": "Meny",
     "roleAdmin": "Administratör",
@@ -240,7 +241,29 @@
     "registerLink": "Registrera"
   },
   "communityPage": {
-  "title": "Gemenskap",
-  "subtitle": "Få kontakt med andra elever, dela erfarenheter och väx tillsammans."
-}
+    "title": "Gemenskap",
+    "subtitle": "Få kontakt med andra elever, dela erfarenheter och väx tillsammans."
+  },
+  "aboutUs": {
+    "title": "Om oss",
+    "description": "Lär dig mer om vårt uppdrag, vår vision och teamet bakom denna plattform.",
+    "missionTitle": "Vårt uppdrag",
+    "missionText": "Att tillhandahålla tillgänglig och högkvalitativ utbildning för alla, överallt.",
+    "visionTitle": "Vår vision",
+    "visionText": "Att skapa en global gemenskap av elever som har befogenhet att uppnå sin fulla potential."
+  },
+  "pricing": {
+    "title": "Välj din plan",
+    "subtitle": "Lås upp full tillgång till alla kurser och funktioner med vår Premium-plan.",
+    "free": {
+      "title": "Gratis",
+      "description": "Begränsad tillgång till introduktionskurser och gemenskapsfunktioner.",
+      "button": "Nuvarande plan"
+    },
+    "premium": {
+      "title": "Premium",
+      "description": "Obegränsad tillgång till alla kurser, material och certifikat.",
+      "button": "Uppgradera till Premium"
+    }
+  }
 }

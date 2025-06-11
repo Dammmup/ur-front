@@ -18,7 +18,7 @@ export const Login: React.FC = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useUser(); 
+  const { login: loginCtx } = useUser(); 
 
   const onFinish = async (values: { login: string; password: string }) => {
     setLoading(true);
@@ -28,8 +28,9 @@ export const Login: React.FC = () => {
       if (res.ok && data.token) {
         const decoded = jwtDecode<User>(data.token); 
         if (decoded.id && decoded.role) {
-          localStorage.setItem('token', data.token); // сохранить токен
-          setUser(decoded); // вызвать setUser из useUser
+          localStorage.setItem('token', data.token); 
+          // Сохраняем токен и инициируем загрузку профиля через контекст
+          loginCtx(data.token);
           message.success(t('login.success'));
           if (decoded.role === 'admin' || decoded.role === 'teacher') {
             navigate('/admin');
@@ -90,4 +91,3 @@ export const Login: React.FC = () => {
     </div>
   );
 };
-

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LANGUAGES, GENDERS, ROLES, COUNTRIES } from '../constants';
+import { LANGUAGES, GENDERS, ROLES, COUNTRIES, LEVELS } from '../constants';
 import { checkUserDuplicate, createUser } from '../api';
 import styles from './styles/UserForm.module.css';
 import TextField from '@mui/material/TextField';
@@ -38,7 +38,7 @@ interface UserFormProps {
   telegram?: string;
   whatsapp?: string;
   role?: string;
-  access?: string;
+  access?: boolean;
   coursesCompleted?: number;
   createdAt?: string;
   emailVerified?: boolean;
@@ -50,6 +50,7 @@ interface UserFormProps {
   password?: string;
   username?: string;
   active?: string;
+  level?: string;
 }
 
 function filterUserFormValues(user: any) {
@@ -69,7 +70,8 @@ function filterUserFormValues(user: any) {
     password: '', // пароль не подставляем из БД
     role: user.role || '',
     notes: user.notes || '',
-    access: user.access !== undefined ? String(user.access) : '',
+    level: user.level || '',
+    access: user.access || false,
     coursesCompleted: typeof user.coursesCompleted === 'number' ? user.coursesCompleted : 0,
     active: user.active !== undefined ? String(user.active) : '',
     blocked: user.blocked !== undefined ? String(user.blocked) : '',
@@ -130,6 +132,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
         whatsapp: values.whatsapp,
         birthday: values.birthday,
         role: isRegistration ? 'student' : values.role,
+        level: values.level,
         coursesCompleted: 0,
         access: 'false',
         emailVerified: 'false',
@@ -408,6 +411,25 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
               />
             </LocalizationProvider>
           </Box>
+          <Box sx={{ width: '100%' }}>
+            <FormControl fullWidth>
+              <InputLabel id="level-label">{t('userForm.levelLabel')}</InputLabel>
+              <Select
+                labelId="level-label"
+                label={t('userForm.levelLabel')}
+                name="level"
+                value={formState.level}
+                onChange={(e) => setFormState((prev: any) => ({ ...prev, level: e.target.value }))}
+                disabled={isReadOnly}
+              >
+                {LEVELS.map((lvl: { value: string; label: string }) => (
+                  <MenuItem key={`lvl-${lvl.value}`} value={lvl.value}>
+                    {lvl.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           <Button
             type="submit"
             variant="contained"
@@ -485,4 +507,3 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
     </div>
   );
 };
-

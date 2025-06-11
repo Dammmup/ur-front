@@ -21,6 +21,12 @@ export const GENDERS = [
   { value: 'female', label: 'Женский' },
 ];
 
-export const COURSE_LEVELS = [
-  'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Beginner', 'Elementary', 'Intermediate', 'Upper-Intermediate', 'Advanced'
+
+
+// Тарифные уровни подписки / курсов
+export const LEVELS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+  { value: 'speaking', label: 'Speaking' },
 ];

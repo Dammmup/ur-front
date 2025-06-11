@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Select, InputNumber, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { COURSE_LEVELS, LANGUAGES } from '../constants';
+import { LEVELS, LANGUAGES } from '../constants';
 import { createCourse } from '../api';
 import { useTranslation } from 'react-i18next';
 
@@ -123,7 +123,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
         placeholder={t('courseForm.levelPlaceholder')}
         value={form.level}
         onChange={val => setForm(f => ({ ...f, level: val }))}
-        options={COURSE_LEVELS.map(level => ({ value: level, label: level }))}
+        options={LEVELS.map(level => ({ value: level, label: level }))}
       />
       <InputNumber
         placeholder={t('courseForm.durationPlaceholder')}

@@ -54,6 +54,7 @@
     "learn": "Apprendre",
     "community": "Communauté",
     "events": "Événements",
+    "about": "À propos",
     "logout": "Déconnexion",
     "menuTitle": "Menu",
     "roleAdmin": "Administrateur",
@@ -224,5 +225,27 @@
   "communityPage": {
     "title": "Communauté",
     "subtitle": "Connectez-vous avec d'autres apprenants, partagez vos expériences et grandissez ensemble."
+  },
+  "aboutUs": {
+    "title": "À propos de nous",
+    "description": "Apprenez-en plus sur notre mission, notre vision et l'équipe derrière cette plateforme.",
+    "missionTitle": "Notre Mission",
+    "missionText": "Fournir une éducation accessible et de haute qualité pour tous, partout.",
+    "visionTitle": "Notre Vision",
+    "visionText": "Créer une communauté mondiale d'apprenants habilités à réaliser leur plein potentiel."
+  },
+  "pricing": {
+    "title": "Choisissez votre forfait",
+    "subtitle": "Débloquez l'accès complet à tous les cours et fonctionnalités avec notre forfait Premium.",
+    "free": {
+      "title": "Gratuit",
+      "description": "Accès limité aux cours d'introduction et aux fonctionnalités de la communauté.",
+      "button": "Forfait actuel"
+    },
+    "premium": {
+      "title": "Premium",
+      "description": "Accès illimité à tous les cours, matériaux et certificats.",
+      "button": "Passer à Premium"
+    }
   }
 }

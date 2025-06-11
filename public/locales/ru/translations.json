@@ -32,6 +32,7 @@
     "notesLabel": "Заметки",
     "telegramLabel": "Telegram",
     "whatsappLabel": "WhatsApp",
+    "levelLabel": "Уровень тарифа",
     "emailLabel": "Email",
     "emailError": "Введите email!",
     "birthdayLabel": "Дата рождения",
@@ -55,6 +56,8 @@
     "learn": "Обучение",
     "community": "Сообщество",
     "events": "События",
+    "about": "О нас",
+    "pricing": "Тарифы",
     "logout": "Выйти",
     "menuTitle": "Меню",
     "roleAdmin": "Администратор",
@@ -146,6 +149,7 @@
     "deleteError": "Ошибка удаления курса",
     "languageLabel": "Язык",
     "durationLabel": "ч.",
+    "levelFilterPlaceholder": "Фильтр по уровню",
     "editModalTitle": "Редактировать курс",
     "updateSuccess": "Курс обновлён!",
     "updateError": "Ошибка обновления курса",
@@ -235,12 +239,25 @@
     "error": "Ошибка загрузки пользователей",
     "noUsers": "Пользователи не найдены",
     "defaultUserName": "Пользователь",
-    "telegramLabel": "Телеграм",
-    "whatsappLabel": "WhatsApp",
-    "emailLabel": "Эл. почта"
+    "title": "Сообщество",
+    "subtitle": "Общайтесь с другими учениками, делитесь опытом и развивайтесь вместе."
   },
-  "communityPage": {
-  "title": "Сообщество",
-  "subtitle": "Общайтесь с другими учениками, делитесь опытом и развивайтесь вместе."
-}
+  "aboutUs": {
+    "title": "О нас",
+    "description": "Узнайте больше о нашей миссии, видении и команде, стоящей за этой платформой.",
+    "missionTitle": "Наша миссия",
+    "missionText": "Обеспечить доступное и качественное образование для всех и везде.",
+    "visionTitle": "Наше видение",
+    "visionText": "Создать глобальное сообщество учащихся, которые могут полностью раскрыть свой потенциал."
+  },
+  "pricing": {
+    "title": "Выберите ваш план",
+    "subtitle": "Откройте полный доступ к курсам и функциям, выбрав подходящий уровень.",
+    "plans": {
+      "beginner": { "title": "Beginner", "description": "Начальные основы языка.", "button": "Выбрать" },
+      "intermediate": { "title": "Intermediate", "description": "Улучшайте навыки.", "button": "Выбрать" },
+      "advanced": { "title": "Advanced", "description": "Высокий уровень владения.", "button": "Выбрать" },
+      "speaking": { "title": "Speaking", "description": "Акцент на разговор.", "button": "Выбрать" }
+    }
+  }
 }

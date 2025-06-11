@@ -1,7 +1,7 @@
 import React from 'react';
 import { useUser } from '../UserContext';
 import { Menu, Select, Button, Drawer } from 'antd';
-import { MenuOutlined, GlobalOutlined, BookOutlined, TeamOutlined, UserOutlined, CalendarOutlined, HomeOutlined } from '@ant-design/icons';
+import { MenuOutlined, GlobalOutlined, BookOutlined, TeamOutlined, UserOutlined, CalendarOutlined, HomeOutlined, InfoOutlined, DollarCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES } from '../constants';
 import './styles/Navbar-new.css';
@@ -42,6 +42,16 @@ export const Navbar: React.FC = () => {
                 icon: <CalendarOutlined />,
                 label: <a href="/events">{t('navbar.events')}</a>,
               },
+              {
+                key: 'about',
+                icon: <InfoOutlined />,
+                label: <a href="/about-us">{t('navbar.about')}</a>,
+              },
+              {
+                key: 'pricing',
+                icon: <DollarCircleOutlined />,
+                label: <a href="/pricing">{t('navbar.pricing')}</a>,
+              },
             ]}
           />
           <Select
@@ -53,7 +63,7 @@ export const Navbar: React.FC = () => {
           />
           {localStorage.getItem('token') ? (
             <>
-              <a href="/admin">
+              <a href={user?.role === 'admin' ? '/admin' : '/profile'}>
                 <UserOutlined
                   style={{ marginLeft: 16, padding: '6px 18px', background: '#1677ff', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, cursor: 'pointer', fontSize: 16 }}
                 />
@@ -107,6 +117,16 @@ export const Navbar: React.FC = () => {
                   key: 'events-m',
                   icon: <CalendarOutlined />,
                   label: <a href="/events">{t('navbar.events')}</a>,
+                },
+                {
+                  key: 'about-m',
+                  icon: <InfoOutlined />,
+                  label: <a href="/about-us">{t('navbar.about')}</a>,
+                },
+                {
+                  key: 'pricing-m',
+                  icon: <DollarCircleOutlined />,
+                  label: <a href="/pricing">{t('navbar.pricing')}</a>,
                 },
               ]}
             />

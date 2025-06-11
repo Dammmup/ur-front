@@ -46,12 +46,15 @@ export const CommunityUsers: React.FC = () => {
       {users.map(user => (
         <Card key={user._id} className="user-card">
           <div className="user-card-content">
-            <Avatar src={user.photo} icon={<UserOutlined />} size={64} />
+            <Avatar src={user.photo} icon={<UserOutlined />} size={100} />
             <div className="user-info">
               <h3 className="user-name">{user.username || user.firstName || t('communityUsers.defaultUserName')}</h3>
               {user.firstName && user.lastName && (
                 <div className="user-full-name">{user.firstName} {user.lastName}</div>
+                
               )}
+              <div className="user-role">{user.role}</div>
+              <div className="user-country">{user.country}</div>
               <div className="user-contacts">
                 {user.telegram && (
                   <a href={`https://t.me/${user.telegram}`} target="_blank" rel="noopener noreferrer" className="contact-link">

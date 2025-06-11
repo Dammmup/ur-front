@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { updateUserNotes } from '../api';
-import { useUser } from '../UserContext';
 
 interface StudentNotesProps {
   userId: string;
@@ -17,7 +16,6 @@ export const StudentNotes: React.FC<StudentNotesProps> = ({ userId, notes, onCha
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string|null>(null);
   const [error, setError] = useState<string|null>(null);
-  const { user } = useUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLocalNotes(e.target.value);
@@ -32,7 +30,7 @@ export const StudentNotes: React.FC<StudentNotesProps> = ({ userId, notes, onCha
     setSuccess(null);
     setError(null);
     try {
-      await updateUserNotes(userId, localNotes, user?.token);
+      await updateUserNotes(userId, localNotes);
       setSuccess(t('notes.saveSuccess'));
       
     } catch (err: any) {

@@ -21,7 +21,7 @@ interface User {
   telegram?: string;
   whatsapp?: string;
   role?: string;
-  access?: string;
+  access?: boolean;
   coursesCompleted?: number;
   createdAt?: string;
   emailVerified?: boolean;
@@ -29,6 +29,7 @@ interface User {
   lastLogin?: string;
   notes?: string;
   photo?: string;
+  level?: string;
 }
 
 export const UserEditor: React.FC = () => {
@@ -85,7 +86,7 @@ export const UserEditor: React.FC = () => {
               >
                 {users.map(u => (
                   <Select.Option key={u._id} value={u._id}>
-                    {u.lastName} {u.firstName} ({u.role})
+                    {u.lastName} {u.firstName} ({u.role}) – {u.level || '—'}
                   </Select.Option>
                 ))}
               </Select>
@@ -118,7 +119,7 @@ export const UserEditor: React.FC = () => {
               >
                 {users.filter(u => u.role === 'student').map(student => (
                   <Select.Option key={student._id} value={student._id}>
-                    {student.lastName} {student.firstName} ({student.phone})
+                    {student.lastName} {student.firstName} ({student.phone}) – {student.level || '—'}
                   </Select.Option>
                 ))}
               </Select>
@@ -143,4 +144,3 @@ export const UserEditor: React.FC = () => {
     </div>
   );
 };
-
