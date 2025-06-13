@@ -257,7 +257,7 @@
     "title": "Choose Your Plan",
     "subtitle": "Unlock full access to all courses and features with the plan that suits you best.",
     "plans": {
-      "beginner": { "title": "Beginner", "description": "Start learning basics.", "button": "Choose" },
+      "beginner": { "title": "Beginner", "description": "Course designed for those who do not speak Uyghur at all; children and adults who want to start from scratch; people born in diaspora who want to reconnect with their ancestors' language.", "button": "Choose" },
       "intermediate": { "title": "Intermediate", "description": "Improve your skills.", "button": "Choose" },
       "advanced": { "title": "Advanced", "description": "Master the language.", "button": "Choose" },
       "speaking": { "title": "Speaking", "description": "Focus on conversation.", "button": "Choose" }

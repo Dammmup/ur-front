@@ -254,7 +254,7 @@
     "title": "Выберите ваш план",
     "subtitle": "Откройте полный доступ к курсам и функциям, выбрав подходящий уровень.",
     "plans": {
-      "beginner": { "title": "Beginner", "description": "Начальные основы языка.", "button": "Выбрать" },
+      "beginner": { "title": "Beginner", "description": "Курс предназначен для тех, кто вообще не говорит на уйгурском; детей и взрослых, желающих начать «с нуля»; людей, родившихся в диаспоре, которые хотят восстановить связь с языком предков.", "button": "Выбрать" },
       "intermediate": { "title": "Intermediate", "description": "Улучшайте навыки.", "button": "Выбрать" },
       "advanced": { "title": "Advanced", "description": "Высокий уровень владения.", "button": "Выбрать" },
       "speaking": { "title": "Speaking", "description": "Акцент на разговор.", "button": "Выбрать" }
