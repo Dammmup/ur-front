@@ -21,6 +21,7 @@
   display: flex;
   justify-content: center;
   gap: 30px;
+  text-align: center;
 }
 
 .pricing-card {
@@ -32,3 +33,15 @@
 .pricing-card.premium {
   border: 2px solid #1890ff;
 }
+@media (max-width: 768px) {
+  .pricing-cards {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }}
+
+.Button{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+  }

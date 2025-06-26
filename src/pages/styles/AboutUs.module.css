@@ -1,30 +1,30 @@
-.about-us-container {
+.container {
   padding: 40px 20px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
 
-.about-us-title {
+.title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-.about-us-description {
+.description {
   font-size: 1.2rem;
   color: #555;
   margin-bottom: 40px;
 }
 
-.about-us-content h2 {
+.content h2 {
   font-size: 1.8rem;
   font-weight: 600;
   margin-top: 30px;
   margin-bottom: 15px;
 }
 
-.about-us-content p {
+.content p {
   font-size: 1rem;
   line-height: 1.6;
   text-align: left;

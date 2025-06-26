@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Tabs, message } from 'antd';
+import { Typography, Tabs } from 'antd';
 import styles from '../components/styles/AdminPanel.module.css';
-import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import {AdminEventForm} from '../components/AdminEventForm';
 import {UserEditor} from '../components/UserEditor';
@@ -18,42 +17,23 @@ export const AdminPanel: React.FC = () => {
   const { user } = useUser();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    console.log(user);
-    if(!user){
+    // Проверяем авторизацию пользователя и права доступа
+    if (!user) {
+      // Если пользователь не авторизован, редиректим на страницу входа
       navigate('/login');
       return;
     }
 
-      if (user?.role === 'student') {
-        navigate('/profile');
-      } else if (user?.role !== 'admin' && user?.role !== 'teacher') {
-        navigate('/');
-      }
-    
-    try {
-      const decoded: any = jwtDecode(token);
-      if (!decoded || !decoded.role) {
-        message.error(t('adminPanel.authErrorNoRole'));
-        navigate('/login');
-        return;
-      }
-      if (decoded.exp && Date.now() >= decoded.exp * 1000) {
-        message.error(t('adminPanel.sessionExpired'));
-        localStorage.removeItem('token');
-        navigate('/login');
-        return;
-      }
-    } catch (e) {
-      message.error(t('adminPanel.authErrorGeneral'));
-      localStorage.removeItem('token');
-      navigate('/login');
+    // Проверка роли пользователя для доступа к админ-панели
+    if (user.role === 'student') {
+      // Если пользователь - студент, редиректим на его профиль
+      navigate('/profile');
+    } else if (user.role !== 'admin' && user.role !== 'teacher') {
+      // Если у пользователя нет прав админа или учителя, редиректим на главную
+      navigate('/');
     }
-  }, [navigate]);
+    // UserContext уже проверяет срок действия токена, так что дополнительные проверки не требуются
+  }, [user, navigate, t]);
 
 
   return (

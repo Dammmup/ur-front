@@ -38,6 +38,7 @@
     "birthdayLabel": "Date of Birth",
     "submitButtonAdd": "Add User",
     "submitButtonUpdate": "Update Data",
+    "submitButtonRegistation": "Register",
     "activeSwitch": "Active",
     "accessSwitch": "Access Granted",
     "blockedSwitch": "Blocked",
@@ -47,7 +48,8 @@
     "registrationSuccess": "Registration successful!",
     "addUserSuccess": "User added successfully!",
     "coursesCompletedLabel": "Courses Completed",
-    "userIcon": "👤"
+    "userIcon": "👤",
+    "editUser":"Edit User"
   },
   "login": {
     "success": "Login successful!",
@@ -128,7 +130,8 @@
     "addingButton": "Adding...",
     "submitButtonUpdate": "Save Changes",
     "submitButtonCreate": "Add Event",
-    "cancelButton": "Cancel"
+    "cancelButton": "Cancel",
+    "addEvent": "Add Event"
   },
   "studentProfile": {
     "profileError": "Profile error",
@@ -211,8 +214,7 @@
         "date": "24.05.2025",
         "author": "UyghurLearn Team",
         "description": "Welcome to our learning community! This is a place where we can share our experiences, ask questions, and support each other in learning the Uyghur language and culture. Feel free to introduce yourself and share your learning goals!",
-        "link": "/community/cmb28uquj000hf53tjexq2j36"
-      }
+"link": "/about-us"      }
     ]
   },
   "learnPage": {
@@ -237,13 +239,23 @@
     "error": "Error loading users",
     "noUsers": "No users found",
     "defaultUserName": "User",
+    "defaultTitle": "Uyghur language learner",
+    "defaultDescription": "Share your learning goals and experience!",
+    "connect": "Connect",
+    "connected": "Connected",
     "telegramLabel": "Telegram",
     "whatsappLabel": "WhatsApp",
     "emailLabel": "Email"
   },
   "communityPage": {
     "title": "Community",
-    "subtitle": "Connect with fellow learners, share experiences, and grow together."
+    "subtitle": "Connect with fellow learners, share experiences, and grow together.",
+    "sections": {
+      "questions": "Questions and Discussions",
+      "news": "News",
+      "history": "History",
+      "people": "People"
+    }
   },
   "aboutUs": {
     "title": "About Us",
@@ -251,16 +263,92 @@
     "missionTitle": "Our Mission",
     "missionText": "To provide accessible and high-quality education for everyone, everywhere.",
     "visionTitle": "Our Vision",
-    "visionText": "To create a global community of learners who are empowered to achieve their full potential."
+    "visionText": "To create a global community of learners who are empowered to achieve their full potential.",
+    "aboutTabTitle": "About Us",
+    "privacyTabTitle": "Privacy Policy"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "General Information",
+      "content": "The YughurLearn platform is designed for learning the Uyghur language. The platform can only be used by persons over 12 years of age. The platform has no legal status and operates as a private educational project."
+    },
+    "section2": {
+      "title": "What Data We Collect",
+      "intro": "We collect and store the following user data:",
+      "item1": "First and last name",
+      "item2": "Email",
+      "item3": "Phone number",
+      "item4": "Country, language, gender",
+      "item5": "Telegram and WhatsApp (if provided)",
+      "item6": "Date of birth",
+      "item7": "Photo (optional)",
+      "item8": "Activity status, registration date and last login",
+      "item9": "Courses accessed and completion status",
+      "item10": "Role in the system (e.g., student, teacher, admin)",
+      "item11": "Email confirmation",
+      "item12": "Blocking and activity flags",
+      "item13": "Hashed password"
+    },
+    "section3": {
+      "title": "Purpose of Data Collection",
+      "intro": "Data is used exclusively within the service:",
+      "item1": "For authorization and authentication",
+      "item2": "For user identity verification",
+      "item3": "For displaying personalized content",
+      "item4": "For internal analytics and tracking progress"
+    },
+    "section4": {
+      "title": "Sharing Data with Third Parties",
+      "content": "We do not share data with third parties. All information is used only within the YughurLearn platform."
+    },
+    "section5": {
+      "title": "Where Data is Stored",
+      "content": "Data is stored in MongoDB on protected servers with restricted access."
+    },
+    "section6": {
+      "title": "User Rights",
+      "content": "Users have the right to request deletion of their personal data by contacting the manager via Telegram or WhatsApp. After deletion, access to the platform will be closed."
+    },
+    "section7": {
+      "title": "Learning, Payment, and Refunds",
+      "paragraph1": "The platform provides access to courses that may be paid. Costs and payment methods are specified through the manager.",
+      "paragraph2": "Payment data is not collected through the website and is not processed directly.",
+      "paragraph3": "Refunds, compensation, or other reimbursement are not possible under any circumstances. Instead:",
+      "item1": "Users can use paid sessions until the end of their subscription;",
+      "item2": "Or transfer them to another user (with manager approval)."
+    }
   },
   "pricing": {
     "title": "Choose Your Plan",
     "subtitle": "Unlock full access to all courses and features with the plan that suits you best.",
+    "whatsappMessage": "Hello! I would like to inquire about the price for the {{plan}} course. Thank you!",
     "plans": {
       "beginner": { "title": "Beginner", "description": "Course designed for those who do not speak Uyghur at all; children and adults who want to start from scratch; people born in diaspora who want to reconnect with their ancestors' language.", "button": "Choose" },
-      "intermediate": { "title": "Intermediate", "description": "Improve your skills.", "button": "Choose" },
-      "advanced": { "title": "Advanced", "description": "Master the language.", "button": "Choose" },
-      "speaking": { "title": "Speaking", "description": "Focus on conversation.", "button": "Choose" }
+      "intermediate": { "title": "Intermediate", "description": "The course is suitable for those who already have basic knowledge and want to confidently use Uyghur in everyday speech. We deepen vocabulary, practice grammar, learn to express complex thoughts and understand native speakers.", "button": "Choose" },
+      "advanced": { "title": "Advanced", "description": "For those who speak Uyghur fluently but want to take the language to a high level. We analyze nuances, idioms, literary speech and professional contexts. Improve fluency, style and confidence.", "button": "Choose" },
+      "speaking": { "title": "Speaking", "description": "Course with a focus on conversation practice. Maximum conversation, minimum theory — living Uyghur language in dialogues, discussions, and role-playing. Suitable for all levels who want to speak freely and without embarrassment.", "button": "Choose" }
     }
+  },
+  "emailVerification": {
+    "title": "Email Verification",
+    "instruction": "Enter the code sent to your email address.",
+    "codeLabel": "Verification Code",
+    "submitButton": "Verify",
+    "successMessage": "Email successfully verified. You can now log in.",
+    "errorMessage": "Invalid code. Please try again.",
+    "resendButton": "Resend Code",
+    "resendSuccess": "A new code has been sent to your email.",
+    "resendError": "Error sending a new code. Please try again later.",
+    "backToLogin": "Back to Login"
+  },
+  "emailVerificationPending": {
+    "title": "Check Your Email",
+    "message": "We have sent an email with a verification code to your address. Please check your email and enter the code on the next page.",
+    "nextButton": "Proceed to Code Entry"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "submit": "Submit"
   }
 }

@@ -1,133 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Spin, Alert, Tag, message } from 'antd';
-import { getCourseById, updateCourse, deleteCourse } from '../api';
-import { Modal, Button } from 'antd';
-import { useUser } from '../UserContext';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Card, Typography, Image, Spin, Alert } from 'antd';
 import { useTranslation } from 'react-i18next';
-// import AdminCourseForm from '../components/AdminCourseForm'; // Раскомментируйте если форма есть
+import { getLesson } from '../api';
+
+const { Title, Paragraph } = Typography;
 
 interface Course {
   _id: string;
   name: string;
-  language: string;
-  image?: string;
-  level?: string;
-  duration?: number;
+  image: string;
+  level: string;
+  duration: number;
   content: string;
-  price?: number;
-  [key: string]: any;
+  price: number;
+  lessonId: string; 
+}
+
+interface Lesson {
+  _id: string;
+  title: string;
+  content: string;
+  image?: string;
+  linkonyoutube?: string;
+  course?: Course;
 }
 
 export const CoursePage: React.FC = () => {
+  const { lessonId } = useParams<{ lessonId: string }>(); 
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { user } = useUser();
-  const [course, setCourse] = useState<Course | null>(null);
+  const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editValues, setEditValues] = useState<Course | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
-    getCourseById(id)
-      .then(data => {
-        setCourse(data);
+    const fetchLessonData = async () => {
+      if (!lessonId) {
+        setError(t('coursePage.invalidLessonId'));
         setLoading(false);
-      })
-      .catch(e => {
-        setError(e.message || t('coursePage.loadingError'));
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const lessonData = await getLesson(lessonId);
+        setLesson(lessonData);
+      } catch (err) {
+        console.error('Error fetching lesson:', err);
+        setError(t('coursePage.loadError'));
+      } finally {
         setLoading(false);
-      });
-  }, [id]);
+      }
+    };
+
+    fetchLessonData();
+  }, [lessonId, t]);
 
   if (loading) return <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />;
   if (error) return <Alert type="error" message={error} style={{ margin: 40 }} />;
-  if (!course) return <Alert type="info" message={t('coursePage.notFound')} style={{ margin: 40 }} />;
+  if (!lesson) return <Alert type="info" message={t('coursePage.lessonNotFound')} style={{ margin: 40 }} />;
 
   return (
-    <Card
-      title={<div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {course.name}
-        {course.level && <Tag color="green">{course.level}</Tag>}
-        {user && (user.role === 'admin' || user.role === 'teacher') && (
-          <>
-            <Button type="default" size="small" style={{ marginLeft: 16 }} onClick={() => { setEditDialogOpen(true); setEditValues(course); }}>{t('coursePage.editButton')}</Button>
-            <Button type="default" danger size="small" style={{ marginLeft: 8 }} onClick={async () => {
-              if (window.confirm(t('coursePage.deleteConfirmation'))) {
-                setDeleteLoading(true);
-                try {
-                  const token = localStorage.getItem('token');
-                  await deleteCourse(course._id, token || undefined);
-                  message.success(t('coursePage.deleteSuccess'));
-                  navigate('/courses');
-                } catch (e: any) {
-                  message.error(e.message || t('coursePage.deleteError'));
-                } finally {
-                  setDeleteLoading(false);
-                }
-              }
-            }} disabled={deleteLoading}>{t('coursePage.deleteButton')}</Button>
-          </>
+    <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto' }}>
+      <Card>
+        <Title level={2}>{lesson.title}</Title>
+        
+        {lesson.course && (
+          <Paragraph type="secondary">
+            {t('coursePage.courseLabel')}: {lesson.course.name}
+          </Paragraph>
         )}
-      </div>}
-      style={{ maxWidth: 700, margin: '40px auto', borderRadius: 12 }}
-      cover={course.image && <img alt={course.name} src={course.image} style={{ height: 260, objectFit: 'cover' }} />}
-    >
-      <div style={{ color: '#888', fontSize: 15, marginBottom: 8 }}>
-        {t('coursePage.languageLabel')}: <b>{course.language}</b>{course.duration ? ` • ${course.duration} ${t('coursePage.durationLabel')}` : ''}{course.price ? ` • ${course.price}₸` : ''}
-      </div>
-      <div style={{ color: '#555', marginBottom: 16 }}>{course.content}</div>
-      {/* Здесь можно добавить список уроков, материалов, кнопки записи и т.д. */}
 
-      {/* Modal для редактирования курса */}
-      <Modal
-        open={editDialogOpen}
-        onCancel={() => setEditDialogOpen(false)}
-        title={t('coursePage.editModalTitle')}
-        footer={null}
-        destroyOnHidden
-      >
-        {/* Если есть AdminCourseForm, используйте его здесь */}
-        {/* <AdminCourseForm initialValues={editValues} onSuccess={...} onCancel={...} /> */}
-        {/* Временная форма для примера: */}
-        {editValues && (
-          <form onSubmit={async e => {
-            e.preventDefault();
-            try {
-              const token = localStorage.getItem('token');
-              await updateCourse(editValues._id, editValues, token || undefined);
-              message.success(t('coursePage.updateSuccess'));
-              setEditDialogOpen(false);
-              getCourseById(editValues._id).then(setCourse);
-            } catch (err: any) {
-              message.error(err.message || t('coursePage.updateError'));
-            }
-          }}>
-            <div style={{ marginBottom: 12 }}>
-              <input type="text" value={editValues.name} onChange={e => setEditValues({ ...editValues, name: e.target.value })} placeholder={t('coursePage.namePlaceholder')} style={{ width: '100%', padding: 8, fontSize: 16 }} />
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <input type="text" value={editValues.language} onChange={e => setEditValues({ ...editValues, language: e.target.value })} placeholder={t('coursePage.languagePlaceholder')} style={{ width: '100%', padding: 8 }} />
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <textarea value={editValues.content} onChange={e => setEditValues({ ...editValues, content: e.target.value })} placeholder={t('coursePage.descriptionPlaceholder')} style={{ width: '100%', padding: 8, minHeight: 80 }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-              <Button onClick={() => setEditDialogOpen(false)}>
-                {t('coursePage.cancelButton')}
-              </Button>
-              <Button type="primary" htmlType="submit">
-                {t('coursePage.saveButton')}
-              </Button>
-            </div>
-          </form>
+        {lesson.image && (
+          <div style={{ textAlign: 'center', margin: '24px 0' }}>
+            <Image
+              src={lesson.image}
+              alt={lesson.title}
+              style={{ maxWidth: '100%', maxHeight: '400px' }}
+            />
+          </div>
         )}
-      </Modal>
-    </Card>
+
+        {lesson.linkonyoutube && (
+          <div style={{ margin: '24px 0' }}>
+            <Title level={4}>{t('coursePage.videoLabel')}</Title>
+           
+          </div>
+        )}
+
+        <div style={{ marginTop: '24px' }}>
+          <Title level={4}>{t('coursePage.contentLabel')}</Title>
+          <div 
+            dangerouslySetInnerHTML={{ __html: lesson.content }}
+            style={{ lineHeight: 1.6 }}
+          />
+        </div>
+      </Card>
+    </div>
   );
 };
-

@@ -7,16 +7,23 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LEVELS } from '../constants';
 
+const LEVEL_COLORS: Record<string, string> = {
+  beginner: 'green',
+  intermediate: 'blue',
+  advanced: 'volcano',
+  speaking: 'purple',
+};
+
 interface Course {
   _id: string;
   name: string;
-  language: string;
   image?: string;
   level?: string;
   duration?: number;
   content: string;
   price?: number;
   createdBy?: string;
+  lessonId: string; 
   [key: string]: any;
 }
 
@@ -83,8 +90,8 @@ export const Learn: React.FC = () => {
           placeholder={t('learnPage.levelFilterPlaceholder')}
           style={{ width: 200, marginBottom: 24 }}
           value={levelFilter || undefined}
-          onChange={val => setLevelFilter(val)}
-          options={LEVELS.map(l => ({ value: l.value ?? l, label: l.label ?? l }))}
+          onChange={(val) => setLevelFilter(val as string)}
+          options={LEVELS}
         />
       </div>
 {filteredCourses.length === 0 ? <Alert type="info" message={t('learnPage.noCourses')} style={{ margin: 40 }} /> : ( 
@@ -95,16 +102,16 @@ export const Learn: React.FC = () => {
             hoverable
             cover={course.image && <img alt={course.name} src={course.image} style={{ height: 192, objectFit: 'cover' }} />}
             style={{ borderRadius: 12 }}
-            onClick={() => navigate(`/course/${course._id}`)}
+            onClick={() => navigate(`/course/${course.lessonId}`)}
 
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 600 }}>{course.name}</h3>
-                {course.level && <Tag color="green" style={{ marginLeft: 8 }}>{course.level}</Tag>}
+                {course.level && <Tag color={LEVEL_COLORS[course.level] || 'default'} style={{ marginLeft: 8 }}>{course.level}</Tag>}
               </div>
               <div style={{ color: '#888', fontSize: 14, marginBottom: 4 }}>
-                {t('learnPage.languageLabel')}: <b>{course.language}</b>{course.duration ? ` • ${course.duration} ${t('learnPage.durationLabel')}` : ''}{course.price ? ` • ${course.price}₸` : ''}
+                {course.duration ? ` • ${course.duration} ${t('learnPage.durationLabel')}` : ''}{course.price ? ` • ${course.price}₸` : ''}
               </div>
               <p style={{ color: '#555', marginBottom: 8 }}>{course.content}</p>
               {user && (user.role === 'admin' || (user.role === 'teacher' && course.createdBy === user.id)) && (
@@ -117,7 +124,7 @@ export const Learn: React.FC = () => {
           </Card>
         ))}
       </div>)}
-      <Modal open={!!deleteModal} title={t('learnPage.deleteConfirmTitle')} onCancel={() => setDeleteModal(null)} footer={null}>
+      <Modal open={!!deleteModal} title={t('learnPage.deleteConfirmTitle')} onCancel={() => setDeleteModal(null)} footer={null} destroyOnClose>
         
       </Modal>
       <Modal
@@ -125,7 +132,7 @@ export const Learn: React.FC = () => {
         title={editingCourse ? t('learnPage.editModalTitle', { courseName: editingCourse.name }) : ''}
         onCancel={() => setEditingCourse(null)}
         footer={null}
-        destroyOnHidden
+        destroyOnClose
       >
         {editingCourse && (
           <CourseForm
@@ -143,4 +150,3 @@ export const Learn: React.FC = () => {
       </Modal>
     </div>
     )}
-

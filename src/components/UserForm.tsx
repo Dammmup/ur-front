@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LANGUAGES, GENDERS, ROLES, COUNTRIES, LEVELS } from '../constants';
+import { LANGUAGES, GENDERS, ROLES, COUNTRIES } from '../constants';
 import { checkUserDuplicate, createUser } from '../api';
-import styles from './styles/UserForm.module.css';
+import commonStyles from './styles/CommonFormStyles.module.css';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -19,6 +19,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { sendVerificationEmail } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -50,7 +52,7 @@ interface UserFormProps {
   password?: string;
   username?: string;
   active?: string;
-  level?: string;
+  onFinish?: (values: any) => void | Promise<void>;
 }
 
 function filterUserFormValues(user: any) {
@@ -70,7 +72,7 @@ function filterUserFormValues(user: any) {
     password: '', // пароль не подставляем из БД
     role: user.role || '',
     notes: user.notes || '',
-    level: user.level || '',
+
     access: user.access || false,
     coursesCompleted: typeof user.coursesCompleted === 'number' ? user.coursesCompleted : 0,
     active: user.active !== undefined ? String(user.active) : '',
@@ -81,12 +83,10 @@ function filterUserFormValues(user: any) {
 
 export const UserForm: React.FC<UserFormProps> = (props) => {
   const { t } = useTranslation();
-  const { isRegistration = false, currentUserRole, isReadOnly = false } = props;
+  const navigate = useNavigate();
+  const { isRegistration = false, currentUserRole, isReadOnly = false, onFinish } = props;
   const isEditMode = !isRegistration;
 
-  const userIcon = (
-    <span style={{ fontSize: 32, marginRight: 10, verticalAlign: 'middle' }}>{t('userForm.userIcon')}</span>
-  );
   const [loading, setLoading] = React.useState(false);
   const [formState, setFormState] = React.useState(filterUserFormValues(props));
   const [errors] = React.useState<any>({});
@@ -154,6 +154,18 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
       }
       setLoading(false);
       setSnackbar({ open: true, message: isRegistration ? t('userForm.registrationSuccess') : t('userForm.addUserSuccess'), severity: 'success' });
+      // Если это регистрация — отправляем письмо и перенаправляем на страницу ожидания
+      if (isRegistration) {
+        try {
+          await sendVerificationEmail(values.email);
+        } catch (err) {
+          console.error('Failed to send verification email', err);
+        }
+        navigate('/email-verification', { state: { email: values.email } });
+      }
+      if (onFinish) {
+        onFinish(values);
+      }
     } catch (error) {
       setLoading(false);
       setSnackbar({ open: true, message: t('userForm.errorCreatingUser'), severity: 'error' });
@@ -177,13 +189,15 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
   };
 
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.header}>
-        {userIcon}
-        <Typography variant="h5" fontWeight={700} sx={{ ml: 1 }}>
-          {isEditMode ? t('userForm.titleEdit') : t('userForm.titleRegistration')}
-        </Typography>
-      </div>
+    <Box className={commonStyles.formContainer}>
+      <Typography variant="h5" component="h1" gutterBottom>
+        {t(isRegistration ? 'userForm.register' : 'userForm.editUser')}
+      </Typography>
+      {isRegistration && (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          {t('userForm.fillAllFields')}
+        </Alert>
+      )}
       <Box component="form" onSubmit={handleFormSubmit} sx={{ maxWidth: 480, margin: '0 auto' }}>
         <Stack spacing={2} sx={{ mt: 2 }}>
           <Box sx={{ width: '100%' }}>
@@ -412,23 +426,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
             </LocalizationProvider>
           </Box>
           <Box sx={{ width: '100%' }}>
-            <FormControl fullWidth>
-              <InputLabel id="level-label">{t('userForm.levelLabel')}</InputLabel>
-              <Select
-                labelId="level-label"
-                label={t('userForm.levelLabel')}
-                name="level"
-                value={formState.level}
-                onChange={(e) => setFormState((prev: any) => ({ ...prev, level: e.target.value }))}
-                disabled={isReadOnly}
-              >
-                {LEVELS.map((lvl: { value: string; label: string }) => (
-                  <MenuItem key={`lvl-${lvl.value}`} value={lvl.value}>
-                    {lvl.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+        
           </Box>
           <Button
             type="submit"
@@ -437,7 +435,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
             fullWidth
             disabled={loading || isReadOnly}
           >
-            {isEditMode ? t('userForm.submitButtonUpdate') : t('userForm.submitButtonAdd')}
+            {isEditMode ? t('userForm.submitButtonUpdate') : t('userForm.submitButtonRegistation')}
           </Button>
           {(currentUserRole === 'admin') && (
             <Stack direction="column" spacing={2} sx={{ mt: 2, border: '1px solid #e0e0e0', borderRadius: 2, p: 2 }}>
@@ -504,6 +502,6 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 };

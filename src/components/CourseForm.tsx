@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { Input, Select, InputNumber, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { LEVELS, LANGUAGES } from '../constants';
+import { LEVELS } from '../constants';
 import { createCourse } from '../api';
 import { useTranslation } from 'react-i18next';
+import { updateCourse } from '../api';
 
 export interface CourseFormValues {
   name: string;
-  language: string;
   level: string;
   duration: number;
   content: string;
-  price: number;
   imageUrl?: string;
   imageLink?: string;
 }
 
-import { updateCourse } from '../api';
 
 interface CourseFormProps {
   initialValues?: Partial<CourseFormValues> & { _id?: string };
@@ -28,11 +26,9 @@ interface CourseFormProps {
 
 const INITIAL_STATE: CourseFormValues = {
   name: '',
-  language: 'yughur',
   level: 'beginner',
   duration: 0.4,
   content: '',
-  price: 100,
   imageUrl: '',
   imageLink: '',
 };
@@ -58,7 +54,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Простая валидация
-    if (!form.name || !form.language || !form.level || !form.content || form.duration === 0 || form.price === 0) {
+    if (!form.name || !form.level || !form.content || form.duration === 0 ) {
       message.error(t('courseForm.validationError'));
       return;
     }
@@ -70,22 +66,18 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
       if (mode === 'edit' && initialValues && initialValues._id) {
         res = await updateCourse(initialValues._id, {
           name: form.name,
-          language: form.language,
           level: form.level,
           duration: form.duration,
           content: form.content,
-          price: form.price,
           image: form.imageLink || form.imageUrl,
         }, token || undefined);
         updatedCourse = { ...form, _id: initialValues._id };
       } else {
         res = await createCourse({
           name: form.name,
-          language: form.language,
           level: form.level,
           duration: form.duration,
           content: form.content,
-          price: form.price,
           image: form.imageLink || form.imageUrl,
         }, token || undefined);
       }
@@ -114,16 +106,10 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
       />
       <Select
-        placeholder={t('courseForm.languagePlaceholder')}
-        value={form.language}
-        onChange={val => setForm(f => ({ ...f, language: val }))}
-        options={LANGUAGES.map(lang => ({ value: lang, label: lang }))}
-      />
-      <Select
         placeholder={t('courseForm.levelPlaceholder')}
         value={form.level}
         onChange={val => setForm(f => ({ ...f, level: val }))}
-        options={LEVELS.map(level => ({ value: level, label: level }))}
+        options={LEVELS}
       />
       <InputNumber
         placeholder={t('courseForm.durationPlaceholder')}
@@ -140,14 +126,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
         onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
         rows={4}
       />
-      <InputNumber
-        placeholder={t('courseForm.pricePlaceholder')}
-        value={form.price}
-        onChange={val => setForm(f => ({ ...f, price: typeof val === 'number' ? val : 0 }))}
-        min={0}
-        max={10000}
-        style={{ width: '100%' }}
-      />
+     
       <Upload beforeUpload={() => false} maxCount={1} onChange={handleImageUpload} listType="picture-card">
         {form.imageUrl ? <img src={form.imageUrl} alt="course" style={{ width: '100%' }} /> : <Button icon={<UploadOutlined />}>{t('courseForm.uploadButton')}</Button>}
       </Upload>

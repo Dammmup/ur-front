@@ -37,6 +37,7 @@
     "birthdayLabel": "Date de naissance",
     "submitButtonAdd": "Ajouter un utilisateur",
     "submitButtonUpdate": "Mettre à jour les données",
+    "submitButtonRegistation": "S'inscrire",
     "activeSwitch": "Actif",
     "accessSwitch": "Accès autorisé",
     "blockedSwitch": "Bloqué",
@@ -46,7 +47,8 @@
     "registrationSuccess": "Inscription réussie !",
     "addUserSuccess": "Utilisateur ajouté avec succès !",
     "coursesCompletedLabel": "Cours terminés",
-    "userIcon": "👤"
+    "userIcon": "👤",
+    "editUser":"Modifier l'utilisateur"
   },
   "navbar": {
     "logo": "UyghurLearn",
@@ -110,7 +112,8 @@
     "addingButton": "Ajout...",
     "submitButtonUpdate": "Enregistrer les modifications",
     "submitButtonCreate": "Ajouter l'événement",
-    "cancelButton": "Annuler"
+    "cancelButton": "Annuler",
+    "addEvent":"Ajouter un événement"
   },
   "studentProfile": {
     "profileError": "Erreur de profil",
@@ -193,8 +196,7 @@
         "date": "24.05.2025",
         "author": "L'équipe UyghurLearn",
         "description": "Bienvenue dans notre communauté d'apprentissage ! C'est un endroit où nous pouvons partager nos expériences, poser des questions et nous soutenir mutuellement dans l'apprentissage de la langue et de la culture ouïghoures. N'hésitez pas à vous présenter et à partager vos objectifs d'apprentissage !",
-        "link": "/community/cmb28uquj000hf53tjexq2j36"
-      }
+"link": "/about-us"      }
     ]
   },
   "learnPage": {
@@ -224,7 +226,13 @@
   },
   "communityPage": {
     "title": "Communauté",
-    "subtitle": "Connectez-vous avec d'autres apprenants, partagez vos expériences et grandissez ensemble."
+    "subtitle": "Connectez-vous avec d'autres apprenants, partagez vos expériences et grandissez ensemble.",
+    "sections": {
+      "questions": "Questions and Discussions",
+      "news": "News",
+      "history": "History",
+      "people": "People"
+    }
   },
   "aboutUs": {
     "title": "À propos de nous",
@@ -232,20 +240,92 @@
     "missionTitle": "Notre Mission",
     "missionText": "Fournir une éducation accessible et de haute qualité pour tous, partout.",
     "visionTitle": "Notre Vision",
-    "visionText": "Créer une communauté mondiale d'apprenants habilités à réaliser leur plein potentiel."
+    "visionText": "Créer une communauté mondiale d'apprenants habilités à réaliser leur plein potentiel.",
+    "aboutTabTitle": "À propos de nous",
+    "privacyTabTitle": "Politique de confidentialité"
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "section1": {
+      "title": "Informations générales",
+      "content": "La plateforme YughurLearn est conçue pour l'apprentissage de la langue ouïghoure. La plateforme ne peut être utilisée que par des personnes de plus de 12 ans. La plateforme n'a pas de statut juridique et fonctionne comme un projet éducatif privé."
+    },
+    "section2": {
+      "title": "Quelles données nous collectons",
+      "intro": "Nous collectons et stockons les données utilisateur suivantes:",
+      "item1": "Prénom et nom",
+      "item2": "Email",
+      "item3": "Numéro de téléphone",
+      "item4": "Pays, langue, genre",
+      "item5": "Telegram et WhatsApp (si fournis)",
+      "item6": "Date de naissance",
+      "item7": "Photo (optionnel)",
+      "item8": "Statut d'activité, date d'inscription et dernière connexion",
+      "item9": "Cours accessibles et statut d'achèvement",
+      "item10": "Rôle dans le système (par exemple, étudiant, enseignant, administrateur)",
+      "item11": "Confirmation d'email",
+      "item12": "Indicateurs de blocage et d'activité",
+      "item13": "Mot de passe haché"
+    },
+    "section3": {
+      "title": "Objectif de la collecte de données",
+      "intro": "Les données sont utilisées exclusivement au sein du service:",
+      "item1": "Pour l'autorisation et l'authentification",
+      "item2": "Pour la vérification de l'identité de l'utilisateur",
+      "item3": "Pour l'affichage de contenu personnalisé",
+      "item4": "Pour l'analyse interne et le suivi des progrès"
+    },
+    "section4": {
+      "title": "Partage de données avec des tiers",
+      "content": "Nous ne partageons pas de données avec des tiers. Toutes les informations sont utilisées uniquement au sein de la plateforme YughurLearn."
+    },
+    "section5": {
+      "title": "Où sont stockées les données",
+      "content": "Les données sont stockées dans MongoDB sur des serveurs protégés avec un accès restreint."
+    },
+    "section6": {
+      "title": "Droits des utilisateurs",
+      "content": "Les utilisateurs ont le droit de demander la suppression de leurs données personnelles en contactant le gestionnaire via Telegram ou WhatsApp. Après la suppression, l'accès à la plateforme sera fermé."
+    },
+    "section7": {
+      "title": "Apprentissage, paiement et remboursements",
+      "paragraph1": "La plateforme donne accès à des cours qui peuvent être payants. Les coûts et les méthodes de paiement sont spécifiés par le gestionnaire.",
+      "paragraph2": "Les données de paiement ne sont pas collectées via le site Web et ne sont pas traitées directement.",
+      "paragraph3": "Les remboursements, compensations ou autres indemnisations ne sont pas possibles en aucune circonstance. À la place:",
+      "item1": "Les utilisateurs peuvent utiliser les sessions payées jusqu'à la fin de leur abonnement;",
+      "item2": "Ou les transférer à un autre utilisateur (avec l'approbation du gestionnaire)."
+    }
   },
   "pricing": {
-    "title": "Choisissez votre forfait",
-    "subtitle": "Débloquez l'accès complet à tous les cours et fonctionnalités avec notre forfait Premium.",
-    "free": {
-      "title": "Gratuit",
-      "description": "Accès limité aux cours d'introduction et aux fonctionnalités de la communauté.",
-      "button": "Forfait actuel"
-    },
-    "premium": {
-      "title": "Premium",
-      "description": "Accès illimité à tous les cours, matériaux et certificats.",
-      "button": "Passer à Premium"
+    "title": "Choisissez Votre Forfait",
+    "subtitle": "Débloquez un accès complet à tous les cours et fonctionnalités avec le forfait qui vous convient le mieux.",
+    "whatsappMessage": "Bonjour ! Je souhaiterais me renseigner sur le prix du cours {{plan}}. Merci !",
+    "plans": {
+      "beginner": { "title": "Beginner", "description": "Ce cours s'adresse à ceux qui possèdent déjà des connaissances de base et souhaitent utiliser l'ouïghour avec assurance au quotidien. Nous approfondissons le vocabulaire, pratiquons la grammaire, apprenons à exprimer des pensées complexes et à comprendre des locuteurs natifs.", "button": "Choose" },
+      "intermediate": { "title": "Intermediate", "description": "Ce cours s'adresse à ceux qui possèdent déjà des connaissances de base et souhaitent utiliser l'ouïghour avec assurance au quotidien. Nous approfondissons le vocabulaire, pratiquons la grammaire, apprenons à exprimer des pensées complexes et à comprendre des locuteurs natifs.", "button": "Choose" },
+      "advanced": { "title": "Advanced", "description": "Pour ceux qui parlent couramment l'ouïghour et souhaitent améliorer leur niveau. Nous analysons les nuances, les expressions idiomatiques, le discours littéraire et les contextes professionnels. Améliorez votre fluidité, votre style et votre confiance en vous.", "button": "Choose" },
+      "speaking": { "title": "Speaking", "description": "Un cours axé sur la pratique de la conversation. Communication maximale, théorie minimale : la langue ouïghoure vivante, à travers des dialogues, des discussions et des jeux de rôle. Convient à tous les niveaux souhaitant s'exprimer librement et sans gêne.", "button": "Choose" }
     }
+  },
+  "emailVerification": {
+    "title": "Vérification de l'email",
+    "instruction": "Entrez le code envoyé à votre adresse email.",
+    "codeLabel": "Code de vérification",
+    "submitButton": "Vérifier",
+    "successMessage": "Email vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "errorMessage": "Code invalide. Veuillez réessayer.",
+    "resendButton": "Renvoyer le code",
+    "resendSuccess": "Un nouveau code a été envoyé à votre email.",
+    "resendError": "Erreur lors de l'envoi d'un nouveau code. Veuillez réessayer plus tard.",
+    "backToLogin": "Retour à la connexion"
+  },
+  "emailVerificationPending": {
+    "title": "Vérifiez votre email",
+    "message": "Nous avons envoyé un email avec un code de vérification à votre adresse. Veuillez vérifier votre email et entrer le code sur la page suivante.",
+    "nextButton": "Passer à la saisie du code"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "submit": "Soumettre"
   }
 }

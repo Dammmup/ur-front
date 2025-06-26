@@ -14,6 +14,9 @@ import { CoursePage } from './pages/Course';
 import { StudentProfile } from './pages/StudentProfile';
 import { AboutUs } from './pages/AboutUs';
 import { Pricing } from './pages/Pricing';
+import { PostPage } from './pages/PostPage';
+
+import EmailVerification from './pages/EmailVerification';
 import { UserProvider } from './UserContext';
 
 const App: React.FC = () => {
@@ -30,6 +33,8 @@ const App: React.FC = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/pricing" element={<Pricing />} />
+              
+              <Route path="/email-verification" element={<EmailVerification />} />
 
               {/* Protected routes */}
               <Route
@@ -41,7 +46,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/course/:id"
+                path="/course/:lessonId"
                 element={
                   <ProtectedRoute requiresAccess={true}>
                     <CoursePage />
@@ -57,6 +62,14 @@ const App: React.FC = () => {
                 }
               />
               <Route
+                path="/community/posts/:postId"
+                element={
+                  <ProtectedRoute>
+                    <PostPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/events"
                 element={
                   <ProtectedRoute>
@@ -65,7 +78,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/profile/:id"
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <StudentProfile />
@@ -77,7 +90,7 @@ const App: React.FC = () => {
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute allowedRoles={['admin']}>
+                  <ProtectedRoute allowedRoles={['admin', 'teacher']}>
                     <AdminPanel />
                   </ProtectedRoute>
                 }

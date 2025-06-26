@@ -37,6 +37,7 @@
     "birthdayLabel": "Födelsedatum",
     "submitButtonAdd": "Lägg till användare",
     "submitButtonUpdate": "Uppdatera data",
+    "submitButtonRegistation": "Registrera",
     "activeSwitch": "Aktiv",
     "accessSwitch": "Åtkomst beviljad",
     "blockedSwitch": "Blockerad",
@@ -46,7 +47,8 @@
     "registrationSuccess": "Registreringen lyckades!",
     "addUserSuccess": "Användare tillagd!",
     "coursesCompletedLabel": "Slutförda kurser",
-    "userIcon": "👤"
+    "userIcon": "👤",
+    "editUser":"Redigera användare"
   },
 
   "navbar": {
@@ -111,7 +113,8 @@
     "addingButton": "Lägger till...",
     "submitButtonUpdate": "Spara ändringar",
     "submitButtonCreate": "Lägg till evenemang",
-    "cancelButton": "Avbryt"
+    "cancelButton": "Avbryt",
+    "addEvent": "Lägg till evenemang"
   },
   "studentProfile": {
     "profileError": "Profilfel",
@@ -195,7 +198,7 @@
         "date": "24.05.2025",
         "author": "UyghurLearn Team",
         "description": "Välkommen till vår lärandegemenskap! Detta är en plats där vi kan dela våra erfarenheter, ställa frågor och stödja varandra i att lära oss det uiguriska språket och kulturen. Presentera dig gärna och dela med dig av dina lärandemål!",
-        "link": "/community/cmb28uquj000hf53tjexq2j36"
+        "link": "/about-us"
       }
     ]
   },
@@ -242,7 +245,13 @@
   },
   "communityPage": {
     "title": "Gemenskap",
-    "subtitle": "Få kontakt med andra elever, dela erfarenheter och väx tillsammans."
+    "subtitle": "Få kontakt med andra elever, dela erfarenheter och väx tillsammans.",
+    "sections": {
+      "questions": "Frågor Diskussioner",
+      "news": "Nyheter",
+      "history": "Historia",
+      "people": "Personer"
+    }
   },
   "aboutUs": {
     "title": "Om oss",
@@ -250,20 +259,92 @@
     "missionTitle": "Vårt uppdrag",
     "missionText": "Att tillhandahålla tillgänglig och högkvalitativ utbildning för alla, överallt.",
     "visionTitle": "Vår vision",
-    "visionText": "Att skapa en global gemenskap av elever som har befogenhet att uppnå sin fulla potential."
+    "visionText": "Att skapa en global gemenskap av elever som har befogenhet att uppnå sin fulla potential.",
+    "aboutTabTitle": "Om oss",
+    "privacyTabTitle": "Integritetspolicy"
+  },
+  "privacy": {
+    "title": "Integritetspolicy",
+    "section1": {
+      "title": "Allmän information",
+      "content": "YughurLearn-plattformen är utformad för att lära sig uiguriska språket. Plattformen kan endast användas av personer över 12 år. Plattformen har ingen juridisk status och fungerar som ett privat utbildningsprojekt."
+    },
+    "section2": {
+      "title": "Vilka uppgifter vi samlar in",
+      "intro": "Vi samlar in och lagrar följande användardata:",
+      "item1": "För- och efternamn",
+      "item2": "E-post",
+      "item3": "Telefonnummer",
+      "item4": "Land, språk, kön",
+      "item5": "Telegram och WhatsApp (om det anges)",
+      "item6": "Födelsedatum",
+      "item7": "Foto (valfritt)",
+      "item8": "Aktivitetsstatus, registreringsdatum och senaste inloggning",
+      "item9": "Kurser som är tillgängliga och slutförandestatus",
+      "item10": "Roll i systemet (t.ex. student, lärare, admin)",
+      "item11": "E-postbekräftelse",
+      "item12": "Blockering och aktivitetsflaggor",
+      "item13": "Hashat lösenord"
+    },
+    "section3": {
+      "title": "Syfte med datainsamling",
+      "intro": "Data används uteslutande inom tjänsten:",
+      "item1": "För auktorisering och autentisering",
+      "item2": "För verifiering av användarens identitet",
+      "item3": "För att visa personligt innehåll",
+      "item4": "För intern analys och spårning av framsteg"
+    },
+    "section4": {
+      "title": "Delning av data med tredje part",
+      "content": "Vi delar inte data med tredje part. All information används endast inom YughurLearn-plattformen."
+    },
+    "section5": {
+      "title": "Var data lagras",
+      "content": "Data lagras i MongoDB på skyddade servrar med begränsad åtkomst."
+    },
+    "section6": {
+      "title": "Användarrättigheter",
+      "content": "Användare har rätt att begära radering av sina personuppgifter genom att kontakta chefen via Telegram eller WhatsApp. Efter radering kommer åtkomsten till plattformen att stängas."
+    },
+    "section7": {
+      "title": "Lärande, betalning och återbetalningar",
+      "paragraph1": "Plattformen ger tillgång till kurser som kan vara betalda. Kostnader och betalningsmetoder anges av chefen.",
+      "paragraph2": "Betalningsdata samlas inte in via webbplatsen och behandlas inte direkt.",
+      "paragraph3": "Återbetalningar, ersättning eller annan kompensation är inte möjliga under några omständigheter. Istället:",
+      "item1": "Användare kan använda betalda sessioner till slutet av sin prenumeration;",
+      "item2": "Eller överföra dem till en annan användare (med chefens godkännande)."
+    }
   },
   "pricing": {
-    "title": "Välj din plan",
-    "subtitle": "Lås upp full tillgång till alla kurser och funktioner med vår Premium-plan.",
-    "free": {
-      "title": "Gratis",
-      "description": "Begränsad tillgång till introduktionskurser och gemenskapsfunktioner.",
-      "button": "Nuvarande plan"
-    },
-    "premium": {
-      "title": "Premium",
-      "description": "Obegränsad tillgång till alla kurser, material och certifikat.",
-      "button": "Uppgradera till Premium"
+    "title": "Välj Din Plan",
+    "subtitle": "Lås upp full tillgång till alla kurser och funktioner med den plan som passar dig bäst.",
+    "whatsappMessage": "Hej! Jag skulle vilja veta priset för {{plan}}-kursen. Tack!",
+    "plans": {
+      "beginner": { "title": "Beginner", "description": "Kursen är för dem som inte pratar ouïghur på något sätt; barn och vuxna som vill börja från noll; människor födda i diaspora som vill återanlända till deras förälders språk.", "button": "Select" },
+      "intermediate": { "title": "Intermediate", "description": "Kursen är för dem som redan har grundläggande kunskap och vill använda ouïghur med säkerhet i dagliga samtal. Vi dyker djupt i vokabulär, pratar grammatik, lär oss att uttrycka komplexa tankar och förstå nativsprechende.", "button": "Select" },
+      "advanced": { "title": "Advanced", "description": "För dig som talar uiguriska flytande men vill ta språket till en hög nivå. Vi analyserar nyanser, idiom, litterärt tal och professionella sammanhang. Förbättra flyt, stil och självförtroende.", "button": "Select" },
+      "speaking": { "title": "Speaking", "description": "En kurs med fokus på pratisk prat. Maximal prat, minimal teori — livande uiguriska språk i dialoger, diskussioner och rollspel. Passar för alla nivåer som vill prata fri och utan störsel.", "button": "Select" }
     }
+  },
+  "emailVerification": {
+    "title": "E-postverifiering",
+    "instruction": "Ange koden som skickats till din e-postadress.",
+    "codeLabel": "Verifieringskod",
+    "submitButton": "Verifiera",
+    "successMessage": "E-post verifierad framgångsrikt. Du kan nu logga in.",
+    "errorMessage": "Ogiltig kod. Försök igen.",
+    "resendButton": "Skicka koden igen",
+    "resendSuccess": "En ny kod har skickats till din e-post.",
+    "resendError": "Fel vid skickande av ny kod. Försök igen senare.",
+    "backToLogin": "Tillbaka till inloggning"
+  },
+  "emailVerificationPending": {
+    "title": "Kontrollera din e-post",
+    "message": "Vi har skickat ett e-postmeddelande med en verifieringskod till din adress. Kontrollera din e-post och ange koden på nästa sida.",
+    "nextButton": "Fortsätt till kodinmatning"
+  },
+  "common": {
+    "cancel": "Avbryt",
+    "submit": "Skicka"
   }
 }

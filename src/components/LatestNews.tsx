@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import './styles/LatestNews.css';
+import { useNavigate } from 'react-router-dom';
 
 interface NewsItem {
   title: string;
@@ -14,6 +15,11 @@ interface NewsItem {
 export const LatestNews: React.FC = () => {
   const { t } = useTranslation();
   const news: NewsItem[] = t('latestNews.news', { returnObjects: true }) as NewsItem[];
+  const navigate = useNavigate();
+
+  const handleReadMore = () => {
+    navigate('/about-us');
+  };
 
   return (
     <section className="latest-news-section">
@@ -24,7 +30,7 @@ export const LatestNews: React.FC = () => {
             <h3 className="latest-news-item-title">{item.title}</h3>
             <p className="latest-news-item-meta">{t('latestNews.byAuthor', { author: item.author })} • {item.date}</p>
             <p className="latest-news-item-description">{item.description}</p>
-            <Button href={item.link} type="link">{t('latestNews.readMore')}</Button>
+            <Button type="link" onClick={() => handleReadMore()}>{t('latestNews.readMore')}</Button>
           </Card>
         ))}
       </div>

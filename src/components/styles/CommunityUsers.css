@@ -1,93 +1,57 @@
-/* Главный контейнер для сетки карточек пользователей */
-.community-users-container {
-  max-width: 1200px; /* Сделаем контейнер шире, чтобы поместилось несколько карточек */
-  margin: 40px auto;
-  padding: 24px;
-  display: grid; /* Используем Grid для удобной сетки */
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Адаптивные колонки */
-  gap: 24px; /* Расстояние между карточками */
+/* Specific styles for CommunityUsers */
+
+.userAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Стили для спиннера и уведомлений */
-.spinner-container, .alert-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-  grid-column: 1 / -1; /* Растягиваем на всю ширину сетки */
-  margin: 40px;
-}
-
-/* Стили для отдельной карточки пользователя */
-.user-card {
-  background: #ffffff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden; /* Обрезаем все, что выходит за рамки */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Центрируем контент по вертикали */
-  align-items: center; /* Центрируем контент по горизонтали */
-  padding: 24px;
-  aspect-ratio: 1 / 1; /* Делает карточку ИДЕАЛЬНО КВАДРАТНОЙ */
-  text-align: center;
-}
-
-.user-card:hover {
-  transform: translateY(-5px); /* Приподнимаем карточку при наведении */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-/* Контент внутри карточки */
-.user-card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-}
-
-/* Имя пользователя */
-.user-name {
+.userName {
   font-size: 1.25rem;
   font-weight: 600;
+  margin: 0;
   color: #333;
+}
+
+.userTitle {
+  font-size: 1rem;
+  color: #888;
   margin: 0;
 }
 
-/* Полное имя */
-.user-full-name {
+.userDescription {
   font-size: 0.9rem;
-  color: #777;
-  margin-top: -4px;
+  color: #666;
+  margin: 8px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  line-height: 1.5;
 }
 
-/* Контейнер для иконок контактов */
-.user-contacts {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
+.connectButton {
+  margin-top: 12px;
+  background-color: #1677ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Ссылка на контакт */
-.contact-link {
-  font-size: 1rem; /* Иконки побольше */
-  color: #555;
-  transition: color 0.3s ease;
+.connectButton:hover {
+  background-color: #0958d9;
 }
 
-.contact-link:hover {
-  color: #007bff; /* Цвет при наведении */
-}
-
-/* Адаптивность для маленьких экранов */
-@media (max-width: 600px) {
-  .community-users-container {
-    /* На маленьких экранах всегда одна колонка */
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
+.connectButton:disabled {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
 }

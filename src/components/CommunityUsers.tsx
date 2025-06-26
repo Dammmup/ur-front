@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Spin, Alert, Avatar } from 'antd';
-import { UserOutlined, WhatsAppOutlined, MailOutlined } from '@ant-design/icons';
-import { FaTelegramPlane } from 'react-icons/fa';
+import { MailOutlined, UserOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { getUsers } from '../api';
+import { FaTelegramPlane } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import './styles/CommunityUsers.css';
+import commonCardStyles from './styles/CardStyles.module.css';
 
 interface User {
   _id: string;
@@ -16,6 +17,8 @@ interface User {
   telegram?: string;
   whatsapp?: string;
   email?: string;
+  title?: string;
+  description?: string;
   [key: string]: any;
 }
 
@@ -37,25 +40,29 @@ export const CommunityUsers: React.FC = () => {
       });
   }, [t]);
 
+
   if (loading) return <Spin size="large" className="spinner-container" />;
   if (error) return <Alert type="error" message={error} className="alert-container" />;
   if (users.length === 0) return <Alert type="info" message={t('communityUsers.noUsers')} className="alert-container" />;
 
   return (
-    <div className="community-users-container">
+    <div className={commonCardStyles.cardContainer}>
       {users.map(user => (
-        <Card key={user._id} className="user-card">
+        <Card key={user._id} className={`user-card ${commonCardStyles.card}`}>
           <div className="user-card-content">
-            <Avatar src={user.photo} icon={<UserOutlined />} size={100} />
+            <Avatar src={user.photo} icon={<UserOutlined />} size={100} className="userAvatar" />
             <div className="user-info">
-              <h3 className="user-name">{user.username || user.firstName || t('communityUsers.defaultUserName')}</h3>
-              {user.firstName && user.lastName && (
+              <h3 className="userName">{user.username}</h3>
+              <p className="userTitle">{user.title || t('communityUsers.defaultTitle')}</p>
+              <p className="userDescription">{user.description || t('communityUsers.defaultDescription')}</p>
+            </div>
+            {user.firstName && user.lastName && (
                 <div className="user-full-name">{user.firstName} {user.lastName}</div>
                 
               )}
               <div className="user-role">{user.role}</div>
               <div className="user-country">{user.country}</div>
-              <div className="user-contacts">
+              <div className="user-contacts" style={{ display: 'flex', flexDirection: 'column' }}>
                 {user.telegram && (
                   <a href={`https://t.me/${user.telegram}`} target="_blank" rel="noopener noreferrer" className="contact-link">
                     <FaTelegramPlane /> {t('communityUsers.telegramLabel')}
@@ -70,7 +77,7 @@ export const CommunityUsers: React.FC = () => {
                   <MailOutlined /> {t('communityUsers.emailLabel')}
                 </a>
               </div>
-            </div>
+
           </div>
         </Card>
       ))}

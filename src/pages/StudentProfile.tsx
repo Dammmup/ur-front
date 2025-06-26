@@ -11,12 +11,11 @@ import {
 } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { useUser } from '../UserContext';
-import { fetchUserById } from '../api';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
-import './styles/StudentProfile.css';
+import styles from './styles/StudentProfile.module.css';
 import { Collapse } from 'antd';
-import { SectionCard } from './SectionCard';
+import { SectionCard } from '../components/SectionCard';
 import { ProfileField } from './ProfileField';
 
 interface UserProfile {
@@ -43,31 +42,32 @@ interface UserProfile {
 
 export const StudentProfile: React.FC = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
-  const [profile, setProfile] = React.useState<UserProfile | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const { user, loading: userLoading } = useUser();
+  // Удалена неиспользуемая переменная error, поскольку мы больше не делаем API-запросы
+  
+  // Преобразуем данные из UserContext в формат профиля
+  const profile = user ? {
+    id: user.id,
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    email: user.email || '',
+    phone: user.phone || '',
+    country: user.country || '',
+    language: user.language || '',
+    gender: user.gender || '',
+    telegram: user.telegram || '',
+    whatsapp: user.whatsapp || '',
+    photo: user.photo,
+    role: user.role,
+    coursesCompleted: user.coursesCompleted || 0,
+    totalCourses: user.totalCourses,
+    createdAt: user.createdAt || new Date().toISOString(),
+    lastLogin: user.lastLogin || new Date().toISOString(),
+    birthDate: user.birthDate
+  } as UserProfile : null;
 
-
-
-
-  React.useEffect(() => {
-    if (!user?.id) return;
-    setLoading(true);
-    fetchUserById(user.id, localStorage.getItem('token') || undefined)
-      .then(data => {
-        setProfile(data);
-        setLoading(false);
-      })
-      .catch(e => {
-        setError(e.message || t('studentProfile.profileError'));
-        setLoading(false);
-      });
-  }, [user]);
-
-  if (loading) return <Box sx={{ textAlign: 'center', mt: 8 }}><CircularProgress /></Box>;
-  if (error) return <MuiAlert severity="error">{error}</MuiAlert>;
-  if (!profile) return null;
+  if (userLoading) return <Box sx={{ textAlign: 'center', mt: 8 }}><CircularProgress /></Box>;
+  if (!profile || !user) return <MuiAlert severity="warning">{t('studentProfile.missingProfile')}</MuiAlert>;
 
   const achievements = [];
   if (profile.coursesCompleted >= 1) achievements.push({ name: t('studentProfile.achievementFirstSteps') });
@@ -87,62 +87,35 @@ export const StudentProfile: React.FC = () => {
 
 
   return (
-    <Box sx={{
-      minHeight: '100vh',
-      background: 'linear-gradient(120deg, #1976d2 0%, #42a5f5 100%)',
-      py: { xs: 2, md: 6 },
-      px: { xs: 0, md: 2 },
-    }}>
-      <Box sx={{
-        maxWidth: 700,
-        mx: 'auto',
-        mb: 4,
-        background: 'rgba(255,255,255,0.95)',
-        borderRadius: 6,
-        boxShadow: 6,
-        p: { xs: 2, md: 4 },
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <Box sx={{
-          position: 'absolute',
-          top: -40,
-          left: -40,
-          width: 160,
-          height: 160,
-          bgcolor: '#1976d2',
-          borderRadius: '50%',
-          opacity: 0.13,
-          filter: 'blur(24px)',
-          zIndex: 0,
-        }} />
+    <Box className={styles.root}>
+      <Box className={styles.profileContainer}>
+        <Box className={styles.animatedBg} />
         <Avatar
           src={profile.photo}
-          sx={{ width: 110, height: 110, mx: 'auto', mb: 2, fontSize: 44, bgcolor: '#1976d2', color: 'white', boxShadow: 3, zIndex: 1 }}
+          className={styles.avatar}
         >
           {profile.firstName?.[0] || '?'}
         </Avatar>
-        <Typography variant="h3" fontWeight={700} sx={{ mb: 1, zIndex: 1, position: 'relative' }}>
+        <Typography variant="h3" className={styles.greeting}>
           {t('studentProfile.greeting', { name: profile.firstName })}
         </Typography>
-        <Typography variant="h6" sx={{ opacity: 0.7, zIndex: 1, position: 'relative' }}>{profile.email}</Typography>
+        <Typography variant="h6" className={styles.email}>{profile.email}</Typography>
         <Chip
           label={profile.role === 'student' ? t('studentProfile.roleStudent') : profile.role}
           color="primary"
-          sx={{ mt: 2, fontWeight: 700, fontSize: 16, zIndex: 1, position: 'relative' }}
+          className={styles.roleChip}
         />
       </Box>
 
-      <Box sx={{ maxWidth: 700, mx: 'auto', mt: 2, mb: 2 }}>
+      <Box className={styles.sectionsContainer}>
         <Collapse style={{ backgroundColor:'white' }}
           items={[
             {
               label: <Typography variant="h6" fontWeight={700}>{t('studentProfile.profileCollapseLabel')}</Typography>,
               className: "panelProfile",
               children: (
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                  <Stack spacing={2} sx={{ mt: 2, alignItems: 'center', textAlign: 'center' }}>
+                <Box className={styles.profileFieldsContainer}>
+                  <Stack spacing={2} className={styles.fieldsStack}>
                     <ProfileField label={t('studentProfile.fieldFirstName')} value={profile.firstName} />
                     <ProfileField label={t('studentProfile.fieldLastName')} value={profile.lastName} />
                     <ProfileField label={t('studentProfile.fieldEmail')} value={profile.email} />

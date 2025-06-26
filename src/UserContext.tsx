@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { fetchUserById } from './api';
 
 // Единый интерфейс для пользователя
 interface User {
@@ -19,6 +18,16 @@ interface User {
   telegram?: string;
   whatsapp?: string;
   level?: 'beginner' | 'intermediate' | 'advanced' | 'speaking';
+  phone?: string;
+  language?: string;
+  gender?: string;
+  coursesCompleted?: number;
+  totalCourses?: number;
+  createdAt?: string;
+  lastLogin?: string;
+  birthDate?: string;
+  exp: number; // добавлено поле exp из JWT-токена
+  iat: number; // добавлено поле iat из JWT-токена
 }
 
 // Структура декодированного токена
@@ -36,7 +45,7 @@ interface UserContextType {
   login: (token: string) => void;
   logout: () => void;
   setUser: Dispatch<SetStateAction<User | null>>;
-  token?: string | null;
+  token: string | null;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -44,24 +53,53 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true); // Начинаем с состояния загрузки
-
+  const token = localStorage.getItem('token');
   useEffect(() => {
     const initializeUser = async () => {
-      const token = localStorage.getItem('token');
+
       if (token) {
         try {
-          const decodedToken: DecodedToken = jwtDecode(token);
+          let decodedToken: DecodedToken;
+          try {
+            decodedToken = jwtDecode(token);
+          } catch (e) {
+            console.error('Ошибка декодирования токена', e);
+            localStorage.removeItem('token');
+            setLoading(false);
+            return;
+          }
           // Проверяем, не истек ли срок действия токена
           if (decodedToken.exp * 1000 < Date.now()) {
             localStorage.removeItem('token');
             setUser(null);
           } else {
-            // Сразу выставляем пользователя из токена,
-            setUser(decodedToken as any);
-            // и параллельно пытаемся подтянуть полный профиль (не блокируем UI)
+            // Устанавливаем заголовок авторизации для запросов
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            await fetchUserById(decodedToken.id, token);
-            setUser(decodedToken as any);
+            
+            // Создаём временный объект пользователя из токена для маршрутизации
+            // Не обновляем state setUser здесь, чтобы избежать двойного рендеринга
+            const tempUser = {
+              id: decodedToken.id,
+              role: decodedToken.role,
+              exp: decodedToken.exp,
+              iat: decodedToken.iat
+            };
+            
+            try {
+              const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+              const response = await axios.get<User>(`${apiBaseUrl}/api/users/${decodedToken.id}`);
+              
+              // Устанавливаем полученный профиль, включая данные из токена
+              setUser({
+                ...response.data,
+                exp: tempUser.exp,
+                iat: tempUser.iat
+              });
+            } catch (profileError) {
+              console.error('Не удалось получить полный профиль:', profileError);
+              // В случае ошибки используем базовые данные из токена
+              setUser(tempUser as any);
+            }
           }
         } catch (error) {
           console.error('Не удалось инициализировать пользователя:', error);
@@ -75,30 +113,57 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     initializeUser();
   }, []);
 
-  const login = (token: string) => {
+  const login = async (token: string) => {
+    // Сохраняем токен и устанавливаем заголовок авторизации
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    // Мгновенно выставляем минимальный объект пользователя из JWT,
-    // чтобы маршруты не редиректировали ещё до запроса профиля
+    
     try {
+      // Декодируем токен для получения основной информации
       const decoded: any = jwtDecode(token);
-      if (decoded) {
-        setUser((prev) => ({ ...prev, ...decoded }));
+      
+      if (!decoded) {
+        throw new Error('Невалидный токен');
+      }
+      
+      // Устанавливаем состояние загрузки
+      setLoading(true);
+      
+      try {
+        // @ts-ignore: Ignore error about process not being defined
+        const apiBaseUrl = 'http://localhost:4000';
+        const response = await axios.get<User>(`${apiBaseUrl}/api/users/${decoded.id}`);
+        
+        // Устанавливаем полный профиль пользователя
+        setUser({
+          ...response.data,
+          exp: decoded.exp,
+          iat: decoded.iat
+        });
+      } catch (error) {
+        console.error('Не удалось получить профиль после входа:', error);
+        // В случае ошибки используем только данные из токена
+        setUser({
+          id: decoded.id,
+          role: decoded.role,
+          exp: decoded.exp,
+          iat: decoded.iat,
+          // Добавляем другие поля из расширенного токена, если они есть
+          email: decoded.email || '',
+          username: decoded.username || '',
+          firstName: decoded.firstName || '',
+          lastName: decoded.lastName || '',
+          emailVerified: decoded.emailVerified || false,
+          photo: decoded.photo || undefined,
+          access: true
+        } as User);
       }
     } catch (e) {
       console.warn('Не удалось декодировать токен при login():', e);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-    // После логина получаем профиль, чтобы иметь полный объект пользователя
-    const fetchProfile = async () => {
-        try {
-            const response = await axios.get<User>(`http://localhost:4000/api/auth/profile`);
-            setUser(response.data);
-        } catch (error) {
-            console.error('Не удалось получить профиль после входа:', error);
-            setUser(null);
-        }
-    };
-    fetchProfile();
   };
 
   const logout = () => {
@@ -107,7 +172,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
-  const value = { user, loading, login, logout, setUser };
+  const value: UserContextType = { user, loading, login, logout, setUser, token: localStorage.getItem('token') };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
