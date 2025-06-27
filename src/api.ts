@@ -1,5 +1,5 @@
 // @ts-ignore: Ignore error about process not being defined
-const apiBaseUrl = 'https://ur-ba-production.up.railway.app';
+const apiBaseUrl = `http://${process.env.REACT_APP_API_URL}:8080`;
 
 // Функции для работы с верификацией email
 export const verifyEmail = async (email: string, code: string) => {
