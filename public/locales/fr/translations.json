@@ -137,7 +137,17 @@
     "sectionAchievements": "Réalisations",
     "coursesCompletedLabel": "Nombre de cours terminés :",
     "sectionRecommendations": "Recommandations",
-    "sectionHistory": "Historique"
+    "sectionHistory": "Historique",
+    "bgType": "Type d'arrière-plan",
+    "bgColorOption": "Couleur unie",
+    "bgGradientOption": "Dégradé",
+    "gradientPreset": "Dégradés prédéfinis",
+    "customGradientOption": "Dégradé personnalisé",
+    "previewLabel": "Aperçu",
+    "communityCardTitle":"Section de la communauté",
+    "statusLabel":"Écrivez votre statut, sur quoi vous voulez parler",
+    "showInCommunity":"Afficher dans la communauté",
+    "saveButton":"Sauvegarder"
   },
   "coursePage": {
     "loadingError": "Erreur de chargement du cours",
@@ -326,6 +336,73 @@
   },
   "common": {
     "cancel": "Annuler",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "preview": "perçu",
+    "loading":"loading"
+  },
+  "course": {
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "name": "Nom du cours",
+    "namePlaceholder": "Entrez le nom du cours",
+    "level": "Niveau",
+    "selectLevel": "Sélectionnez le niveau",
+    "duration": "Durée (heures)",
+    "durationPlaceholder": "Entrez la durée",
+    "durationDisplay": "{{duration}} h",
+    "price": "Prix",
+    "pricePlaceholder": "Entrez le prix",
+    "priceDisplay": "{{price}} €",
+    "description": "Description",
+    "descriptionPlaceholder": "Entrez la description du cours",
+    "tabBasicInfo": "Informations de base",
+    "tabContent": "Contenu",
+    "addText": "Ajouter du texte",
+    "addImage": "Ajouter une image",
+    "addVideo": "Ajouter une vidéo",
+    "textPlaceholder": "Entrez le texte",
+    "imageUrlPlaceholder": "URL de l'image ou téléchargez une image",
+    "upload": "Télécharger",
+    "levelFilterPlaceholder": "Filtrer par niveau",
+    "removeBlock": "Supprimer le bloc",
+    "moveUp": "Déplacer vers le haut",
+    "moveDown": "Déplacer vers le bas",
+    "noLesson": "Aucune leçon trouvée",
+    "saveSuccess": "Cours enregistré avec succès",
+    "saveError": "Erreur lors de l'enregistrement du cours",
+    "deleteSuccess": "Cours supprimé avec succès",
+    "deleteError": "Erreur lors de la suppression du cours",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce cours ?",
+    "invalidLessonId": "ID de leçon invalide",
+    "blockTypes": {
+      "text": "Texte",
+      "image": "Image",
+      "youtube": "Vidéo YouTube"
+    },
+    "levels": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "all": "Tous les niveaux"
+    },
+    "lesson": {
+      "edit": "Modifier la leçon",
+      "create": "Créer une leçon",
+      "editLesson": "Modifier la leçon",
+      "deleteLesson": "Supprimer la leçon",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette leçon ?",
+      "deleteSuccess": "Leçon supprimée avec succès",
+      "deleteError": "Erreur lors de la suppression de la leçon",
+      "invalidLessonId": "ID de leçon invalide",
+      "blockTypes": {
+        "text": "Texte",
+        "image": "Image",
+        "youtube": "Vidéo YouTube"
+      }
+    }
   }
 }

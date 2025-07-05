@@ -6,6 +6,12 @@ import {CourseForm} from '../components/CourseForm';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LEVELS } from '../constants';
+const LEVEL_ORDER = ['beginner', 'intermediate', 'advanced', 'speaking'] as const;
+const getLevelPriority = (lvl?: string) => {
+  if (!lvl) return 0;
+  const idx = LEVEL_ORDER.indexOf(lvl as any);
+  return idx === -1 ? 0 : idx;
+};
 
 const LEVEL_COLORS: Record<string, string> = {
   beginner: 'green',
@@ -77,7 +83,15 @@ export const Learn: React.FC = () => {
     });
   };
 
-  const filteredCourses = levelFilter ? courses.filter(c => c.level === levelFilter) : courses;
+  // Фильтрация курсов по уровню пользователя
+  let visibleCourses = courses;
+  if (user && user.level && user.access !== false) {
+    const userPriority = getLevelPriority(user.level);
+    visibleCourses = courses.filter(c => getLevelPriority(c.level) <= userPriority);
+  } else if (user && user.access === false) {
+    visibleCourses = []; // нет доступа
+  }
+  const filteredCourses = levelFilter ? visibleCourses.filter(c => c.level === levelFilter) : visibleCourses;
 
   if (loading) return <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />;
   if (error) return <Alert type="error" message={error} style={{ margin: 40 }} />;
@@ -87,7 +101,7 @@ export const Learn: React.FC = () => {
       <div style={{ maxWidth: 1200, margin: '0 auto', marginBottom: 24 }}>
         <Select
           allowClear
-          placeholder={t('learnPage.levelFilterPlaceholder')}
+          placeholder={t('course.levelFilterPlaceholder')}
           style={{ width: 200, marginBottom: 24 }}
           value={levelFilter || undefined}
           onChange={(val) => setLevelFilter(val as string)}
@@ -102,7 +116,7 @@ export const Learn: React.FC = () => {
             hoverable
             cover={course.image && <img alt={course.name} src={course.image} style={{ height: 192, objectFit: 'cover' }} />}
             style={{ borderRadius: 12 }}
-            onClick={() => navigate(`/course/${course.lessonId}`)}
+            onClick={() => navigate(`/course/${course._id}`)}
 
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

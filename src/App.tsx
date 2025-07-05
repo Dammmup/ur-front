@@ -10,11 +10,12 @@ import { AdminPanel } from './pages/AdminPanel';
 import { Events } from './pages/Events';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
-import { CoursePage } from './pages/Course';
+import CoursePage from './pages/Course';
 import { StudentProfile } from './pages/StudentProfile';
 import { AboutUs } from './pages/AboutUs';
 import { Pricing } from './pages/Pricing';
-import { PostPage } from './pages/PostPage';
+import { PostPage } from './components/PostPage';
+import LessonEditorPage from './pages/LessonEditorPage';
 
 import EmailVerification from './pages/EmailVerification';
 import { UserProvider } from './UserContext';
@@ -46,10 +47,18 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/course/:lessonId"
+                path="/course/:courseId"
                 element={
                   <ProtectedRoute requiresAccess={true}>
                     <CoursePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/lesson-editor/:lessonId"
+                element={
+                  <ProtectedRoute requiresAccess={true}>
+                    <LessonEditorPage />
                   </ProtectedRoute>
                 }
               />

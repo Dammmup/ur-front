@@ -138,7 +138,17 @@
     "sectionAchievements": "Prestationer",
     "coursesCompletedLabel": "Antal avslutade kurser:",
     "sectionRecommendations": "Rekommendationer",
-    "sectionHistory": "Historik"
+    "sectionHistory": "Historia",
+    "bgType": "Bakgrundstyp",
+    "bgColorOption": "Solid färg",
+    "bgGradientOption": "Gradient",
+    "gradientPreset": "Förinställda gradienter",
+    "customGradientOption": "Egen gradient",
+    "previewLabel": "Förhandsvisning",
+    "communityCardTitle":"Gemenskapssektionen",
+    "statusLabel":"Skriv din status, vad du vill prata om",
+    "showInCommunity":"Visa i community",
+    "saveButton":"Spara"
   },
   "coursePage": {
     "loadingError": "Fel vid inläsning av kurs",
@@ -345,6 +355,74 @@
   },
   "common": {
     "cancel": "Avbryt",
-    "submit": "Skicka"
+    "submit": "Skicka",
+    "edit": "Redigera",
+    "delete": "Radera",
+    "preview": "Förhandsgranskning",
+    "loading":"loading"
+  },
+  "course": {
+    "edit": "Redigera",
+    "save": "Spara",
+    "delete": "Radera",
+    "cancel": "Avbryt",
+    "name": "Kursnamn",
+    "namePlaceholder": "Ange kursnamn",
+    "level": "Nivå",
+    "selectLevel": "Välj nivå",
+    "duration": "Längd (timmar)",
+    "durationPlaceholder": "Ange längd",
+    "durationDisplay": "{{duration}} h",
+    "price": "Pris",
+    "levelFilterPlaceholder": "Filtrer par niveau",
+    "lessons":"lessons",
+    "pricePlaceholder": "Ange pris",
+    "priceDisplay": "{{price}} €",
+    "description": "Beskrivning",
+    "descriptionPlaceholder": "Ange kursbeskrivning",
+    "tabBasicInfo": "Grundinformation",
+    "tabContent": "Innehåll",
+    "addText": "Lägg till text",
+    "addImage": "Lägg till bild",
+    "addVideo": "Lägg till video",
+    "textPlaceholder": "Ange text",
+    "imageUrlPlaceholder": "Bild URL eller ladda upp en bild",
+    "upload": "Ladda upp",
+    "removeBlock": "Ta bort block",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ner",
+    "noLesson": "Ingen lektion hittades",
+    "saveSuccess": "Kursen har sparats",
+    "saveError": "Fel vid sparande av kurs",
+    "deleteSuccess": "Kursen har raderats",
+    "deleteError": "Fel vid radering av kurs",
+    "deleteConfirm": "Är du säker på att du vill radera den här kursen?",
+    "invalidLessonId": "Ogiltigt lektion-ID",
+    "blockTypes": {
+      "text": "Text",
+      "image": "Bild",
+      "youtube": "YouTube Video"
+    },
+    "levels": {
+      "beginner": "Nybörjare",
+      "intermediate": "Mellan",
+      "advanced": "Avancerad",
+      "all": "Alla nivåer"
+    },
+    "lesson": {
+      "edit": "Redigera lektion",
+      "create": "Skapa lektion",
+      "editLesson": "Redigera lektion",
+      "deleteLesson": "Ta bort lektion",
+      "deleteConfirm": "Är du säker på att du vill ta bort denna lektion?",
+      "deleteSuccess": "Lektionen har tagits bort",
+      "deleteError": "Fel vid borttagande av lektion",
+      "invalidLessonId": "Ogiltigt lektion-ID",
+      "blockTypes": {
+        "text": "Text",
+        "image": "Bild",
+        "youtube": "YouTube Video"
+      }
+    }
   }
 }

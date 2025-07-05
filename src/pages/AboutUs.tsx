@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tabs, Typography, Collapse } from 'antd';
-import styles from './styles/AboutUs.module.css';
+import './styles/AboutUs.css';
 
 export const AboutUs: React.FC = () => {
   const { t } = useTranslation();
   const { Panel } = Collapse;
   
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Tabs 
         defaultActiveKey="about" 
         items={[
@@ -17,9 +17,9 @@ export const AboutUs: React.FC = () => {
             label: t('aboutUs.aboutTabTitle', 'О нас'),
             children: (
               <div>
-                <h1 className={styles.title}>{t('aboutUs.title')}</h1>
-                <p className={styles.description}>{t('aboutUs.description')}</p>
-                <div className={styles.content}>
+                <h1 className="title">{t('aboutUs.title')}</h1>
+                <p className="description">{t('aboutUs.description')}</p>
+                <div className="content">
                   <h2>{t('aboutUs.missionTitle')}</h2>
                   <p>{t('aboutUs.missionText')}</p>
                   <h2>{t('aboutUs.visionTitle')}</h2>
@@ -32,10 +32,10 @@ export const AboutUs: React.FC = () => {
             key: 'privacy',
             label: t('aboutUs.privacyTabTitle', 'Политика конфиденциальности'),
             children: (
-              <div className={styles.privacyPolicy}>
+              <div className="privacyPolicy">
                 <h1>{t('privacy.title', 'Политика конфиденциальности')}</h1>
                 
-                <Collapse defaultActiveKey={['1']} className={styles.policyCollapse}>
+                <Collapse defaultActiveKey={['1']} className="policyCollapse">
                   <Panel header={t('privacy.section1.title', 'Общая информация')} key="1">
                     <Typography.Paragraph>
                       {t('privacy.section1.content', 'Платформа YughurLearn предназначена для изучения уйгурского языка. Использование платформы возможно только лицами старше 12 лет. Платформа не имеет юридического статуса и работает как частный образовательный проект.')}

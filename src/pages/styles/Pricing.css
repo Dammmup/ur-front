@@ -20,12 +20,19 @@
 .pricing-cards {
   display: flex;
   justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
   gap: 30px;
   text-align: center;
 }
 
 .pricing-card {
   width: 300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
@@ -33,15 +40,18 @@
 .pricing-card.premium {
   border: 2px solid #1890ff;
 }
+.centered-button {
+  width: 80%;
+  margin: 0 auto 16px;
+}
+
 @media (max-width: 768px) {
   .pricing-cards {
     flex-direction: column;
     gap: 20px;
-    text-align: center;
-  }}
-
-.Button{
-    text-align: center;
-    align-items: center;
-    align-content: center;
   }
+  .pricing-card {
+    width: 90%;
+  }
+}
+  

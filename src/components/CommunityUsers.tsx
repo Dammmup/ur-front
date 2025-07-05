@@ -17,8 +17,8 @@ interface User {
   telegram?: string;
   whatsapp?: string;
   email?: string;
-  title?: string;
-  description?: string;
+  status?: string;
+  cardColor?: string;
   [key: string]: any;
 }
 
@@ -31,7 +31,7 @@ export const CommunityUsers: React.FC = () => {
   useEffect(() => {
     getUsers()
       .then(data => {
-        setUsers(data.filter((u: User) => u.role !== 'admin'));
+        setUsers(data.filter((u: User) => u.role !== 'admin' && u.active !== false));
         setLoading(false);
       })
       .catch(e => {
@@ -48,13 +48,12 @@ export const CommunityUsers: React.FC = () => {
   return (
     <div className={commonCardStyles.cardContainer}>
       {users.map(user => (
-        <Card key={user._id} className={`user-card ${commonCardStyles.card}`}>
+        <Card key={user._id} className={`user-card ${commonCardStyles.card}`} style={user.cardColor ? { background: user.cardColor } : {}}>
           <div className="user-card-content">
             <Avatar src={user.photo} icon={<UserOutlined />} size={100} className="userAvatar" />
             <div className="user-info">
               <h3 className="userName">{user.username}</h3>
-              <p className="userTitle">{user.title || t('communityUsers.defaultTitle')}</p>
-              <p className="userDescription">{user.description || t('communityUsers.defaultDescription')}</p>
+              <p className="userStatus">{user.status }</p>
             </div>
             {user.firstName && user.lastName && (
                 <div className="user-full-name">{user.firstName} {user.lastName}</div>
