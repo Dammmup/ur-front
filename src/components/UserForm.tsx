@@ -72,10 +72,12 @@ function filterUserFormValues(user: any) {
     password: '', // пароль не подставляем из БД
     role: user.role || '',
     notes: user.notes || '',
+  status: user.status || '',
+  cardColor: user.cardColor || '#1890ff',
 
     access: user.access || false,
     coursesCompleted: typeof user.coursesCompleted === 'number' ? user.coursesCompleted : 0,
-    active: user.active !== undefined ? String(user.active) : '',
+    active: user.active !== undefined ? String(user.active) : 'true',
     blocked: user.blocked !== undefined ? String(user.blocked) : '',
     emailVerified: user.emailVerified !== undefined ? String(user.emailVerified) : '',
   };
@@ -143,7 +145,10 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
       if (!isRegistration) {
         userData = {
           ...userData,
-          notes: values.role === 'teacher' ? values.notes : undefined
+          notes: values.notes,
+          status: values.status,
+          cardColor: values.cardColor,
+          active: values.active === 'true',
         };
       }
       const createRes = await createUser(userData);

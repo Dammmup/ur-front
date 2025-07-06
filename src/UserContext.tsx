@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { apiBaseUrl } from './api';
 
 // Единый интерфейс для пользователя
 interface User {
@@ -17,10 +18,14 @@ interface User {
   country?: string;
   telegram?: string;
   whatsapp?: string;
-  level?: 'beginner' | 'intermediate' | 'advanced' | 'speaking';
+  level?: 'none' | 'beginner' | 'intermediate' | 'advanced' | 'speaking';
   phone?: string;
+  status?: string;
+  cardColor?: string;
+  active?: boolean;
   language?: string;
   gender?: string;
+  completedLessons?: string[];
   coursesCompleted?: number;
   totalCourses?: number;
   createdAt?: string;
@@ -36,6 +41,9 @@ interface DecodedToken {
   role: 'student' | 'teacher' | 'admin';
   exp: number;
   iat: number;
+  blocked: boolean;
+  level?: 'none' | 'beginner' | 'intermediate' | 'advanced' | 'speaking';
+  access?: boolean;
 }
 
 // Тип контекста теперь включает состояние загрузки
@@ -76,22 +84,26 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             // Устанавливаем заголовок авторизации для запросов
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             
-            // Создаём временный объект пользователя из токена для маршрутизации
-            // Не обновляем state setUser здесь, чтобы избежать двойного рендеринга
+
             const tempUser = {
               id: decodedToken.id,
+              level: (decodedToken as any).level,
+              access: (decodedToken as any).access,
               role: decodedToken.role,
               exp: decodedToken.exp,
-              iat: decodedToken.iat
+              iat: decodedToken.iat,
+              blocked: decodedToken.blocked
             };
             
             try {
-              const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+              
               const response = await axios.get<User>(`${apiBaseUrl}/api/users/${decodedToken.id}`);
               
               // Устанавливаем полученный профиль, включая данные из токена
               setUser({
                 ...response.data,
+                level: response.data.level ?? (decodedToken as any).level,
+                access: typeof response.data.access === 'boolean' ? response.data.access : (decodedToken as any).access,
                 exp: tempUser.exp,
                 iat: tempUser.iat
               });
@@ -131,12 +143,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       
       try {
         // @ts-ignore: Ignore error about process not being defined
-        const apiBaseUrl = 'http://localhost:4000';
         const response = await axios.get<User>(`${apiBaseUrl}/api/users/${decoded.id}`);
         
         // Устанавливаем полный профиль пользователя
         setUser({
           ...response.data,
+          level: response.data.level ?? (decoded as any).level,
+          access: typeof response.data.access === 'boolean' ? response.data.access : (decoded as any).access,
           exp: decoded.exp,
           iat: decoded.iat
         });
@@ -150,12 +163,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           iat: decoded.iat,
           // Добавляем другие поля из расширенного токена, если они есть
           email: decoded.email || '',
-          username: decoded.username || '',
-          firstName: decoded.firstName || '',
-          lastName: decoded.lastName || '',
           emailVerified: decoded.emailVerified || false,
-          photo: decoded.photo || undefined,
-          access: true
+          access: (decoded as any).access !== undefined ? (decoded as any).access : true
         } as User);
       }
     } catch (e) {

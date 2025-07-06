@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { List, Typography, Button, Modal, Form, Input, message, Spin, Avatar } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import type { Post, PostCategory } from '../apiPosts';
-import { getPosts, createPost } from '../apiPosts';
+import type { Post, PostCategory } from '../api';
+import { getPosts, createPost } from '../api';
 import { useUser } from '../UserContext';
 import { useTranslation } from 'react-i18next';
 

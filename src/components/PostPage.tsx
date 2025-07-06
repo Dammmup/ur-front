@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Spin, Typography, List, Form, Input, Button, message, Avatar, Space, Card, Divider } from 'antd';
-import UserProfileModal from '../components/UserProfileModal';
-import type { Comment, Post } from '../apiPosts';
-import { getPostById, createComment, deleteComment } from '../apiPosts';
+import UserProfileModal from './UserProfileModal';
+import type { Comment, Post } from '../api';
+import { getPostById, createComment, deleteComment } from '../api';
 import { useUser } from '../UserContext';
 import { useTranslation } from 'react-i18next';
 

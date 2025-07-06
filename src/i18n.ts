@@ -8,8 +8,8 @@ i18n
   .use(LanguageDetector) // Определяет язык пользователя
   .use(initReactI18next) // Передает экземпляр i18n в react-i18next
   .init({
-    fallbackLng: 'en', // Язык по умолчанию, если язык пользователя не доступен
-    debug: true, // Включает логирование в консоль для разработки
+    fallbackLng: 'sv', // Язык по умолчанию, если язык пользователя не доступен
+    debug: false, // Включает логирование в консоль для разработки
     supportedLngs: ['en', 'ru', 'fr', 'sv'], // Список поддерживаемых языков
     ns: 'translations', // Пространство имен по умолчанию
     defaultNS: 'translations',

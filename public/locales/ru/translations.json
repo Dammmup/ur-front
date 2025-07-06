@@ -140,7 +140,18 @@
     "sectionAchievements": "Достижения",
     "coursesCompletedLabel": "Количество пройденных курсов:",
     "sectionRecommendations": "Рекомендации",
-    "sectionHistory": "История"
+    "sectionHistory": "История",
+    "bgType": "Тип фона",
+    "bgColorOption": "Сплошной цвет",
+    "bgGradientOption": "Градиент",
+    "gradientPreset": "Градиенты",
+    "customGradientOption": "Свой градиент",
+    "previewLabel": "Превью",
+    "communityCardTitle":"Раздел Сообщества",
+    "statusLabel":"Напишите свой статус, о чем хотите поговорить",
+    "showInCommunity":"Показывать в сообществе",
+    "saveButton":"Сохранить"
+
   },
   "coursePage": {
     "loadingError": "Ошибка загрузки курса",
@@ -350,6 +361,72 @@
   },
   "common": {
     "cancel": "Отмена",
-    "submit": "Подтвердить"
+    "submit": "Подтвердить",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "preview": "Предпросмотр",
+    "loading":"Загрузка"
+    
+  },
+  "course": {
+    "edit": "Редактировать",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "cancel": "Отменить",
+    "name": "Название курса",
+    "namePlaceholder": "Введите название курса",
+    "levelFilterPlaceholder": "Фильтр по уровню",
+    "level": "Уровень",
+    "lessons":"Урок",
+    "selectLevel": "Выберите уровень",
+    "duration": "Продолжительность (часы)",
+    "durationPlaceholder": "Введите продолжительность",
+    "durationDisplay": "{{duration}} ч.",
+    "price": "Цена",
+    "pricePlaceholder": "Введите цену",
+    "priceDisplay": "{{price}} €",
+    "description": "Описание",
+    "descriptionPlaceholder": "Введите описание курса",
+    "tabBasicInfo": "Основная информация",
+    "tabContent": "Содержание",
+    "addText": "Добавить текст",
+    "addImage": "Добавить изображение",
+    "addVideo": "Добавить видео",
+    "textPlaceholder": "Введите текст",
+    "imageUrlPlaceholder": "URL изображения или загрузите изображение",
+    "upload": "Загрузить",
+    "removeBlock": "Удалить блок",
+    "moveUp": "Переместить вверх",
+    "moveDown": "Переместить вниз",
+    "noLesson": "Урок не найден",
+    "saveSuccess": "Курс успешно сохранен",
+    "saveError": "Ошибка при сохранении курса",
+    "deleteSuccess": "Курс успешно удален",
+    "deleteError": "Ошибка при удалении курса",
+    "deleteConfirm": "Вы уверены, что хотите удалить этот курс?",
+    "invalidLessonId": "Недопустимый ID урока",
+    "blockTypes": {
+      "text": "Текст",
+      "image": "Изображение",
+      "youtube": "Видео YouTube"
+    },
+    "levels": {
+      "beginner": "Начальный",
+      "intermediate": "Средний",
+      "advanced": "Продвинутый",
+      "all": "Все уровни"
+    },
+    "lesson":{
+      "title":"Название урока",
+      "description":"Описание урока",
+     "titleRequired":"Название урока обязательно",
+     "descriptionRequired":"Описание урока обязательно",
+     "content":"Содержание",
+     "youtubeLink":"Ссылка на видео",
+     "image":"Изображение",
+     "upload":"Загрузить",
+     "additionalContent":"Дополнительное содержание",
+     "additionalImage":"Дополнительное изображение"
+    }
   }
 }

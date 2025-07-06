@@ -2,7 +2,7 @@ import React from 'react';
 // ИСПРАВЛЕНО: импортируем CommunityUsers как именованный компонент
 import { CommunityUsers } from '../components/CommunityUsers'; 
 import { useTranslation } from 'react-i18next';
-import styles from './styles/Community.module.css';
+import './styles/Community.css';
 import { Tabs } from 'antd';
 import { PostList } from '../components/PostList';
 
@@ -12,12 +12,12 @@ export const Community: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>{t('communityPage.title')}</h1>
-      <p className={styles.subtitle}>
+    <div className="container">
+      <h1 className="title">{t('communityPage.title')}</h1>
+      <p className="subtitle">
         {t('communityPage.subtitle')}
       </p>
-      <Tabs defaultActiveKey="questions" className={styles.tabs}>
+      <Tabs defaultActiveKey="questions" className="tabs" centered>
         <TabPane tab={t('communityPage.sections.questions')} key="questions">
           <PostList category="question" />
         </TabPane>
