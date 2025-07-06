@@ -51,7 +51,7 @@ interface UserFormProps {
   currentUserRole?: string;
   password?: string;
   username?: string;
-  active?: string;
+  active?: boolean;
   onFinish?: (values: any) => void | Promise<void>;
 }
 
