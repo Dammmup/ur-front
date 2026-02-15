@@ -1,5 +1,5 @@
 // @ts-ignore: Ignore error about process not being defined
-export const apiBaseUrl = `https://ur-ba-production.up.railway.app`;
+export const apiBaseUrl = process.env.REACT_APP_API_URL;
 //export const apiBaseUrl = `http://localhost:8080`;
 
 // API helpers for Community posts
@@ -210,17 +210,17 @@ export const getLesson = async (id: string) => {
     throw new Error('Ошибка загрузки урока');
   }
   const data = await res.json();
-  
+
   // Преобразуем данные из формата бэкенда в формат фронтенда
   const result = {
     ...data,
     content: data.contentBlocks ? JSON.stringify(data.contentBlocks) : '[]',
     content2: data.description || '',
   };
-  
+
   console.log('[API] Lesson data received:', data);
   console.log('[API] Transformed for frontend:', result);
-  
+
   return result;
 };
 
@@ -244,7 +244,7 @@ export const createLesson = async (lesson: {
 }, token?: string) => {
   // Преобразуем данные в формат, ожидаемый бэкендом
   let contentBlocks = [];
-  
+
   // Пытаемся распарсить contentBlocks из content, если оно есть
   if (lesson.content) {
     try {
@@ -253,13 +253,13 @@ export const createLesson = async (lesson: {
       console.error('Error parsing content blocks:', err);
     }
   }
-  
+
   // Проверяем, что course является валидным MongoDB ID
   if (!lesson.course || typeof lesson.course !== 'string' || !/^[0-9a-fA-F]{24}$/.test(lesson.course)) {
     console.error(`[API] Invalid MongoDB ID format for course: ${lesson.course}`);
     throw new Error(`Ошибка: неверный формат ID курса`);
   }
-  
+
   // Создаем объект в формате модели бэкенда
   const lessonData = {
     title: lesson.title,
@@ -268,10 +268,10 @@ export const createLesson = async (lesson: {
     course: lesson.course, // ID курса (MongoDB ID формата)
     order: lesson.order || 0,
   };
-  
+
   console.log('[API] Creating lesson with data:', lessonData);
   console.log(`[API] Course ID being sent: ${lessonData.course} (should be a valid MongoDB ID)`);
-  
+
   const res = await fetch(`${apiBaseUrl}/api/lessons`, {
     method: 'POST',
     headers: {
@@ -280,13 +280,13 @@ export const createLesson = async (lesson: {
     },
     body: JSON.stringify(lessonData),
   });
-  
+
   if (!res.ok) {
     const errorData = await res.text();
     console.error('API Error:', res.status, errorData);
     throw new Error(`Ошибка создания урока: ${res.status} ${errorData}`);
   }
-  
+
   return res.json();
 };
 
@@ -303,7 +303,7 @@ export const updateLesson = async (id: string, lesson: {
 }, token?: string) => {
   // Преобразуем данные в формат, ожидаемый бэкендом
   let contentBlocks = [];
-  
+
   // Пытаемся распарсить contentBlocks из content, если оно есть
   if (lesson.content) {
     try {
@@ -312,7 +312,7 @@ export const updateLesson = async (id: string, lesson: {
       console.error('Error parsing content blocks:', err);
     }
   }
-  
+
   // Создаем объект в формате модели бэкенда
   const lessonData = {
     title: lesson.title,
@@ -321,9 +321,9 @@ export const updateLesson = async (id: string, lesson: {
     course: lesson.course,
     order: lesson.order || 0,
   };
-  
+
   console.log('[API] Updating lesson with data:', lessonData);
-  
+
   const res = await fetch(`${apiBaseUrl}/api/lessons/${id}`, {
     method: 'PUT',
     headers: {
@@ -332,13 +332,13 @@ export const updateLesson = async (id: string, lesson: {
     },
     body: JSON.stringify(lessonData),
   });
-  
+
   if (!res.ok) {
     const errorData = await res.text();
     console.error('API Error:', res.status, errorData);
     throw new Error(`Ошибка обновления урока: ${res.status} ${errorData}`);
   }
-  
+
   return res.json();
 };
 
@@ -428,7 +428,7 @@ export const createEvent = async (event: any, token?: string) => {
 };
 
 export const updateEvent = async (id: string, event: any, token?: string) => {
-  const res = await fetch(`${apiBaseUrl}/api/events/${id}` , {
+  const res = await fetch(`${apiBaseUrl}/api/events/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
