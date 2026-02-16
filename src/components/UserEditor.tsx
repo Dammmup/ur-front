@@ -100,7 +100,30 @@ export const UserEditor: React.FC = () => {
             )}
           </div>
           {selectedUser && (
-            <UserForm {...selectedUser} active={getActiveString(selectedUser.active)} currentUserRole={contextUser.role} />
+            <UserForm
+              login={selectedUser.login}
+              firstName={selectedUser.firstName}
+              lastName={selectedUser.lastName}
+              phone={selectedUser.phone}
+              country={selectedUser.country}
+              language={selectedUser.language}
+              email={selectedUser.email}
+              birthday={selectedUser.birthday}
+              gender={selectedUser.gender}
+              telegram={selectedUser.telegram}
+              whatsapp={selectedUser.whatsapp}
+              role={selectedUser.role}
+              access={selectedUser.access}
+              coursesCompleted={selectedUser.coursesCompleted}
+              createdAt={selectedUser.createdAt}
+              emailVerified={selectedUser.emailVerified}
+              blocked={selectedUser.blocked}
+              lastLogin={selectedUser.lastLogin}
+              notes={selectedUser.notes}
+              photo={selectedUser.photo}
+              active={selectedUser.active !== undefined ? String(selectedUser.active) : undefined}
+              currentUserRole={contextUser.role}
+            />
           )}
         </>
       )}
