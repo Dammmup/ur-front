@@ -4,9 +4,10 @@ import { Calendar, Badge, Spin, Typography, message, Empty } from 'antd';
 import { Popover, Modal, Button } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import {AdminEventForm} from '../components/AdminEventForm';
+import { AdminEventForm } from '../components/AdminEventForm';
 import { getEvents, deleteEvent } from '../api';
 import { useTranslation } from 'react-i18next';
+import './styles/Events.css';
 
 const { Title } = Typography;
 
@@ -44,7 +45,6 @@ export const Events: React.FC = () => {
     fetchEvents();
   }, []);
 
-  // Группируем события по дате (YYYY-MM-DD)
   const eventsByDate = events.reduce((acc, event) => {
     const d = dayjs(event.date).format('YYYY-MM-DD');
     if (!acc[d]) acc[d] = [];
@@ -116,37 +116,37 @@ export const Events: React.FC = () => {
   };
 
   return (
-  <div style={{ maxWidth: 900, margin: '40px auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px #0001', padding: 32 }}>
-    <Title level={2} style={{ textAlign: 'center', marginBottom: 32 }}>{t('eventsPage.title')}</Title>
-    {loading ? (
-      <Spin size="large" style={{ display: 'block', margin: '60px auto' }} />
-    ) : events.length === 0 ? (
-      <Empty description={t('eventsPage.noEvents')} />
-    ) : (
-      <Calendar cellRender={dateCellRender} />
-    )}
+    <div className="events-page">
+      <div className="events-container">
+        <Title level={2}>{t('eventsPage.title')}</Title>
+        {loading ? (
+          <Spin size="large" className="loading-spin" />
+        ) : events.length === 0 ? (
+          <Empty className="no-events" description={t('eventsPage.noEvents')} />
+        ) : (
+          <Calendar cellRender={dateCellRender} />
+        )}
 
-    {/* Modal для редактирования события */}
-    <Modal
-      open={!!editEvent}
-      onCancel={() => setEditEvent(null)}
-      title={t('eventsPage.editModalTitle')}
-      footer={null}
-      destroyOnHidden
-    >
-      {editEvent && (
-        <AdminEventForm
-          initialValues={editEvent}
-          onSuccess={() => {
-            setEditEvent(null);
-            fetchEvents();
-            message.success(t('eventsPage.updateSuccess'));
-          }}
+        <Modal
+          open={!!editEvent}
           onCancel={() => setEditEvent(null)}
-        />
-      )}
-    </Modal>
-  </div>
-);
+          title={t('eventsPage.editModalTitle')}
+          footer={null}
+          destroyOnHidden
+        >
+          {editEvent && (
+            <AdminEventForm
+              initialValues={editEvent}
+              onSuccess={() => {
+                setEditEvent(null);
+                fetchEvents();
+                message.success(t('eventsPage.updateSuccess'));
+              }}
+              onCancel={() => setEditEvent(null)}
+            />
+          )}
+        </Modal>
+      </div>
+    </div>
+  );
 };
-

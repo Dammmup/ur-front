@@ -6,7 +6,6 @@ import { Button, Space, Modal, message, Typography } from 'antd';
 import { DeleteOutlined, ToolOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import './styles/Course.css';
-
 const { Title, Paragraph } = Typography;
 
 // ==================== Types ====================
@@ -61,7 +60,7 @@ const CoursePage: React.FC = () => {
   const isAdmin = user?.role === 'admin';
   const isTeacherCreator = user?.role === 'teacher' && course?.createdBy === user?.id;
   const canEdit = isAdmin || isTeacherCreator;
-  
+
   // ---------- Data loading ----------
   useEffect(() => {
     if (!courseId) return;
@@ -119,7 +118,7 @@ const CoursePage: React.FC = () => {
       return;
     }
     try {
-      await updateUser((user._id ?? user.id) as string, { completedLessonId: lessonId },  token as string);
+      await updateUser((user._id ?? user.id) as string, { completedLessonId: lessonId }, token as string);
       const newCompleted = [...(user.completedLessons || []), lessonId];
       setUser({ ...user, completedLessons: newCompleted, coursesCompleted: (user.coursesCompleted || 0) + 1 });
     } catch (e) {
@@ -197,9 +196,8 @@ const CoursePage: React.FC = () => {
                 <iframe
                   width="100%"
                   height="480"
-                  src={`https://www.youtube.com/embed/${
-                    lesson.linkonyoutube.split('v=')[1] || lesson.linkonyoutube
-                  }`}
+                  src={`https://www.youtube.com/embed/${lesson.linkonyoutube.split('v=')[1] || lesson.linkonyoutube
+                    }`}
                   title={lesson.title}
                   frameBorder={0}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -270,20 +268,22 @@ const CoursePage: React.FC = () => {
 
   return (
     <div className="coursePage">
-      {renderCourseInfo()}
+      <div className="course-container">
+        {renderCourseInfo()}
 
-      <div className="lessonsSection">
-        <Title level={3}>{t('course.lessons') || 'Course lessons'}</Title>
-        {renderLessonsList()}
-      </div>
-
-      {canEdit && (
-        <div className="addLessonButton">
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateLesson}>
-            {t('lesson.create') || 'Create lesson'}
-          </Button>
+        <div className="lessonsSection">
+          <Title level={3}>{t('course.lessons') || 'Course lessons'}</Title>
+          {renderLessonsList()}
         </div>
-      )}
+
+        {canEdit && (
+          <div className="addLessonButton">
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateLesson}>
+              {t('lesson.create') || 'Create lesson'}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

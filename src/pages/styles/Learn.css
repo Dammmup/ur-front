@@ -1,15 +1,139 @@
-/* Стили для страницы Learn */
-.page {
-  padding: 48px 0;
+.learn-page {
+  min-height: 100vh;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+.learn-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.learn-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.learn-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  position: relative;
+  display: inline-block;
+}
+
+.learn-header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+.learn-header p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 20px;
+}
+
+.level-filter {
+  margin-bottom: 30px;
   text-align: center;
 }
-.heading {
-  font-size: 2.5rem;
-  font-weight: 700;
+
+.level-filter .ant-select {
+  min-width: 200px;
 }
-.desc {
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.course-card {
+  border-radius: 16px !important;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  border: none !important;
+}
+
+.course-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+.course-card .ant-card-cover img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.course-card .ant-card-body {
+  padding: 24px;
+}
+
+.course-card-title {
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  color: #1a1a2e !important;
+  margin-bottom: 8px !important;
+}
+
+.course-card-meta {
   color: #888;
-  font-size: 18px;
-  max-width: 600px;
-  margin: 24px auto 0;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.course-card-desc {
+  color: #555 !important;
+  line-height: 1.6;
+}
+
+.course-card .ant-tag {
+  border-radius: 20px;
+  padding: 2px 12px;
+}
+
+.course-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.course-card-actions .ant-btn {
+  border-radius: 8px;
+}
+
+.no-courses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.learn-loading {
+  display: block;
+  margin: 60px auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .learn-page {
+    padding: 40px 15px;
+  }
+
+  .learn-header h1 {
+    font-size: 2rem;
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
 }

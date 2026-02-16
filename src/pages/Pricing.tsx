@@ -4,7 +4,7 @@ import { Card, Button } from 'antd';
 import { LEVELS } from '../constants';
 import './styles/Pricing.css';
 
-const WHATSAPP_NUMBER =  '+77089358975';
+const WHATSAPP_NUMBER = '+77089358995';
 
 export const Pricing: React.FC = () => {
   const { t } = useTranslation();
@@ -18,30 +18,30 @@ export const Pricing: React.FC = () => {
   };
 
   return (
-    <div className="pricing-container">
-      <h1 className="pricing-title">{t('pricing.title')}</h1>
-      <p className="pricing-subtitle">{t('pricing.subtitle')}</p>
-      <div className="pricing-cards">
-        {LEVELS.map(lvl => (
-          <Card 
-            key={lvl.value} 
-            title={t(`pricing.plans.${lvl.value}.title`)} 
-            className="pricing-card centered"
-            actions={[
-              <Button 
-                key="select" 
-                type="primary" 
+    <div className="pricing-page">
+      <div className="pricing-container">
+        <h1 className="pricing-title">{t('pricing.title')}</h1>
+        <p className="pricing-subtitle">{t('pricing.subtitle')}</p>
+        <div className="pricing-cards">
+          {LEVELS.map(lvl => (
+            <Card
+              key={lvl.value}
+              title={t(`pricing.plans.${lvl.value}.title`)}
+              className="pricing-card"
+            >
+              <p>{t(`pricing.plans.${lvl.value}.description`)}</p>
+              <Button
+                key="select"
+                type="primary"
                 onClick={() => handleWhatsAppRedirect(lvl.value)}
                 className="centered-button"
               >
                 {t(`pricing.plans.${lvl.value}.button`)}
               </Button>
-            ]}
-          >
-            <p>{t(`pricing.plans.${lvl.value}.description`)}</p>
-          </Card>
-        ))}
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
-  )
+  );
 };

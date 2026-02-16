@@ -1,156 +1,508 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 20px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  padding: 25px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.headerTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.lessonFormCard {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   margin-bottom: 24px;
 }
 
+.formSectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eef2f7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(to right, #f8f9ff, transparent);
+  padding-left: 15px;
+}
+
+.formSectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 28px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
 .tabContent {
-  padding: 24px;
+  padding: 30px;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 16px;
   min-height: 300px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f4f8;
 }
 
 .formField {
   margin-bottom: 24px;
 }
 
+.formField label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 8px;
+  display: block;
+  padding-left: 4px;
+}
+
+.formField input,
+.formField textarea {
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+}
+
+.formField input:hover,
+.formField textarea:hover {
+  border-color: #a0aec0;
+  background-color: #fff;
+}
+
+.formField input:focus,
+.formField textarea:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  background-color: #fff;
+}
+
 .contentBlocks {
-  margin-top: 16px;
+  margin-top: 24px;
+  min-height: 100px;
 }
 
 .contentBlock {
-  padding: 16px;
-  margin-bottom: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  background-color: #fafafa;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background-color: #ffffff;
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #667eea;
+}
+
+.contentBlock:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-color: #a0aec0;
+  border-left: 4px solid #667eea;
+}
+
+.blockTypeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .blockActions {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 16px;
+  right: 16px;
   display: flex;
   gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+.contentBlock:hover .blockActions {
+  opacity: 1;
+}
+
+.blockActions button {
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a5568;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.blockActions button:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
 }
 
 .blockContent {
-  margin-top: 16px;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #edf2f7;
+  background: linear-gradient(to bottom right, #ffffff, #f8fafc);
 }
 
 .addBlockButton {
-  margin-top: 16px;
-  margin-bottom: 24px;
+  margin-top: 30px;
+  margin-bottom: 35px;
   text-align: center;
 }
 
-.blockToolbar {
+.addBlockButton button {
+  border-radius: 14px;
+  padding: 16px 36px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  text-transform: none;
   display: flex;
-  gap: 8px;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  gap: 8px;
+}
+
+.addBlockButton button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
 }
 
 .formActions {
-  margin-top: 24px;
+  margin-top: 40px;
   display: flex;
   gap: 16px;
   justify-content: flex-end;
+  padding-top: 25px;
+  border-top: 1px solid #eef2f7;
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border-radius: 0 0 16px 16px;
+  padding: 25px 0 0;
+}
+
+.formActions button {
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: none;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.formActions button:first-child {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+}
+
+.formActions button:first-child:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+}
+
+.formActions {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding-top: 25px;
+  border-top: 1px solid #eef2f7;
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border-radius: 0 0 16px 16px;
+  padding: 25px 0 0;
+}
+
+.formActions button {
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: none;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.formActions button:first-child {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+}
+
+.formActions button:first-child:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
 }
 
 .youtubePreview {
   width: 100%;
-  height: 400px;
-  margin-top: 16px;
-  border-radius: 4px;
+  height: 450px;
+  margin-top: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
 }
 
 .imagePreview {
   max-width: 100%;
-  max-height: 400px;
-  margin-top: 16px;
-  border-radius: 4px;
+  max-height: 500px;
+  margin-top: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.imagePreview:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
 }
 
 .dropzone {
-  border: 2px dashed #cccccc;
-  border-radius: 4px;
-  padding: 24px;
+  border: 2px dashed #cbd5e0;
+  border-radius: 16px;
+  padding: 40px;
   text-align: center;
   cursor: pointer;
-  margin-bottom: 16px;
-  background-color: #f8f8f8;
-  transition: border-color 0.3s;
+  margin-bottom: 20px;
+  background-color: #f8fafc;
+  transition: all 0.3s ease;
+  color: #718096;
 }
 
 .dropzone:hover {
-  border-color: #1976d2;
+  border-color: #667eea;
+  background-color: #f0f7ff;
+  transform: scale(1.02);
 }
 
-/* Drag and drop styles */
 .draggableBlock {
-  margin-bottom: 16px;
-  transition: background-color 0.2s;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .blockPaper {
   position: relative;
-  padding: 16px;
-  padding-left: 40px;
+  padding: 24px;
+  padding-left: 52px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  overflow: visible;
+}
+
+.blockPaper:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .dragHandle {
   position: absolute;
-  left: 8px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
   cursor: grab;
-  color: #757575;
+  color: #a0aec0;
   display: flex;
   align-items: center;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+  z-index: 5;
+}
+
+.dragHandle:hover {
+  background: #edf2f7;
+  color: #718096;
+  transform: translateY(-50%) scale(1.05);
 }
 
 .dragHandle:active {
   cursor: grabbing;
+  background: #e2e8f0;
+  transform: translateY(-50%) scale(0.95);
 }
 
 .blockTypeIcon {
-  margin-right: 8px;
+  margin-right: 10px;
   vertical-align: middle;
+  color: #667eea;
+  font-size: 1.4rem;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .previewContainer {
-  padding: 24px;
-  margin-top: 16px;
+  padding: 30px;
+  margin-top: 24px;
+  background: white;
+  border-radius: 16px;
 }
 
 .spacerBlock {
-  height: 30px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  height: 40px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2f8 100%);
+  border-radius: 12px;
+  border: 1px dashed #cbd5e0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
+.spacerBlock::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 10px,
+      rgba(203, 213, 224, 0.2) 10px,
+      rgba(203, 213, 224, 0.2) 20px);
+}
 
+.spacerBlock:hover {
+  transform: scale(1.02);
+  border-style: solid;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6ecf5 100%);
+}
 
 .quoteBlock {
-  border-left: 4px solid #757575;
-  padding-left: 16px;
+  border-left: 5px solid #667eea;
+  padding: 24px 24px 24px 32px;
   font-style: italic;
+  color: #4a5568;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border-radius: 0 16px 16px 0;
+  margin: 20px 0;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.quoteBlock:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.quoteBlock::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  font-size: 5rem;
+  color: rgba(102, 126, 234, 0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.quoteBlock::after {
+  content: '"';
+  position: absolute;
+  bottom: -40px;
+  right: 20px;
+  font-size: 5rem;
+  color: rgba(102, 126, 234, 0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
 }
 
 .videoContainer {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  padding-top: 56.25%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  background: #000;
+}
+
+.videoContainer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .videoContainer iframe {
@@ -159,4 +511,369 @@
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 16px;
+}
+
+/* Улучшаем стиль текстовых блоков */
+.MuiTypography-root {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a5568;
+}
+
+.MuiTypography-body1 {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4a5568;
+  font-weight: 450;
+}
+
+/* Добавляем стили для текста в блоках */
+.blockContent .MuiTypography-root {
+  padding: 12px 0;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #2d3748;
+}
+
+.blockContent .MuiTypography-body1 {
+  padding: 12px 0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #2d3748;
+  white-space: pre-wrap;
+}
+
+/* Tabs styling */
+.tabs {
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f0f0f0;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 0 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+}
+
+.tabs .MuiTabs-flexContainer {
+  justify-content: center;
+}
+
+.tabs .MuiTab-root {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: none;
+  min-width: 180px;
+  padding: 16px 32px;
+  border-radius: 12px 12px 0 0;
+  margin: 0 8px;
+  color: #718096;
+  transition: all 0.3s ease;
+  background: transparent;
+  position: relative;
+}
+
+.tabs .MuiTab-root::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  border-radius: 2px 2px 0 0;
+  transition: all 0.3s ease;
+}
+
+.tabs .MuiTab-root:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.tabs .MuiTab-root.Mui-selected {
+  color: #667eea !important;
+  background: white;
+  box-shadow: 0 -2px 12px rgba(102, 126, 234, 0.1);
+}
+
+.tabs .MuiTab-root.Mui-selected::after {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.tabs .MuiTabs-indicator {
+  display: none;
+}
+
+/* Edit and Preview tab specific styles */
+.edit-tab,
+.preview-tab {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+}
+
+/* Form container */
+.formContainer {
+  padding: 36px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f4f8;
+}
+
+.formContainer .MuiTextField-root {
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.formContainer .MuiTextField-root .MuiOutlinedInput-root {
+  border-radius: 12px;
+  padding: 6px 0;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.formContainer .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #a0aec0;
+}
+
+.formContainer .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.formContainer .MuiTypography-h6 {
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-top: 30px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef2f7;
+  background: linear-gradient(to right, #f8f9ff, transparent);
+  padding-left: 10px;
+}
+
+/* Empty state */
+.emptyBlocks {
+  padding: 60px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border-radius: 20px;
+  border: 2px dashed #cbd5e0;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.1);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+}
+
+.emptyBlocks:hover {
+  transform: scale(1.02);
+  border-color: #a0aec0;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6eeff 100%);
+}
+
+.emptyBlocksIcon {
+  font-size: 70px;
+  color: #a0aec0;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.emptyBlocksText {
+  color: #718096;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Preview container */
+.previewContainer {
+  padding: 36px !important;
+  border-radius: 16px !important;
+  background: white !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #f0f4f8 !important;
+}
+
+.previewContainer h4 {
+  color: #1a1a2e;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.previewContainer .MuiTypography-body1 {
+  color: #4a5568;
+  line-height: 1.9;
+  font-size: 1.05rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .headerTitle {
+    font-size: 1.5rem;
+  }
+
+  .tabContent {
+    padding: 20px 15px;
+  }
+
+  .tabs .MuiTabs-flexContainer {
+    flex-wrap: wrap;
+  }
+
+  .tabs .MuiTab-root {
+    min-width: 120px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    margin: 4px;
+  }
+
+  .youtubePreview {
+    height: 250px;
+  }
+
+  .blockToolbar {
+    gap: 8px;
+  }
+
+  .blockToolbar button {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-width: auto;
+  }
+
+  .formContainer {
+    padding: 24px 18px;
+  }
+
+  .contentBlock {
+    padding: 18px;
+  }
+
+  .blockActions {
+    position: static;
+    opacity: 1;
+    margin-top: 15px;
+    justify-content: flex-end;
+    background: transparent;
+    box-shadow: none;
+    gap: 10px;
+  }
+
+  .blockPaper {
+    padding: 18px;
+    padding-left: 18px;
+  }
+
+  .dragHandle {
+    position: static;
+    transform: none;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .formActions button {
+    width: 100%;
+  }
+
+  .addBlockButton button {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .previewContainer {
+    padding: 24px !important;
+  }
+
+  .previewContainer h4 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Add Block Dialog Styles */
+.addBlockDialog .MuiDialogTitle-root {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: #1a1a2e !important;
+  padding: 24px 30px !important;
+  border-bottom: 1px solid #eef2f7 !important;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.addBlockDialog .MuiDialogContent-root {
+  padding: 20px !important;
+}
+
+.addBlockDialog .MuiList-root {
+  padding: 12px !important;
+}
+
+.addBlockDialog .MuiListItem-root {
+  border-radius: 14px !important;
+  margin: 6px 0 !important;
+  padding: 16px 20px !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid #e2e8f0 !important;
+  background: white !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+.addBlockDialog .MuiListItem-root:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  transform: translateX(6px) !important;
+  border-color: #667eea !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+.addBlockDialog .MuiListItemIcon-root {
+  min-width: 44px !important;
+  color: #667eea !important;
+  font-size: 1.4rem !important;
+}
+
+.addBlockDialog .MuiListItem-root:hover .MuiListItemIcon-root {
+  color: white !important;
+}
+
+.addBlockDialog .MuiDialogActions-root {
+  padding: 20px 30px !important;
+  border-top: 1px solid #eef2f7 !important;
+  background: #f8fafc !important;
+  border-radius: 0 0 16px 16px !important;
+}
+
+.addBlockDialog .MuiButton-root {
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  min-width: 100px !important;
 }

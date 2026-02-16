@@ -5,6 +5,7 @@ import { LEVELS } from '../constants';
 import { createCourse } from '../api';
 import { useTranslation } from 'react-i18next';
 import { updateCourse } from '../api';
+import styles from './styles/CourseForm.module.css';
 
 export interface CourseFormValues {
   name: string;
@@ -44,17 +45,22 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (info: any) => {
-    if (info.file.status === 'done' || info.file.status === 'uploading') {
+    const file = info.file.originFileObj || info.file;
+    if (file) {
       const reader = new FileReader();
-      reader.onload = e => setForm(f => ({ ...f, imageUrl: e.target?.result as string }));
-      reader.readAsDataURL(info.file.originFileObj);
+      reader.onload = e => {
+        if (e.target?.result) {
+          setForm(f => ({ ...f, imageUrl: e.target?.result as string }));
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Простая валидация
-    if (!form.name || !form.level || !form.content || form.duration === 0 ) {
+    if (!form.name || !form.level || !form.content || form.duration === 0) {
       message.error(t('courseForm.validationError'));
       return;
     }
@@ -62,7 +68,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
     try {
       const token = localStorage.getItem('token');
       let res;
-      let updatedCourse = null;
+      let updatedCourse: any = null;
       if (mode === 'edit' && initialValues && initialValues._id) {
         res = await updateCourse(initialValues._id, {
           name: form.name,
@@ -99,49 +105,104 @@ export const CourseForm: React.FC<CourseFormProps> = ({ initialValues, mode = 'c
 
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Input
-        placeholder={t('courseForm.namePlaceholder')}
-        value={form.name}
-        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-      />
-      <Select
-        placeholder={t('courseForm.levelPlaceholder')}
-        value={form.level}
-        onChange={val => setForm(f => ({ ...f, level: val }))}
-        options={LEVELS}
-      />
-      <InputNumber
-        placeholder={t('courseForm.durationPlaceholder')}
-        value={form.duration}
-        onChange={val => setForm(f => ({ ...f, duration: typeof val === 'number' ? val : 0 }))}
-        min={0.1}
-        max={1000}
-        step={0.1}
-        style={{ width: '100%' }}
-      />
-      <Input.TextArea
-        placeholder={t('courseForm.descriptionPlaceholder')}
-        value={form.content}
-        onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-        rows={4}
-      />
-     
-      <Upload beforeUpload={() => false} maxCount={1} onChange={handleImageUpload} listType="picture-card">
-        {form.imageUrl ? <img src={form.imageUrl} alt="course" style={{ width: '100%' }} /> : <Button icon={<UploadOutlined />}>{t('courseForm.uploadButton')}</Button>}
-      </Upload>
-      <Input
-        placeholder={t('courseForm.imageLinkPlaceholder')}
-        value={form.imageLink}
-        onChange={e => setForm(f => ({ ...f, imageLink: e.target.value }))}
-      />
-      {(form.imageLink || form.imageUrl) && (
-        <div style={{ marginBottom: 16 }}>
-          <span style={{ fontSize: 13, color: '#888' }}>{t('courseForm.previewLabel')}</span><br />
-          <img src={form.imageLink || form.imageUrl || ''} alt="preview" style={{ width: 120, borderRadius: 8, marginTop: 4 }} />
+    <div className={styles.courseFormContainer}>
+      <h2 className={styles.formTitle}>
+        {mode === 'edit' ? (t('courseForm.editTitle') || 'Редактирование курса') : (t('courseForm.createTitle') || 'Создание курса')}
+      </h2>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.formSection}>
+          <div className={styles.formGroup}>
+            <Input
+              placeholder={t('courseForm.namePlaceholder')}
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className={styles.formInput}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <Select
+              placeholder={t('courseForm.levelPlaceholder')}
+              value={form.level}
+              onChange={val => setForm(f => ({ ...f, level: val }))}
+              options={LEVELS}
+              className={styles.formSelect}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <InputNumber
+              placeholder={t('courseForm.durationPlaceholder')}
+              value={form.duration}
+              onChange={val => setForm(f => ({ ...f, duration: typeof val === 'number' ? val : 0 }))}
+              min={0.1}
+              max={1000}
+              step={0.1}
+              className={styles.formInputNumber}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <Input.TextArea
+              placeholder={t('courseForm.descriptionPlaceholder')}
+              value={form.content}
+              onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+              rows={4}
+              className={styles.formTextArea}
+            />
+          </div>
         </div>
-      )}
-      <Button type="primary" block htmlType="submit" loading={loading}>{submitText || (mode === 'create' ? t('courseForm.submitButtonCreate') : t('courseForm.submitButtonUpdate'))}</Button>
-    </form>
+
+        <div className={styles.imageUploadSection}>
+          <div className={styles.formGroup}>
+            <Upload
+              beforeUpload={() => false}
+              maxCount={1}
+              onChange={handleImageUpload}
+              listType="picture-card"
+              className={styles.uploadButton}
+            >
+              {form.imageUrl ? (
+                <img src={form.imageUrl} alt="course" style={{ width: '100%' }} />
+              ) : (
+                <Button icon={<UploadOutlined />}>{t('courseForm.uploadButton')}</Button>
+              )}
+            </Upload>
+          </div>
+
+          <div className={styles.formGroup}>
+            <Input
+              placeholder={t('courseForm.imageLinkPlaceholder')}
+              value={form.imageLink}
+              onChange={e => setForm(f => ({ ...f, imageLink: e.target.value }))}
+              className={styles.formInput}
+            />
+          </div>
+
+          {(form.imageLink || form.imageUrl) && (
+            <div className={styles.imagePreviewContainer}>
+              <div>
+                <span className={styles.imagePreviewLabel}>{t('courseForm.previewLabel')}</span>
+              </div>
+              <img
+                src={form.imageLink || form.imageUrl || ''}
+                alt="preview"
+                className={styles.imagePreview}
+              />
+            </div>
+          )}
+        </div>
+
+        <Button
+          type="primary"
+          block
+          htmlType="submit"
+          loading={loading}
+          className={styles.submitButton}
+        >
+          {submitText || (mode === 'create' ? t('courseForm.submitButtonCreate') : t('courseForm.submitButtonUpdate'))}
+        </Button>
+      </form>
+    </div>
   );
 };

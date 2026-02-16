@@ -49,7 +49,7 @@
     "addUserSuccess": "User added successfully!",
     "coursesCompletedLabel": "Courses Completed",
     "userIcon": "👤",
-    "editUser":"Edit User"
+    "editUser": "Edit User"
   },
   "login": {
     "success": "Login successful!",
@@ -96,17 +96,19 @@
     "addSuccess": "Course added!",
     "saveError": "Error saving course",
     "networkError": "Network error",
+    "createTitle": "Create New Course",
+    "editTitle": "Edit Course",
     "namePlaceholder": "Course Name",
     "languagePlaceholder": "Language",
-    "levelPlaceholder": "Level",
+    "levelPlaceholder": "Select Level",
     "durationPlaceholder": "Duration (hours)",
-    "descriptionPlaceholder": "Description",
+    "descriptionPlaceholder": "Course description...",
     "pricePlaceholder": "Price ($)",
-    "uploadButton": "Upload",
-    "imageLinkPlaceholder": "or paste an image link",
+    "uploadButton": "Upload Image",
+    "imageLinkPlaceholder": "https://example.com/image.jpg",
     "previewLabel": "Preview:",
-    "submitButtonCreate": "Add Course",
-    "submitButtonUpdate": "Update Course"
+    "submitButtonCreate": "Create Course",
+    "submitButtonUpdate": "Save Changes"
   },
   "adminEventForm": {
     "validationError": "Please fill in the required fields!",
@@ -162,10 +164,10 @@
     "gradientPreset": "Preset gradients",
     "customGradientOption": "Custom gradient",
     "previewLabel": "Preview",
-    "communityCardTitle":"Community Section",
-    "statusLabel":"Write your status, about what you want to talk",
-    "showInCommunity":"Show in community",
-    "saveButton":"Save"
+    "communityCardTitle": "Community Section",
+    "statusLabel": "Write your status, about what you want to talk",
+    "showInCommunity": "Show in community",
+    "saveButton": "Save"
   },
   "coursePage": {
     "loadingError": "Course loading error",
@@ -224,7 +226,8 @@
         "date": "24.05.2025",
         "author": "UyghurLearn Team",
         "description": "Welcome to our learning community! This is a place where we can share our experiences, ask questions, and support each other in learning the Uyghur language and culture. Feel free to introduce yourself and share your learning goals!",
-"link": "/about-us"      }
+        "link": "/about-us"
+      }
     ]
   },
   "learnPage": {
@@ -334,10 +337,26 @@
     "subtitle": "Unlock full access to all courses and features with the plan that suits you best.",
     "whatsappMessage": "Hello! I would like to inquire about the price for the {{plan}} course. Thank you!",
     "plans": {
-      "beginner": { "title": "Beginner", "description": "Course designed for those who do not speak Uyghur at all; children and adults who want to start from scratch; people born in diaspora who want to reconnect with their ancestors' language.", "button": "Choose" },
-      "intermediate": { "title": "Intermediate", "description": "The course is suitable for those who already have basic knowledge and want to confidently use Uyghur in everyday speech. We deepen vocabulary, practice grammar, learn to express complex thoughts and understand native speakers.", "button": "Choose" },
-      "advanced": { "title": "Advanced", "description": "For those who speak Uyghur fluently but want to take the language to a high level. We analyze nuances, idioms, literary speech and professional contexts. Improve fluency, style and confidence.", "button": "Choose" },
-      "speaking": { "title": "Speaking", "description": "Course with a focus on conversation practice. Maximum conversation, minimum theory — living Uyghur language in dialogues, discussions, and role-playing. Suitable for all levels who want to speak freely and without embarrassment.", "button": "Choose" }
+      "beginner": {
+        "title": "Beginner",
+        "description": "Course designed for those who do not speak Uyghur at all; children and adults who want to start from scratch; people born in diaspora who want to reconnect with their ancestors' language.",
+        "button": "Choose"
+      },
+      "intermediate": {
+        "title": "Intermediate",
+        "description": "The course is suitable for those who already have basic knowledge and want to confidently use Uyghur in everyday speech. We deepen vocabulary, practice grammar, learn to express complex thoughts and understand native speakers.",
+        "button": "Choose"
+      },
+      "advanced": {
+        "title": "Advanced",
+        "description": "For those who speak Uyghur fluently but want to take the language to a high level. We analyze nuances, idioms, literary speech and professional contexts. Improve fluency, style and confidence.",
+        "button": "Choose"
+      },
+      "speaking": {
+        "title": "Speaking",
+        "description": "Course with a focus on conversation practice. Maximum conversation, minimum theory — living Uyghur language in dialogues, discussions, and role-playing. Suitable for all levels who want to speak freely and without embarrassment.",
+        "button": "Choose"
+      }
     }
   },
   "emailVerification": {
@@ -363,7 +382,52 @@
     "edit": "Edit",
     "delete": "Delete",
     "preview": "Preview",
-    "loading":"loading"
+    "loading": "loading",
+    "save": "Save",
+    "saving": "Saving...",
+    "back": "Back",
+    "authError": "Authorization error"
+  },
+  "lesson": {
+    "editor": "Lesson Editor",
+    "editTitle": "Edit Lesson",
+    "createTitle": "Create New Lesson",
+    "editTab": "Edit",
+    "previewTab": "Preview",
+    "titleField": "Lesson Title",
+    "descriptionField": "Description",
+    "contentBlocks": "Content Blocks",
+    "noBlocks": "No content blocks yet. Click 'Add Block' to start building your lesson.",
+    "addBlock": "Add Block",
+    "addContentBlock": "Add Content Block",
+    "textBlock": "Text",
+    "imageBlock": "Image",
+    "videoBlock": "Video",
+    "linkBlock": "Link",
+    "quoteBlock": "Quote",
+    "spacerBlock": "Spacer",
+    "unknownBlockType": "Unknown block type",
+    "content": "Content",
+    "imageUrl": "Image URL",
+    "imagePreview": "Image preview",
+    "videoUrl": "Video URL (YouTube)",
+    "youtubeUrlHelp": "Enter a YouTube URL like https://www.youtube.com/watch?v=...",
+    "linkUrl": "Link URL",
+    "linkText": "Link Text",
+    "linkTextPlaceholder": "Enter link text...",
+    "caption": "Caption",
+    "editTextBlock": "Edit Text Block",
+    "editImageBlock": "Edit Image Block",
+    "editVideoBlock": "Edit Video Block",
+    "editLinkBlock": "Edit Link Block",
+    "editQuoteBlock": "Edit Quote Block",
+    "editSpacerBlock": "Edit Spacer Block",
+    "errorLoading": "Error loading lesson",
+    "titleRequired": "Lesson title is required",
+    "courseRequired": "Course is required",
+    "updateSuccess": "Lesson updated successfully",
+    "createSuccess": "Lesson created successfully",
+    "saveError": "Error saving lesson"
   },
   "course": {
     "edit": "Edit",

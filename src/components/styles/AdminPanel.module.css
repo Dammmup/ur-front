@@ -1,29 +1,76 @@
 .adminPanelContainer {
-  max-width: 700px;
-  margin: 48px auto;
-  background: #fff;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px #0001;
+  max-width: 900px;
+  margin: 60px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  min-height: calc(100vh - 120px);
 }
 
 .centeredTitle {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  color: #1a1a2e !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  position: relative;
+}
+
+.centeredTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
 }
 
 .userTabContent {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .accessDenied {
   color: #d4380d;
   background: #fff2e8;
-  border-radius: 8px;
-  padding: 32px 0;
+  border-radius: 12px;
+  padding: 40px;
   text-align: center;
-  font-size: 20px;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-top: 80px;
+}
+
+/* Antd Tabs styling override */
+.adminPanelContainer .ant-tabs-nav {
+  margin-bottom: 30px;
+}
+
+.adminPanelContainer .ant-tabs-tab {
+  font-size: 1.1rem;
+  padding: 12px 25px;
+}
+
+.adminPanelContainer .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #667eea !important;
+}
+
+.adminPanelContainer .ant-tabs-ink-bar {
+  background: linear-gradient(90deg, #667eea, #764ba2) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .adminPanelContainer {
+    margin: 40px 15px;
+    padding: 25px 20px;
+  }
+
+  .centeredTitle {
+    font-size: 1.5rem !important;
+  }
 }

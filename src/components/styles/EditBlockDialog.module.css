@@ -1,0 +1,145 @@
+/* EditBlockDialog Styles */
+
+.dialogTitle {
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    color: #1a1a2e !important;
+    padding: 24px 30px !important;
+    border-bottom: 1px solid #eef2f7 !important;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%) !important;
+    border-radius: 16px 16px 0 0 !important;
+    background-clip: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03) !important;
+}
+
+.dialogContent {
+    padding: 30px !important;
+    background: #fff;
+}
+
+.formField {
+    margin-bottom: 24px;
+}
+
+.formField:last-child {
+    margin-bottom: 0;
+}
+
+.formField label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 10px;
+    display: block;
+    padding-left: 4px;
+}
+
+.formInput {
+    width: 100%;
+    border-radius: 12px !important;
+}
+
+.formInput .MuiOutlinedInput-root {
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.formInput .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #a0aec0;
+}
+
+.formInput .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.formTextArea {
+    width: 100%;
+    border-radius: 12px !important;
+}
+
+.formTextArea .MuiOutlinedInput-root {
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.imagePreview {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.imagePreview img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.helpText {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 6px;
+    display: block;
+}
+
+.dialogActions {
+    padding: 24px 30px !important;
+    border-top: 1px solid #eef2f7 !important;
+    gap: 14px;
+    background: #f8fafc;
+    border-radius: 0 0 16px 16px !important;
+}
+
+.cancelButton {
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-weight: 500 !important;
+    color: #4a5568 !important;
+    border: 1px solid #e2e8f0 !important;
+    background: white !important;
+    text-transform: none !important;
+    min-width: 100px !important;
+}
+
+.cancelButton:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e0 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.saveButton {
+    border-radius: 12px !important;
+    padding: 12px 28px !important;
+    font-weight: 600 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4) !important;
+    text-transform: none !important;
+    min-width: 100px !important;
+}
+
+.saveButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5) !important;
+}
+
+.saveButton:disabled {
+    background: #cbd5e0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Block type specific icons in title */
+.blockTypeIcon {
+    margin-right: 10px;
+    color: #667eea;
+    vertical-align: middle;
+}
