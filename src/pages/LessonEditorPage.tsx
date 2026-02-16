@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { LessonEditor } from '../components/LessonEditor';
