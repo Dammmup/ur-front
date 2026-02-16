@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 // Material UI imports
 import {
-  Box, Button, Typography, IconButton, CardMedia, 
+  Box, Button, Typography, IconButton, CardMedia,
   Dialog, DialogTitle, DialogContent, DialogActions,
   List, ListItem, ListItemIcon, ListItemText, Link
 } from '@mui/material';
@@ -22,7 +22,7 @@ import {
 import { MainLessonEditor } from './MainLessonEditor';
 
 // Styles import
-import  './styles/LessonEditor.module.css';
+import styles from './styles/LessonEditor.module.css';
 
 // Enum для типов блоков контента
 export enum ContentBlockType {
@@ -103,7 +103,7 @@ interface AddBlockDialogProps {
 
 export const AddBlockDialog: React.FC<AddBlockDialogProps> = ({ open, onClose, onAddBlock }) => {
   const { t } = useTranslation();
-  
+
   const blockTypes = [
     { type: ContentBlockType.TEXT, icon: <TextIcon />, label: t('lesson.textBlock') },
     { type: ContentBlockType.IMAGE, icon: <ImageIcon />, label: t('lesson.imageBlock') },
@@ -112,15 +112,15 @@ export const AddBlockDialog: React.FC<AddBlockDialogProps> = ({ open, onClose, o
     { type: ContentBlockType.QUOTE, icon: <QuoteIcon />, label: t('lesson.quoteBlock') },
     { type: ContentBlockType.SPACER, icon: <SpacerIcon />, label: t('lesson.spacerBlock') }
   ];
-  
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth className={styles.addBlockDialog} PaperProps={{ sx: { borderRadius: 16 } }}>
       <DialogTitle>{t('lesson.addContentBlock')}</DialogTitle>
       <DialogContent>
         <List>
           {blockTypes.map((block) => (
-            <ListItem 
-              key={block.type} 
+            <ListItem
+              key={block.type}
               onClick={() => {
                 onAddBlock(block.type);
                 onClose();
@@ -148,7 +148,7 @@ interface ContentBlockRendererProps {
 
 export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ block, onEdit, onDelete }) => {
   const { t } = useTranslation();
-  
+
   const renderBlockContent = () => {
     switch (block.type) {
       case ContentBlockType.TEXT:
@@ -158,7 +158,7 @@ export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ bloc
       case ContentBlockType.IMAGE:
         return (
           <Box>
-            {block.url && <CardMedia component="img" className="imagePreview" image={block.url} alt={block.caption || ''} />}
+            {block.url && <CardMedia component="img" className={styles.imagePreview} image={block.url} alt={block.caption || ''} />}
             {block.caption && <Typography variant="caption">{block.caption}</Typography>}
           </Box>
         );
@@ -167,8 +167,8 @@ export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ bloc
         return (
           <Box>
             {videoId && (
-              <Box className="youtubePreview">
-                <iframe 
+              <Box className={styles.youtubePreview}>
+                <iframe
                   src={`https://www.youtube.com/embed/${videoId}`}
                   title={block.caption || 'YouTube video'}
                   allowFullScreen
@@ -190,11 +190,11 @@ export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ bloc
           </Box>
         );
       case ContentBlockType.SPACER:
-        return <Box className="dropzone" sx={{ height: '30px' }} />;
+        return <Box className={styles.dropzone} sx={{ height: '30px' }} />;
 
       case ContentBlockType.QUOTE:
         return (
-          <Box className="contentBlock" sx={{ borderLeft: '4px solid #ccc', paddingLeft: 2 }}>
+          <Box className={styles.quoteBlock}>
             <Typography variant="body1" style={{ fontStyle: 'italic' }}>"{block.content}"</Typography>
             {block.caption && <Typography variant="caption">{block.caption}</Typography>}
           </Box>
@@ -203,10 +203,10 @@ export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ bloc
         return <Typography>{t('lesson.unknownBlockType')}</Typography>;
     }
   };
-  
+
   return (
-    <Box className="contentBlock">
-      <Box className="blockActions">
+    <Box className={styles.contentBlock}>
+      <Box className={styles.blockActions}>
         <IconButton size="small" onClick={() => onEdit(block.id)}>
           <EditIcon fontSize="small" />
         </IconButton>
@@ -215,15 +215,15 @@ export const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = ({ bloc
         </IconButton>
       </Box>
       <Typography variant="subtitle2">
-        {block.type === ContentBlockType.TEXT && <TextIcon className="blockTypeIcon" />}
-        {block.type === ContentBlockType.IMAGE && <ImageIcon className="blockTypeIcon" />}
-        {block.type === ContentBlockType.VIDEO && <YouTubeIcon className="blockTypeIcon" />}
-        {block.type === ContentBlockType.LINK && <LinkIcon className="blockTypeIcon" />}
-        {block.type === ContentBlockType.SPACER && <SpacerIcon className="blockTypeIcon" />}
-        {block.type === ContentBlockType.QUOTE && <QuoteIcon className="blockTypeIcon" />}
+        {block.type === ContentBlockType.TEXT && <TextIcon className={styles.blockTypeIcon} />}
+        {block.type === ContentBlockType.IMAGE && <ImageIcon className={styles.blockTypeIcon} />}
+        {block.type === ContentBlockType.VIDEO && <YouTubeIcon className={styles.blockTypeIcon} />}
+        {block.type === ContentBlockType.LINK && <LinkIcon className={styles.blockTypeIcon} />}
+        {block.type === ContentBlockType.SPACER && <SpacerIcon className={styles.blockTypeIcon} />}
+        {block.type === ContentBlockType.QUOTE && <QuoteIcon className={styles.blockTypeIcon} />}
         {t(`lesson.${block.type}Block`)}
       </Typography>
-      <Box className="blockContent">
+      <Box className={styles.blockContent}>
         {renderBlockContent()}
       </Box>
     </Box>

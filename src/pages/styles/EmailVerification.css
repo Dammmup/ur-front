@@ -1,0 +1,60 @@
+.email-verification-page {
+    min-height: 100vh;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-verification-container {
+    max-width: 450px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.email-verification-title {
+    text-align: center;
+    margin-bottom: 20px !important;
+    color: #1a1a2e !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+}
+
+.email-verification-desc {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px !important;
+    line-height: 1.6;
+}
+
+.email-verification-form .ant-form-item-label>label {
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.verify-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    height: auto !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    border-radius: 10px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.verify-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .email-verification-container {
+        padding: 30px 20px;
+    }
+}

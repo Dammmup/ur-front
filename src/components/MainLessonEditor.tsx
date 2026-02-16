@@ -11,7 +11,7 @@ import {
 
 // Material UI imports
 import {
-  Box, Button, Container, TextField, Typography, 
+  Box, Button, Container, TextField, Typography,
   Tab, Tabs, Paper, CircularProgress, Alert,
   Fab, Link
 } from '@mui/material';
@@ -30,10 +30,10 @@ import EditBlockDialog from './EditBlockDialog';
 import { type ContentBlock, ContentBlockType, TabPanel, AddBlockDialog, ContentBlockRenderer } from './LessonEditor';
 
 // Styles import
-import './styles/LessonEditor.module.css';
+import styles from './styles/LessonEditor.module.css';
 
 // Main LessonEditor component
-interface MainLessonEditorProps {}
+interface MainLessonEditorProps { }
 
 export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
   const { t } = useTranslation();
@@ -42,17 +42,17 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { user } = useUser();
   const [tabValue, setTabValue] = useState(0);
-  
+
   // Определяем, создаем ли мы новый урок
   const queryParams = new URLSearchParams(location.search);
   const isNew = queryParams.get('new') === 'true';
-  
+
   // State for lesson data
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [courseId, setCourseId] = useState<string>('');
   const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
-  
+
   // UI state
   const [loading, setLoading] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
@@ -61,14 +61,14 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
   const [addBlockDialogOpen, setAddBlockDialogOpen] = useState<boolean>(false);
   const [editingBlock, setEditingBlock] = useState<ContentBlock | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
-  
+
   // Helper function to get YouTube ID
   const getYouTubeId = (url: string): string | null => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
   };
-  
+
   // Очищаем courseId при монтировании компонента, чтобы не использовались предыдущие значения
   useEffect(() => {
     console.log('[MainLessonEditor] Component mounted, resetting courseId');
@@ -82,18 +82,18 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       // ВАЖНО: получаем courseId из URL параметров
       const courseIdParam = queryParams.get('courseId');
       console.log(`[MainLessonEditor] Extracted courseId from URL parameters: ${courseIdParam}`);
-      
+
       if (courseIdParam) {
         // Проверяем формат MongoDB ID (24 символа в hex)
         const isValidMongoId = /^[0-9a-fA-F]{24}$/.test(courseIdParam);
-        
+
         if (!isValidMongoId) {
           console.error(`[MainLessonEditor] Invalid MongoDB ID format for courseId: ${courseIdParam}`);
           setError('Invalid course ID format. Cannot create lesson.');
           setLoading(false);
           return;
         }
-        
+
         // Проверяем, что courseId не совпадает с lessonId
         if (courseIdParam === lessonId) {
           console.error(`[MainLessonEditor] Error: courseId (${courseIdParam}) is the same as lessonId!`);
@@ -101,7 +101,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
           setLoading(false);
           return;
         }
-        
+
         // Устанавливаем courseId в состояние и сохраняем в localStorage
         setCourseId(String(courseIdParam));
         localStorage.setItem('lastUsedCourseId', courseIdParam); // Сохраняем в localStorage для отладки
@@ -115,18 +115,18 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
         return;
       }
     }
-    
+
     if (lessonId && !isNew) {
       setLoading(true);
       console.log(`[MainLessonEditor] Loading lesson data for ID: ${lessonId}`);
-      
+
       getLesson(lessonId)
         .then(data => {
           if (data) {
             console.log('[MainLessonEditor] Lesson data received:', data);
             setTitle(data.title || '');
             setDescription(data.content2 || '');
-            
+
             // ВАЖНО: устанавливаем courseId из data.course только если редактируем существующий урок,
             // а не создаем новый (при создании нового courseId уже установлен из URL параметров)
             if (!isNew) {
@@ -139,7 +139,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
               // Если создаем новый урок, не трогаем courseId, он уже должен быть установлен из URL
               console.log(`[MainLessonEditor] Creating new lesson, keeping courseId from URL: ${courseId}`);
             }
-            
+
             // Парсим содержимое content, где хранятся блоки контента
             try {
               if (data.content) {
@@ -172,12 +172,12 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
         .finally(() => setLoading(false));
     }
   }, [lessonId, t]);
-  
+
   // Handle tab change
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-  
+
   // Add new content block
   const handleAddBlock = (type: ContentBlockType) => {
     const newBlock: ContentBlock = {
@@ -186,12 +186,12 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       content: '',
       order: contentBlocks.length
     };
-    
+
     setContentBlocks([...contentBlocks, newBlock]);
     setEditingBlock(newBlock);
     setEditDialogOpen(true);
   };
-  
+
   // Delete content block
   const handleDeleteBlock = (blockId: string) => {
     const updatedBlocks = contentBlocks
@@ -199,7 +199,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       .map((block, index) => ({ ...block, order: index }));
     setContentBlocks(updatedBlocks);
   };
-  
+
   // Edit content block
   const handleEditBlock = (blockId: string) => {
     const blockToEdit = contentBlocks.find(block => block.id === blockId);
@@ -208,44 +208,44 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       setEditDialogOpen(true);
     }
   };
-  
+
   // Update block after editing
   const handleSaveEditingBlock = (updatedBlock: ContentBlock) => {
-    const updatedBlocks = contentBlocks.map(block => 
+    const updatedBlocks = contentBlocks.map(block =>
       block.id === updatedBlock.id ? updatedBlock : block
     );
     setContentBlocks(updatedBlocks);
     setEditingBlock(null);
     setEditDialogOpen(false);
   };
-  
+
   // Handle drag and drop reordering
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-    
+
     const items = Array.from(contentBlocks);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    
+
     // Update order property for each item
     const updatedItems = items.map((item, index) => ({ ...item, order: index }));
-    
+
     setContentBlocks(updatedItems);
   };
-  
+
   // Save lesson
   const handleSave = async () => {
     if (!title) {
       setError(t('lesson.titleRequired'));
       return;
     }
-    
+
     if (!courseId) {
       setError(t('lesson.courseRequired') || 'Course ID is required');
       console.error('[MainLessonEditor] Course ID is missing');
       return;
     }
-    
+
     console.log(`[MainLessonEditor] Current lessonId param: ${lessonId}`);
     console.log(`[MainLessonEditor] Current courseId param: ${courseId}`);
 
@@ -264,7 +264,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       setError('Внутренняя ошибка: ID курса и ID урока совпадают');
       return;
     }
-    
+
     // Преобразуем contentBlocks в строку JSON для хранения в поле content
     // и обеспечиваем совместимость с моделью урока на бэкенде
     const sanitizedBlocks = contentBlocks.map(block => ({
@@ -272,19 +272,19 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       content: (block.content && block.content.trim() !== '') ? block.content : '-', // заменяем undefined/null на пустую строку
     }));
     const content = JSON.stringify(sanitizedBlocks);
-    
+
     // Обязательная проверка courseId на формат MongoDB ID (24 символа в hex)
     // COURSE_ID - это МОНГО АЙДИ родительского курса
     console.log(`[MainLessonEditor] Проверка COURSE_ID для создания урока: ${courseId}`);
-    
+
     const isValidMongoId = courseId && /^[0-9a-fA-F]{24}$/.test(courseId);
-    
+
     if (!isValidMongoId) {
-      console.error(`[MainLessonEditor] Неверный формат MongoDB ID для COURSE_ID: ${courseId}`);  
+      console.error(`[MainLessonEditor] Неверный формат MongoDB ID для COURSE_ID: ${courseId}`);
       setError('Неверный формат ID курса. Невозможно создать урок.');
       return;
     }
-    
+
     // Подготавливаем данные в формате, соответствующем модели на бэкенде
 
     const lessonData = {
@@ -298,25 +298,25 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       linkonyoutube: '',
       order: 0
     };
-    
+
     console.log('[MainLessonEditor] Preparing lesson data:', lessonData);
-    console.log(`[MainLessonEditor] Course ID being sent: ${lessonData.course}`);  
-    
+    console.log(`[MainLessonEditor] Course ID being sent: ${lessonData.course}`);
+
     setSaving(true);
     setError(null);
-    
+
     try {
       // Получаем токен авторизации из localStorage
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         setError(t('common.authError'));
         setSaving(false);
         return;
       }
-      
+
       console.log('[MainLessonEditor] Using token for API call:', token.substring(0, 15) + '...');
-      
+
       if (lessonId && !isNew) {
         console.log(`[MainLessonEditor] Updating lesson with ID: ${lessonId}`);
         const result = await updateLesson(lessonId, lessonData, token);
@@ -340,10 +340,10 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       setSaving(false);
     }
   };
-  
+
   // Check if user has edit permissions
   const canEdit = user && (user.role === 'admin' || user.role === 'teacher');
-  
+
   if (!canEdit) {
     return (
       <Container className='container'>
@@ -351,7 +351,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       </Container>
     );
   }
-  
+
   if (loading) {
     return (
       <Container className='container' sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
@@ -359,25 +359,25 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
       </Container>
     );
   }
-  
+
   return (
-    <Container className='container'>
-      <Box className='header'>
+    <Container className={styles.container}>
+      <Box className={styles.header}>
         <Typography variant="h4">
           {lessonId ? t('lesson.editTitle') : t('lesson.createTitle')}
         </Typography>
       </Box>
-      
+
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
-      
-      <Tabs value={tabValue} onChange={handleTabChange} className='tabs'>
-        <Tab label={t('lesson.editTab')} />
-        <Tab label={t('lesson.previewTab')} />
+
+      <Tabs value={tabValue} onChange={handleTabChange} className={styles.tabs} variant="fullWidth">
+        <Tab label={t('lesson.editTab')} className={styles.editTab} />
+        <Tab label={t('lesson.previewTab')} className="preview-tab" />
       </Tabs>
-      
+
       <TabPanel value={tabValue} index={0}>
-        <Box className='formContainer'>
+        <Box className={styles.formContainer}>
           <TextField
             fullWidth
             label={t('lesson.titleField')}
@@ -388,7 +388,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
             error={!title}
             helperText={!title ? t('lesson.titleRequired') : ''}
           />
-          
+
           <TextField
             fullWidth
             label={t('lesson.descriptionField')}
@@ -398,22 +398,22 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
             multiline
             rows={4}
           />
-          
+
           <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
             {t('lesson.contentBlocks')}
           </Typography>
-          
+
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="content-blocks">
               {(provided) => (
                 <Box
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className='contentBlocks'
+                  className={styles.contentBlocks}
                 >
                   {contentBlocks.length === 0 ? (
-                    <Paper 
-                      elevation={0} 
+                    <Paper
+                      elevation={0}
                       sx={{ p: 3, textAlign: 'center', bgcolor: '#f5f5f5' }}
                     >
                       {t('lesson.noBlocks')}
@@ -425,16 +425,16 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
                           <Box
                             ref={provided.innerRef}
                             {...provided.draggableProps}
-                            className='draggableBlock'
+                            className={styles.draggableBlock}
                           >
-                            <Paper elevation={1} className='blockPaper'>
-                              <Box 
+                            <Paper elevation={1} className={styles.blockPaper}>
+                              <Box
                                 {...provided.dragHandleProps}
-                                className='dragHandle'
+                                className={styles.dragHandle}
                               >
                                 <DragIcon />
                               </Box>
-                              
+
                               <ContentBlockRenderer
                                 block={block}
                                 onEdit={handleEditBlock}
@@ -451,24 +451,24 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
               )}
             </Droppable>
           </DragDropContext>
-          
-          <Box className='addBlockButton'>
-            <Fab 
-              color="primary" 
-              variant="extended" 
+
+          <Box className={styles.addBlockButton}>
+            <Fab
+              color="primary"
+              variant="extended"
               onClick={() => setAddBlockDialogOpen(true)}
             >
               <AddIcon sx={{ mr: 1 }} />
               {t('lesson.addBlock')}
             </Fab>
           </Box>
-          
-          <Box className='formActions'>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              startIcon={<SaveIcon />} 
-              disabled={saving} 
+
+          <Box className={styles.formActions}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<SaveIcon />}
+              disabled={saving}
               onClick={handleSave}
             >
               {saving ? t('common.saving') : t('common.save')}
@@ -477,12 +477,12 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
           </Box>
         </Box>
       </TabPanel>
-      
+
       <TabPanel value={tabValue} index={1}>
-        <Paper className='previewContainer' elevation={1}>
+        <Paper className={styles.previewContainer} elevation={1}>
           <Typography variant="h4">{title}</Typography>
           <Typography variant="body1" sx={{ mb: 3 }}>{description}</Typography>
-          
+
           {contentBlocks.map((block) => (
             <Box key={block.id} sx={{ mb: 3 }}>
               {block.type === ContentBlockType.TEXT && (
@@ -499,7 +499,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
                 return videoId ? (
                   <>
                     <Box className='videoContainer'>
-                      <iframe 
+                      <iframe
                         src={`https://www.youtube.com/embed/${videoId}`}
                         title={block.caption || 'YouTube video'}
                         allowFullScreen
@@ -529,7 +529,7 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
           ))}
         </Paper>
       </TabPanel>
-      
+
       <AddBlockDialog
         open={addBlockDialogOpen}
         onClose={() => setAddBlockDialogOpen(false)}
@@ -542,10 +542,10 @@ export const MainLessonEditor: React.FC<MainLessonEditorProps> = () => {
           onClose={() => setEditDialogOpen(false)}
           onSave={handleSaveEditingBlock}
           block={editingBlock}
-          />
-        )}
-      </Container>
-    );
-  };
+        />
+      )}
+    </Container>
+  );
+};
 
 export default MainLessonEditor;
