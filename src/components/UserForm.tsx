@@ -51,7 +51,7 @@ interface UserFormProps {
   currentUserRole?: string;
   password?: string;
   username?: string;
-  active?: string;
+  active?: boolean;
   onFinish?: (values: any) => void | Promise<void>;
 }
 
@@ -72,8 +72,8 @@ function filterUserFormValues(user: any) {
     password: '', // пароль не подставляем из БД
     role: user.role || '',
     notes: user.notes || '',
-  status: user.status || '',
-  cardColor: user.cardColor || '#1890ff',
+    status: user.status || '',
+    cardColor: user.cardColor || '#1890ff',
 
     access: user.access || false,
     coursesCompleted: typeof user.coursesCompleted === 'number' ? user.coursesCompleted : 0,
@@ -431,7 +431,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
             </LocalizationProvider>
           </Box>
           <Box sx={{ width: '100%' }}>
-        
+
           </Box>
           <Button
             type="submit"
