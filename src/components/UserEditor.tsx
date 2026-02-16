@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import '../pages/styles/UserEditor.css';
 import { getUsers } from '../api.ts';
 import { Select, Spin, message } from 'antd';
-import {UserForm} from './UserForm.tsx';
-import {StudentNotes} from './StudentNotes';
+import { UserForm } from './UserForm.tsx';
+import { StudentNotes } from './StudentNotes';
 import { useUser } from '../UserContext';
 
 interface User {
@@ -30,6 +30,7 @@ interface User {
   notes?: string;
   photo?: string;
   level?: string;
+  active?: string;
 }
 
 export const UserEditor: React.FC = () => {
@@ -64,7 +65,7 @@ export const UserEditor: React.FC = () => {
     }
   }, [selectedUserId, users]);
 
-    return (
+  return (
     <div>
       {/* Админ видит селектор и может редактировать любого */}
       {user?.role === 'admin' && (
@@ -93,7 +94,7 @@ export const UserEditor: React.FC = () => {
             )}
           </div>
           {selectedUser && (
-            <UserForm {...selectedUser} currentUserRole={user.role} />
+            <UserForm {...selectedUser} active={selectedUser.active !== undefined ? String(selectedUser.active) : undefined} currentUserRole={user.role} />
           )}
         </>
       )}
@@ -125,21 +126,21 @@ export const UserEditor: React.FC = () => {
               </Select>
             )}
           </div>
-          
+
           {selectedUser && selectedUser.role === 'student' ? (
             <StudentNotes
               userId={selectedUser._id}
               notes={selectedUser.notes || ''}
             />
           ) : (
-            <UserForm {...user} currentUserRole={user.role} isReadOnly={true} />
+            <UserForm {...user} active={user.active !== undefined ? String(user.active) : undefined} currentUserRole={user.role} isReadOnly={true} />
           )}
         </>
       )}
 
       {/* Студент видит только свой профиль */}
       {user?.role === 'student' && (
-        <UserForm {...user} currentUserRole={user.role} />
+        <UserForm {...user} active={user.active !== undefined ? String(user.active) : undefined} currentUserRole={user.role} />
       )}
     </div>
   );

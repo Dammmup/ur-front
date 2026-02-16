@@ -1,12 +1,12 @@
 import React from 'react';
-import { 
-  Avatar, 
-  Box, 
-  Stack, 
-  Typography, 
-  LinearProgress, 
-  Chip, 
-  CircularProgress, 
+import {
+  Avatar,
+  Box,
+  Stack,
+  Typography,
+  LinearProgress,
+  Chip,
+  CircularProgress,
   Alert as MuiAlert,
   TextField,
   Button,
@@ -53,7 +53,7 @@ export const StudentProfile: React.FC = () => {
   const { t } = useTranslation();
   const { user, loading: userLoading, setUser, token } = useUser();
   // Удалена неиспользуемая переменная error, поскольку мы больше не делаем API-запросы
-  
+
   // Преобразуем данные из UserContext в формат профиля
   const profile = user ? {
     id: user.id,
@@ -81,7 +81,7 @@ export const StudentProfile: React.FC = () => {
   if (userLoading) return <Box sx={{ textAlign: 'center', mt: 8 }}><CircularProgress /></Box>;
   if (!profile || !user) return <MuiAlert severity="warning">{t('studentProfile.missingProfile')}</MuiAlert>;
 
-  const achievements = [];
+  const achievements: { name: string }[] = [];
   if (profile.coursesCompleted >= 1) achievements.push({ name: t('studentProfile.achievementFirstSteps') });
   if (profile.coursesCompleted >= 5) achievements.push({ name: t('studentProfile.achievement5Courses') });
   if (profile.firstName && profile.lastName && profile.email && profile.phone && profile.country && profile.language && profile.gender && profile.telegram && profile.whatsapp) achievements.push({ name: t('studentProfile.achievementProfileComplete') });
@@ -103,12 +103,12 @@ export const StudentProfile: React.FC = () => {
   const [showInCommunity, setShowInCommunity] = React.useState(profile.active !== false);
   const [saving, setSaving] = React.useState(false);
 
-  const recommendations = [];
+  const recommendations: string[] = [];
   if (profile.coursesCompleted === 0) recommendations.push(t('studentProfile.recommendationFirstCourse'));
   if (!profile.phone || !profile.telegram || !profile.whatsapp) recommendations.push(t('studentProfile.recommendationCompleteProfile'));
   else recommendations.push(t('studentProfile.recommendationNewOpportunities'));
 
-  const events = [
+  const events: { name: string }[] = [
     { name: t('studentProfile.eventRegistrationDate', { date: dayjs(profile.createdAt).format('DD.MM.YYYY') }) },
     { name: t('studentProfile.eventLastLogin', { date: dayjs(profile.lastLogin).format('DD.MM.YYYY') }) },
   ];
@@ -137,7 +137,7 @@ export const StudentProfile: React.FC = () => {
       </Box>
 
       <Box className="sectionsContainer">
-        <Collapse style={{ backgroundColor:'white' }}
+        <Collapse style={{ backgroundColor: 'white' }}
           items={[
             {
               label: <Typography variant="h6" fontWeight={700}>{t('studentProfile.profileCollapseLabel')}</Typography>,
@@ -161,12 +161,12 @@ export const StudentProfile: React.FC = () => {
 
       <SectionCard title={t('studentProfile.sectionAchievements')}>
         {achievements.map((achievement, index) => (
-          <Chip 
-            key={index} 
-            label={achievement.name} 
-            icon={<SchoolIcon />} 
-            color="primary" 
-            sx={{ mr: 1, mb: 1 }} 
+          <Chip
+            key={index}
+            label={achievement.name}
+            icon={<SchoolIcon />}
+            color="primary"
+            sx={{ mr: 1, mb: 1 }}
           />
         ))}
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
@@ -186,12 +186,12 @@ export const StudentProfile: React.FC = () => {
 
       <SectionCard title={t('studentProfile.sectionHistory')}>
         {events.map((event, index) => (
-          <Chip 
-            key={index} 
-            label={event.name} 
-            icon={<SchoolIcon />} 
-            color="primary" 
-            sx={{ mr: 1, mb: 1 }} 
+          <Chip
+            key={index}
+            label={event.name}
+            icon={<SchoolIcon />}
+            color="primary"
+            sx={{ mr: 1, mb: 1 }}
           />
         ))}
       </SectionCard>
@@ -206,35 +206,35 @@ export const StudentProfile: React.FC = () => {
             fullWidth
           />
           <InputLabel>{t('studentProfile.bgType')}</InputLabel>
-          <Select value={bgType} onChange={(e)=>setBgType(e.target.value)} fullWidth>
+          <Select value={bgType} onChange={(e) => setBgType(e.target.value)} fullWidth>
             <MenuItem value="color">{t('studentProfile.bgColorOption')}</MenuItem>
             <MenuItem value="gradient">{t('studentProfile.bgGradientOption')}</MenuItem>
           </Select>
 
-          {bgType==='color' && (
-            <input type="color" value={cardStyle.startsWith('linear-gradient')? '#1890ff': cardStyle} onChange={(e)=>setCardStyle(e.target.value)} style={{width: '100%', height: 40, border:'none', padding:0}} />
+          {bgType === 'color' && (
+            <input type="color" value={cardStyle.startsWith('linear-gradient') ? '#1890ff' : cardStyle} onChange={(e) => setCardStyle(e.target.value)} style={{ width: '100%', height: 40, border: 'none', padding: 0 }} />
           )}
 
-          {bgType==='gradient' && (
+          {bgType === 'gradient' && (
             <>
               <InputLabel>{t('studentProfile.gradientPreset')}</InputLabel>
-              <Select value={presetGradients.find(g=>g.value===cardStyle)?cardStyle:'custom'} onChange={(e)=>{
-                if(e.target.value==='custom') return;
+              <Select value={presetGradients.find(g => g.value === cardStyle) ? cardStyle : 'custom'} onChange={(e) => {
+                if (e.target.value === 'custom') return;
                 setCardStyle(e.target.value as string);
               }} fullWidth>
-                {presetGradients.map(g=>(
+                {presetGradients.map(g => (
                   <MenuItem key={g.value} value={g.value}>{g.label}</MenuItem>
                 ))}
                 <MenuItem value="custom">{t('studentProfile.customGradientOption')}</MenuItem>
               </Select>
-              {(!presetGradients.find(g=>g.value===cardStyle)) && (
-                <TextField value={cardStyle} onChange={(e)=>setCardStyle(e.target.value)} placeholder="linear-gradient(...)" fullWidth sx={{mt:1}} />
+              {(!presetGradients.find(g => g.value === cardStyle)) && (
+                <TextField value={cardStyle} onChange={(e) => setCardStyle(e.target.value)} placeholder="linear-gradient(...)" fullWidth sx={{ mt: 1 }} />
               )}
             </>
           )}
-           {/* Preview */}
-           <InputLabel sx={{mt:1}}>{t('studentProfile.previewLabel')}</InputLabel>
-           <Paper variant="outlined" sx={{height:80, borderRadius:2, background: cardStyle}} />
+          {/* Preview */}
+          <InputLabel sx={{ mt: 1 }}>{t('studentProfile.previewLabel')}</InputLabel>
+          <Paper variant="outlined" sx={{ height: 80, borderRadius: 2, background: cardStyle }} />
           <FormControlLabel
             control={<Switch checked={showInCommunity} onChange={(e) => setShowInCommunity(e.target.checked)} />}
             label={t('studentProfile.showInCommunity')}
