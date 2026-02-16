@@ -35,7 +35,7 @@ interface User {
 
 export const UserEditor: React.FC = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { user: contextUser } = useUser();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -65,10 +65,16 @@ export const UserEditor: React.FC = () => {
     }
   }, [selectedUserId, users]);
 
+  // Функция для преобразования active в строку для UserForm
+  const getActiveString = (activeVal: string | boolean | undefined): string | undefined => {
+    if (activeVal === undefined) return undefined;
+    return String(activeVal);
+  };
+
   return (
     <div>
       {/* Админ видит селектор и может редактировать любого */}
-      {user?.role === 'admin' && (
+      {contextUser?.role === 'admin' && (
         <>
           <div style={{ marginBottom: 24 }}>
             {loading ? (
@@ -94,13 +100,13 @@ export const UserEditor: React.FC = () => {
             )}
           </div>
           {selectedUser && (
-            <UserForm {...selectedUser} active={selectedUser.active !== undefined ? String(selectedUser.active) : undefined} currentUserRole={user.role} />
+            <UserForm {...selectedUser} active={getActiveString(selectedUser.active)} currentUserRole={contextUser.role} />
           )}
         </>
       )}
 
       {/* Преподаватель видит селектор студентов и либо свой профиль, либо заметки студента */}
-      {user?.role === 'teacher' && (
+      {contextUser?.role === 'teacher' && (
         <>
           <div style={{ marginBottom: 24 }}>
             {loading ? (
@@ -133,14 +139,54 @@ export const UserEditor: React.FC = () => {
               notes={selectedUser.notes || ''}
             />
           ) : (
-            <UserForm {...user} active={user.active !== undefined ? String(user.active) : undefined} currentUserRole={user.role} isReadOnly={true} />
+            <UserForm
+              _id={contextUser._id}
+              email={contextUser.email}
+              username={contextUser.username}
+              firstName={contextUser.firstName}
+              lastName={contextUser.lastName}
+              phone={contextUser.phone}
+              country={contextUser.country}
+              language={contextUser.language}
+              gender={contextUser.gender}
+              telegram={contextUser.telegram}
+              whatsapp={contextUser.whatsapp}
+              role={contextUser.role}
+              access={contextUser.access}
+              coursesCompleted={contextUser.coursesCompleted}
+              createdAt={contextUser.createdAt}
+              emailVerified={contextUser.emailVerified}
+              photo={contextUser.photo}
+              active={getActiveString(contextUser.active)}
+              currentUserRole={contextUser.role}
+              isReadOnly={true}
+            />
           )}
         </>
       )}
 
       {/* Студент видит только свой профиль */}
-      {user?.role === 'student' && (
-        <UserForm {...user} active={user.active !== undefined ? String(user.active) : undefined} currentUserRole={user.role} />
+      {contextUser?.role === 'student' && (
+        <UserForm
+          _id={contextUser._id}
+          email={contextUser.username}
+          firstName={contextUser.firstName}
+          lastName={contextUser.lastName}
+          phone={contextUser.phone}
+          country={contextUser.country}
+          language={contextUser.language}
+          gender={contextUser.gender}
+          telegram={contextUser.telegram}
+          whatsapp={contextUser.whatsapp}
+          role={contextUser.role}
+          access={contextUser.access}
+          coursesCompleted={contextUser.coursesCompleted}
+          createdAt={contextUser.createdAt}
+          emailVerified={contextUser.emailVerified}
+          photo={contextUser.photo}
+          active={getActiveString(contextUser.active)}
+          currentUserRole={contextUser.role}
+        />
       )}
     </div>
   );
