@@ -30,12 +30,12 @@ interface User {
   notes?: string;
   photo?: string;
   level?: string;
-  active?: string;
+  active?: boolean;
 }
 
 export const UserEditor: React.FC = () => {
   const { t } = useTranslation();
-  const { user: contextUser } = useUser();
+  const { user } = useUser();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -65,16 +65,10 @@ export const UserEditor: React.FC = () => {
     }
   }, [selectedUserId, users]);
 
-  // Функция для преобразования active в строку для UserForm
-  const getActiveString = (activeVal: string | boolean | undefined): string | undefined => {
-    if (activeVal === undefined) return undefined;
-    return String(activeVal);
-  };
-
   return (
     <div>
       {/* Админ видит селектор и может редактировать любого */}
-      {contextUser?.role === 'admin' && (
+      {user?.role === 'admin' && (
         <>
           <div style={{ marginBottom: 24 }}>
             {loading ? (
@@ -100,36 +94,13 @@ export const UserEditor: React.FC = () => {
             )}
           </div>
           {selectedUser && (
-            <UserForm
-              login={selectedUser.login}
-              firstName={selectedUser.firstName}
-              lastName={selectedUser.lastName}
-              phone={selectedUser.phone}
-              country={selectedUser.country}
-              language={selectedUser.language}
-              email={selectedUser.email}
-              birthday={selectedUser.birthday}
-              gender={selectedUser.gender}
-              telegram={selectedUser.telegram}
-              whatsapp={selectedUser.whatsapp}
-              role={selectedUser.role}
-              access={selectedUser.access}
-              coursesCompleted={selectedUser.coursesCompleted}
-              createdAt={selectedUser.createdAt}
-              emailVerified={selectedUser.emailVerified}
-              blocked={selectedUser.blocked}
-              lastLogin={selectedUser.lastLogin}
-              notes={selectedUser.notes}
-              photo={selectedUser.photo}
-              active={selectedUser.active !== undefined ? String(selectedUser.active) : undefined}
-              currentUserRole={contextUser.role}
-            />
+            <UserForm {...selectedUser} active={selectedUser.active !== undefined ? selectedUser.active : undefined} currentUserRole={user.role} />
           )}
         </>
       )}
 
       {/* Преподаватель видит селектор студентов и либо свой профиль, либо заметки студента */}
-      {contextUser?.role === 'teacher' && (
+      {user?.role === 'teacher' && (
         <>
           <div style={{ marginBottom: 24 }}>
             {loading ? (
@@ -162,54 +133,14 @@ export const UserEditor: React.FC = () => {
               notes={selectedUser.notes || ''}
             />
           ) : (
-            <UserForm
-              _id={contextUser._id}
-              email={contextUser.email}
-              username={contextUser.username}
-              firstName={contextUser.firstName}
-              lastName={contextUser.lastName}
-              phone={contextUser.phone}
-              country={contextUser.country}
-              language={contextUser.language}
-              gender={contextUser.gender}
-              telegram={contextUser.telegram}
-              whatsapp={contextUser.whatsapp}
-              role={contextUser.role}
-              access={contextUser.access}
-              coursesCompleted={contextUser.coursesCompleted}
-              createdAt={contextUser.createdAt}
-              emailVerified={contextUser.emailVerified}
-              photo={contextUser.photo}
-              active={getActiveString(contextUser.active)}
-              currentUserRole={contextUser.role}
-              isReadOnly={true}
-            />
+            <UserForm {...user} active={user.active !== undefined ? user.active : undefined} currentUserRole={user.role} isReadOnly={true} />
           )}
         </>
       )}
 
       {/* Студент видит только свой профиль */}
-      {contextUser?.role === 'student' && (
-        <UserForm
-          _id={contextUser._id}
-          email={contextUser.username}
-          firstName={contextUser.firstName}
-          lastName={contextUser.lastName}
-          phone={contextUser.phone}
-          country={contextUser.country}
-          language={contextUser.language}
-          gender={contextUser.gender}
-          telegram={contextUser.telegram}
-          whatsapp={contextUser.whatsapp}
-          role={contextUser.role}
-          access={contextUser.access}
-          coursesCompleted={contextUser.coursesCompleted}
-          createdAt={contextUser.createdAt}
-          emailVerified={contextUser.emailVerified}
-          photo={contextUser.photo}
-          active={getActiveString(contextUser.active)}
-          currentUserRole={contextUser.role}
-        />
+      {user?.role === 'student' && (
+        <UserForm {...user} active={user.active !== undefined ? user.active : undefined} currentUserRole={user.role} />
       )}
     </div>
   );
