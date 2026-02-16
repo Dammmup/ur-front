@@ -1,5 +1,5 @@
 // Используем переменную окружения для production, fallback на localhost для разработки
-export const apiBaseUrl = import.meta.env.REACT_APP_API_URL || 'https://ur-ba.vercel.app/';
+export const apiBaseUrl = import.meta.env.REACT_APP_API_URL || 'https://ur-ba.vercel.app';
 
 // API helpers for Community posts
 export type PostCategory = 'question' | 'discussion' | 'news' | 'history';
